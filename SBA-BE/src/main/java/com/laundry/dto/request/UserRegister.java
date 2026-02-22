@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class   UserRegister {
+public class UserRegister {
     @NotBlank
     @Size(min = 6, max = 30)
     @Email
