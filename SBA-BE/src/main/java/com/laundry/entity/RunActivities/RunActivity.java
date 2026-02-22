@@ -1,11 +1,10 @@
-package com.laundry.entity;
+package com.laundry.entity.RunActivities;
 
-import jakarta.persistence.*;
+import com.laundry.entity.AbstractEntity;
+import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -15,10 +14,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
-public class Permissions extends AbstractEntity<Long> {
-    String name;
-    String description;
-
-    @ManyToMany(mappedBy = "permissions")
-    List<Roles> roles;
+public class RunActivity extends AbstractEntity<Long> {
 }
