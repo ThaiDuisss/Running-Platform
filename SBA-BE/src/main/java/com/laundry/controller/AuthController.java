@@ -1,9 +1,9 @@
 package com.laundry.controller;
 
 import com.laundry.dto.request.IntrospectToken;
+import com.laundry.dto.request.UserRequest;
 import com.laundry.dto.response.ApiResponse;
 import com.laundry.dto.request.SignInRequest;
-import com.laundry.dto.request.UserRegister;
 import com.laundry.dto.response.TokenResponse;
 import com.laundry.enums.TokenType;
 import com.laundry.service.AuthenticationService;
@@ -51,7 +51,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Object>> register(@RequestBody UserRegister userRegister) {
+    public ResponseEntity<ApiResponse<Object>> register(@RequestBody UserRequest userRegister) {
         return ResponseEntity.ok()
                 .body(ApiResponse.<Object>builder()
                         .code(200)

@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    Long id;
+    Long userId;
     String username;
     boolean emailVerified;
     Set<RoleResponse> roles;
