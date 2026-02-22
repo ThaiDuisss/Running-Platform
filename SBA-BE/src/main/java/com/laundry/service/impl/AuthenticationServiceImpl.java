@@ -4,7 +4,7 @@ import com.laundry.config.AuthConfig;
 import com.laundry.constant.ErrorEnum;
 import com.laundry.dto.request.SignInRequest;
 import com.laundry.dto.response.TokenResponse;
-import com.laundry.entity.Users;
+import com.laundry.entity.UserAuth.Users;
 import com.laundry.enums.TokenType;
 import com.laundry.exception.AppException;
 import com.laundry.repository.AuthRepository;
@@ -25,7 +25,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
