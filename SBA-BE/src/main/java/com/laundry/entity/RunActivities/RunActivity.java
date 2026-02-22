@@ -11,7 +11,6 @@ import org.hibernate.annotations.Where;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
 public class RunActivity extends AbstractEntity<Long> {
