@@ -50,16 +50,16 @@ public class AuthController {
                         .build());
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Object>> register(@RequestBody UserRegister userRegister) {
-        return ResponseEntity.ok()
-                .body(ApiResponse.<Object>builder()
-                        .code(200)
-                        .status("OK")
-                        .message("User register in successfully")
-                        .data(userService.register(userRegister))
-                        .build());
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<ApiResponse<Object>> register(@RequestBody UserRegister userRegister) {
+//        return ResponseEntity.ok()
+//                .body(ApiResponse.<Object>builder()
+//                        .code(200)
+//                        .status("OK")
+//                        .message("User register in successfully")
+//                        .data(userService.register(userRegister))
+//                        .build());
+//    }
 
     @GetMapping("/refresh-token")
     public ResponseEntity<ApiResponse<Object>> refreshToken(@CookieValue(name = "refreshToken") String refreshToken) {

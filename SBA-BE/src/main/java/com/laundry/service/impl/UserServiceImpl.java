@@ -36,28 +36,28 @@ public class UserServiceImpl {
     AuthConfig authConfig;
     JwtServiceImp jwtService;
 
-    @Transactional
-    public UserResponse register(UserRegister userRegister) {
-        if (repository.existsByUsername(userRegister.getUsername())) {
-            throw new AppException(ErrorEnum.USERNAME_EXIST);
-        }
-        Set<Roles> roles = roleRepository.findByRoleNameIn(userRegister.getRoles());
-        Users user = Users.builder()
-                .username(userRegister.getUsername())
-                .password(authConfig.passwordEncoder().encode(userRegister.getPassword()))
-                .roles(roles)
-                .emailVerified(false)
-                .build();
-
-        user = repository.save(user);
-        UserProfile userProfile = mapper.toUserProfile(userRegister);
-        userProfile.setUserId(user.getId());
-        userProfile.setUserId(user.getId());
-        UserResponse userResponse = mapper.toUserResponse(userRegister);
-        userResponse.setId(user.getId());
-        sendEmail(userRegister.getUsername());
-        return userResponse;
-    }
+//    @Transactional
+//    public UserResponse register(UserRegister userRegister) {
+//        if (repository.existsByUsername(userRegister.getUsername())) {
+//            throw new AppException(ErrorEnum.USERNAME_EXIST);
+//        }
+//        Set<Roles> roles = roleRepository.findByRoleNameIn(userRegister.getRoles());
+//        Users user = Users.builder()
+//                .username(userRegister.getUsername())
+//                .password(authConfig.passwordEncoder().encode(userRegister.getPassword()))
+//                .roles(roles)
+//                .emailVerified(false)
+//                .build();
+//
+//        user = repository.save(user);
+//        UserProfile userProfile = mapper.toUserProfile(userRegister);
+//        userProfile.setUserId(user.getId());
+//        userProfile.setUserId(user.getId());
+//        UserResponse userResponse = mapper.toUserResponse(userRegister);
+//        userResponse.setId(user.getId());
+//        sendEmail(userRegister.getUsername());
+//        return userResponse;
+//    }
 
 //    public ProfileResponse getMyInfo(Long userId) {
 //        Users user = repository.findById(userId).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
