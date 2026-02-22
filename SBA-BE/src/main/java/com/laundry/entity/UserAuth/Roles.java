@@ -1,6 +1,7 @@
-package com.laundry.entity;
+package com.laundry.entity.UserAuth;
 
 import com.laundry.constant.RoleEnum;
+import com.laundry.entity.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

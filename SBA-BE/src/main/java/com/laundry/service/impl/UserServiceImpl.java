@@ -5,10 +5,9 @@ import com.laundry.config.AuthConfig;
 import com.laundry.constant.ErrorEnum;
 import com.laundry.dto.request.UserProfile;
 import com.laundry.dto.request.UserRegister;
-import com.laundry.dto.response.ProfileResponse;
 import com.laundry.dto.response.UserResponse;
-import com.laundry.entity.Roles;
-import com.laundry.entity.Users;
+import com.laundry.entity.UserAuth.Roles;
+import com.laundry.entity.UserAuth.Users;
 
 import com.laundry.exception.AppException;
 import com.laundry.mapper.RoleMapper;

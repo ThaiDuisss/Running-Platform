@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -24,13 +25,11 @@ public abstract class AbstractEntity<T extends Serializable> implements Serializ
 
     @Column(name = "createdAt")
     @CreationTimestamp
-     @Temporal(TemporalType.TIMESTAMP)
-    Date creatDate;
+    Instant creatDate;
 
     @Column(name = "updateAt")
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    Date updateDate;
+    Instant updateDate;
 
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;

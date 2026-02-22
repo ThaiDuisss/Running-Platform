@@ -1,7 +1,7 @@
 package com.laundry.mapper;
 
 import com.laundry.dto.response.PermissionResponse;
-import com.laundry.entity.Permissions;
+import com.laundry.entity.UserAuth.Permissions;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
