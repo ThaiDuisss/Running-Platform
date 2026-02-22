@@ -1,11 +1,13 @@
 package com.laundry.mapper;
 
 import com.laundry.constant.RoleEnum;
-import com.laundry.dto.request.UserProfile;
-import com.laundry.dto.request.UserRegister;
-import com.laundry.dto.response.ProfileResponse;
+import com.laundry.dto.request.UserRequest;
+import com.laundry.dto.response.PermissionResponse;
 import com.laundry.dto.response.RoleResponse;
 import com.laundry.dto.response.UserResponse;
+import com.laundry.entity.UserAuth.Permissions;
+import com.laundry.entity.UserAuth.Roles;
+import com.laundry.entity.UserAuth.Users;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.annotation.processing.Generated;
@@ -13,28 +15,30 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-17T00:24:24+0700",
+    date = "2026-02-22T22:55:51+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Eclipse Adoptium)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
 
     @Override
-    public UserProfile toUserProfile(UserRegister userRegister) {
-        if ( userRegister == null ) {
+    public Users toUserProfile(UserRequest users) {
+        if ( users == null ) {
             return null;
         }
 
-        UserProfile userProfile = new UserProfile();
+        Users.UsersBuilder users1 = Users.builder();
 
-        userProfile.setFullName( userRegister.getFullName() );
-        userProfile.setPhoneNumber( userRegister.getPhoneNumber() );
+        users1.username( users.getUsername() );
+        users1.password( users.getPassword() );
+        users1.roles( roleEnumSetToRolesSet( users.getRoles() ) );
+        users1.phoneNumber( users.getPhoneNumber() );
 
-        return userProfile;
+        return users1.build();
     }
 
     @Override
-    public UserResponse toUserResponse(UserRegister user) {
+    public UserResponse toUserResponse(Users user) {
         if ( user == null ) {
             return null;
         }
@@ -42,45 +46,82 @@ public class UserMapperImpl implements UserMapper {
         UserResponse.UserResponseBuilder userResponse = UserResponse.builder();
 
         userResponse.username( user.getUsername() );
-        userResponse.roles( roleEnumSetToRoleResponseSet( user.getRoles() ) );
+        userResponse.emailVerified( user.isEmailVerified() );
+        userResponse.roles( rolesSetToRoleResponseSet( user.getRoles() ) );
 
         return userResponse.build();
     }
 
-    @Override
-    public ProfileResponse toProfileResponse(UserProfile user) {
-        if ( user == null ) {
+    protected Roles roleEnumToRoles(RoleEnum roleEnum) {
+        if ( roleEnum == null ) {
             return null;
         }
 
-        ProfileResponse.ProfileResponseBuilder profileResponse = ProfileResponse.builder();
+        Roles.RolesBuilder roles = Roles.builder();
 
-        profileResponse.userId( user.getUserId() );
-        profileResponse.fullName( user.getFullName() );
-        profileResponse.phoneNumber( user.getPhoneNumber() );
-        profileResponse.avatar( user.getAvatar() );
-
-        return profileResponse.build();
+        return roles.build();
     }
 
-    protected RoleResponse roleEnumToRoleResponse(RoleEnum roleEnum) {
-        if ( roleEnum == null ) {
+    protected Set<Roles> roleEnumSetToRolesSet(Set<RoleEnum> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<Roles> set1 = new LinkedHashSet<Roles>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( RoleEnum roleEnum : set ) {
+            set1.add( roleEnumToRoles( roleEnum ) );
+        }
+
+        return set1;
+    }
+
+    protected PermissionResponse permissionsToPermissionResponse(Permissions permissions) {
+        if ( permissions == null ) {
+            return null;
+        }
+
+        PermissionResponse.PermissionResponseBuilder permissionResponse = PermissionResponse.builder();
+
+        permissionResponse.name( permissions.getName() );
+        permissionResponse.description( permissions.getDescription() );
+
+        return permissionResponse.build();
+    }
+
+    protected Set<PermissionResponse> permissionsSetToPermissionResponseSet(Set<Permissions> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<PermissionResponse> set1 = new LinkedHashSet<PermissionResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Permissions permissions : set ) {
+            set1.add( permissionsToPermissionResponse( permissions ) );
+        }
+
+        return set1;
+    }
+
+    protected RoleResponse rolesToRoleResponse(Roles roles) {
+        if ( roles == null ) {
             return null;
         }
 
         RoleResponse.RoleResponseBuilder roleResponse = RoleResponse.builder();
 
+        roleResponse.roleName( roles.getRoleName() );
+        roleResponse.permissions( permissionsSetToPermissionResponseSet( roles.getPermissions() ) );
+
         return roleResponse.build();
     }
 
-    protected Set<RoleResponse> roleEnumSetToRoleResponseSet(Set<RoleEnum> set) {
+    protected Set<RoleResponse> rolesSetToRoleResponseSet(Set<Roles> set) {
         if ( set == null ) {
             return null;
         }
 
         Set<RoleResponse> set1 = new LinkedHashSet<RoleResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
-        for ( RoleEnum roleEnum : set ) {
-            set1.add( roleEnumToRoleResponse( roleEnum ) );
+        for ( Roles roles : set ) {
+            set1.add( rolesToRoleResponse( roles ) );
         }
 
         return set1;
