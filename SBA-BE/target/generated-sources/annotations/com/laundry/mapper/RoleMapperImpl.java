@@ -2,8 +2,8 @@ package com.laundry.mapper;
 
 import com.laundry.dto.response.PermissionResponse;
 import com.laundry.dto.response.RoleResponse;
-import com.laundry.entity.Permissions;
-import com.laundry.entity.Roles;
+import com.laundry.entity.UserAuth.Permissions;
+import com.laundry.entity.UserAuth.Roles;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.annotation.processing.Generated;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-17T00:24:24+0700",
+    date = "2026-02-22T22:55:51+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Eclipse Adoptium)"
 )
 @Component
