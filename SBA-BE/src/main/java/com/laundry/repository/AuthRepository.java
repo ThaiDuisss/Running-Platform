@@ -1,6 +1,6 @@
 package com.laundry.repository;
 
-import com.laundry.entity.Users;
+import com.laundry.entity.UserAuth.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

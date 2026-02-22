@@ -1,6 +1,6 @@
 package com.laundry.config;
 
-import com.laundry.entity.Users;
+import com.laundry.entity.UserAuth.Users;
 import com.laundry.enums.TokenType;
 import com.laundry.repository.AuthRepository;
 import com.laundry.service.impl.JwtServiceImp;

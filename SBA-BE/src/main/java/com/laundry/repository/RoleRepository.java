@@ -1,7 +1,7 @@
 package com.laundry.repository;
 
 import com.laundry.constant.RoleEnum;
-import com.laundry.entity.Roles;
+import com.laundry.entity.UserAuth.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
