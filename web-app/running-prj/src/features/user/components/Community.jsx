@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { Users } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 const Community = () => {
     return (
@@ -16,9 +17,9 @@ const Community = () => {
                     Tham gia cùng hơn 10.000 runner và trekker khác để chia sẻ lộ trình,
                     bí quyết luyện tập và cùng nhau chinh phục những đỉnh cao mới tại Việt Nam.
                 </p>
-                <Button variant="dark" className="rounded-0 px-5 py-3 fw-bold">
+                <NavLink to="/postMedia" className="btn btn-dark rounded-0 px-5 py-3 fw-bold">
                     THAM GIA NGAY
-                </Button>
+                </NavLink>
             </Container>
         </section>
     );
