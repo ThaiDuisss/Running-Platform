@@ -1,7 +1,8 @@
-package com.laundry.entity.RunActivities;
+package com.laundry.entity.FriendShipAndChat;
 
 import com.laundry.entity.AbstractEntity;
 import com.laundry.entity.UserAuth.Users;
+import com.laundry.enums.FriendStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -10,32 +11,22 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 @Entity
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @AllArgsConstructor
-@Where(clause = "is_deleted=false")
 @NoArgsConstructor
-public class RunActivity extends AbstractEntity<Long> {
+@Where(clause = "is_deleted=false")
+public class FriendShips extends AbstractEntity<Long> {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requester_id", nullable = false)
+    Users requester;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    Users user;
+    @JoinColumn(name = "addressee_id", nullable = false)
+    Users addressee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_id", nullable = true)
-    UserPlans plan;
-
-    LocalDate runDate;
-
-    BigDecimal distance;
-
-    Integer duration;
-
-    BigDecimal AvgPace;
+    FriendStatus status;
 }
