@@ -4,6 +4,7 @@ import com.laundry.entity.AbstractEntity;
 import com.laundry.entity.RouteChallege.RouteChallenge;
 import com.laundry.entity.RunActivities.RunActivity;
 import com.laundry.entity.UserAuth.Users;
+import com.laundry.enums.PostStatus;
 import com.laundry.enums.VisibilityEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,5 +34,8 @@ public class Posts extends AbstractEntity<Long> {
     RunActivity run;
 
     @ManyToOne(fetch = FetchType.LAZY)
-     RouteChallenge challenge;
+    RouteChallenge challenge;
+
+    @Enumerated(EnumType.STRING)
+    PostStatus status;
 }
