@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -27,9 +28,9 @@ public class AuthConfig {
      CustomizeRequestFilter customizeRequestFilter;
 
      String[] PUBLIC_ENDPOINTS = {
-            "/sign-in", "/register", "/refresh-token", "/introspect",
+            "/auth/**",
              "/swagger-ui/**",
-             "/v3/api-docs/**",
+             "/api-docs/**",
              "/swagger-ui.html",
              "/webjars/**",
              "/actuator/**",
@@ -44,13 +45,19 @@ public class AuthConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Configuring security filter chain");
-            http.securityMatcher("/**")
-                    .authorizeHttpRequests(req -> req.requestMatchers(PUBLIC_ENDPOINTS).permitAll().anyRequest().authenticated())
-                    .sessionManagement(mgr -> mgr.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .authenticationProvider(authenticationProvider())
-                    .addFilterBefore(customizeRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                    .csrf(csrf -> csrf.disable());
-            return http.build();
+        http
+                .cors(cors -> {})   // 🔥 bật CORS trong Security
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(mgr -> mgr.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()   // 🔥 QUAN TRỌNG
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(customizeRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean

@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Getter

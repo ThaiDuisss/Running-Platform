@@ -1,23 +1,23 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   application:
-    name: auth-service
+    name: running-platform
   datasource:
-    url: jdbc:mysql://localhost:3306/auth-service
+    url: jdbc:mysql://localhost:3306/running_platform
     username: admin
     password: Thai@13082020
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      #        password: Thai@11052004
-      timeout: 60000
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+#      #        password: Thai@11052004
+#      timeout: 60000
 #  kafka:
 #    bootstrap-servers: localhost:9092
 #    producer:
@@ -40,3 +40,8 @@ jwt:
   refreshTokenExpiration: 2592000000
   mailExpiration: 300000
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
