@@ -8,7 +8,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -34,9 +34,9 @@ public class UserPlans extends AbstractEntity<Long> {
     @Lob
     String description;
 
-    Instant startDate;
+    private LocalDate startDate;
 
-    Instant endDate;
+    private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
     VisibilityEnum visibility;
