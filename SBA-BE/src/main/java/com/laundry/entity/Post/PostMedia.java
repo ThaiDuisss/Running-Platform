@@ -1,7 +1,7 @@
-package com.laundry.entity.RunActivities;
+package com.laundry.entity.Post;
 
 import com.laundry.entity.AbstractEntity;
-import com.laundry.entity.UserAuth.Users;
+import com.laundry.entity.Files;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -10,32 +10,20 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 @Entity
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
-@NoArgsConstructor
-public class RunActivity extends AbstractEntity<Long> {
+public class PostMedia extends AbstractEntity<Long> {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    Posts posts;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    Users user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_id", nullable = true)
-    UserPlans plan;
-
-    LocalDate runDate;
-
-    BigDecimal distance;
-
-    Integer duration;
-
-    BigDecimal AvgPace;
+    @JoinColumn(name = "file_id", nullable = false)
+    Files file;
 }

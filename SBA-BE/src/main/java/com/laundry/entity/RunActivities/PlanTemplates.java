@@ -4,10 +4,7 @@ import com.laundry.entity.AbstractEntity;
 import com.laundry.enums.GoalType;
 import com.laundry.enums.LevelEnum;
 import com.laundry.enums.VisibilityEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
@@ -37,4 +34,7 @@ public class PlanTemplates extends AbstractEntity<Long> {
 
     @Enumerated(EnumType.STRING)
     VisibilityEnum visibilityEnum;
+
+    @Lob
+    private String description;
 }
