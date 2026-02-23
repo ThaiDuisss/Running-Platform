@@ -2,14 +2,12 @@ package com.laundry.entity.RunActivities;
 
 import com.laundry.entity.AbstractEntity;
 import com.laundry.enums.DayOfWeekEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -20,6 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
+@Table(uniqueConstraints = @UniqueConstraint(
+        columnNames = {"plan_template_id", "week_number","day_of_week"}
+))
 public class TemplateWorkouts extends AbstractEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,7 +29,8 @@ public class TemplateWorkouts extends AbstractEntity<Long> {
 
     Integer weekNumber;
 
-    DayOfWeekEnum dayOfWeekEnum;
+    @Enumerated(EnumType.STRING)
+    DayOfWeekEnum dayOfWeek;
 
-    Float targetDistance;
+    BigDecimal targetDistance;
 }
