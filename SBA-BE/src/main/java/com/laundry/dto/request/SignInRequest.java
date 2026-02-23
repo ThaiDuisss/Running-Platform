@@ -19,4 +19,6 @@ public class SignInRequest {
     @NotBlank
     @Size(min = 6, max = 30)
     String password;
+
+    boolean rememberMe;
 }
