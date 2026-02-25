@@ -1,23 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { AuthActionContext, AuthDataContext } from '@/app/providers/AuthProvider';
+import React, { useState, useEffect, useContext } from 'react';
+import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 
 const RunWiseNavbar = () => {
-    const navLinkCustom = ({ isActive }) => {
-        return "nav-link" + (isActive ? "border-bottom border-black text-info" : " text-gray");
-    }
+    const { user, theme } = useContext(AuthDataContext);
+    const { changeTheme } = useContext(AuthActionContext);
+    const navLinkCustom = ({ isActive }) =>
+        "nav-link " +
+        (isActive
+            ? "border-bottom border-black text-info"
+            : "text-gray");
+
 
     return (
 
-        <div className='container py-2'>
-            <nav className="navbar navbar-expand-lg bg-white">
-                <a className='d-flex align-items-center fw-bold navbar-brand italic fs-3' href='/'>
+        <div className=' border-bottom '>
+            <nav
+                className={`navbar navbar-expand-lg container py-2 ${theme === "Dark" ? "navbar-dark bg-dark" : "navbar-light bg-white"
+                    }`}
+            >
+                <Link
+                    to="/"
+                    className="d-flex align-items-center fw-bold navbar-brand fs-3"
+                >
                     <img src="/logo/logo-running.png" style={{ height: 35, width: 40, paddingRight: 10 }} />
                     RunWise
                     <span className='ms-1 rounded-circle'
                         style={{ backgroundColor: "#6f4ef6", height: 6, width: 6, display: "inline-block" }}>
                     </span>
-                </a>
+                </Link>
                 <button type='button' className='navbar-toggler'
                     data-bs-toggle="collapse"
                     data-bs-target="#mainNavbar">
@@ -45,8 +57,22 @@ const RunWiseNavbar = () => {
                         </li>
                     </ul>
                 </div>
+                {!user ?
+                    (<div className="d-flex gap-2 ms-5">
+                        <NavLink className="btn btn-outline-primary me-2" to="/login">Đăng nhập</NavLink>
+                        <NavLink className="btn btn-outline-primary" to="/register">Đăng ký</NavLink>
+                    </div>) :
+                    (<Nav>
+                        <NavDropdown title="Dropdown" id="nav-dropdown">
+                            <NavDropdown.Item eventKey="4.1">Action</NavDropdown.Item>
+                            <NavDropdown.Item eventKey="4.2">Another action</NavDropdown.Item>
+                            <NavDropdown.Item eventKey="4.3">Something else here</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item>
+                        </NavDropdown>
+                    </Nav>)
+                }
             </nav>
-
         </div>
 
     );
