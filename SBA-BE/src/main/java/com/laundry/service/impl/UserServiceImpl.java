@@ -4,6 +4,7 @@ import com.laundry.config.AuthConfig;
 
 import com.laundry.constant.ErrorEnum;
 import com.laundry.dto.request.UserRequest;
+import com.laundry.dto.response.ProfileResponse;
 import com.laundry.dto.response.UserResponse;
 import com.laundry.entity.UserAuth.Roles;
 import com.laundry.entity.UserAuth.Users;
@@ -13,6 +14,7 @@ import com.laundry.mapper.RoleMapper;
 import com.laundry.mapper.UserMapper;
 import com.laundry.repository.RoleRepository;
 import com.laundry.repository.AuthRepository;
+import com.laundry.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Slf4j(topic = "USER_SERVICE")
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
     AuthRepository repository;
     RoleRepository roleRepository;
     UserMapper mapper;
@@ -46,6 +49,7 @@ public class UserServiceImpl {
                 .password(authConfig.passwordEncoder().encode(userRegister.getPassword()))
                 .roles(roles)
                 .emailVerified(false)
+                .createAt(LocalDateTime.now())
                 .build();
 
         user = repository.save(user);
@@ -57,13 +61,20 @@ public class UserServiceImpl {
         return userResponse;
     }
 
-//    public ProfileResponse getMyInfo(Long userId) {
-//        Users user = repository.findById(userId).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
-//        ProfileResponse profileResponse = mapper.toProfileResponse(users);
-//        profileResponse.setRole(roleMapper.toResponse(user.getRoles()));
-//        profileResponse.setUsername(user.getUsername());
-//        return profileResponse;
-//    }
+    public UserResponse getUserById(Long userId) {
+        Users user = repository.findById(userId).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        UserResponse userResponse = mapper.toUserResponse(user);
+        userResponse.setRoles(roleMapper.toResponse(user.getRoles()));
+        return userResponse;
+    }
+
+    @Override
+    public UserResponse getUserByUsername(String username) {
+        Users user = repository.findByUsername(username).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        UserResponse userResponse = mapper.toUserResponse(user);
+        userResponse.setRoles(roleMapper.toResponse(user.getRoles()));
+        return userResponse;
+    }
 
     public boolean verifyEmail(String token) {
         try {
