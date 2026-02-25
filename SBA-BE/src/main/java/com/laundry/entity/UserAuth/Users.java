@@ -45,9 +45,6 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
 
     String avatar;
 
-    @Column(name = "create_at", nullable = false)
-    LocalDateTime createAt;
-
     @Column(name = "vip_expired_at")
     LocalDateTime vipExpiredAt;
 

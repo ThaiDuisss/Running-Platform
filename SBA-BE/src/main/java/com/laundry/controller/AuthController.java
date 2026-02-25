@@ -36,7 +36,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> signIn(@RequestBody SignInRequest signInRequest) {
         TokenResponse tokenResponse = authenticationService.getAccessToken(signInRequest);
-        UserResponse u = userService.getMyInfo(SecurityContextHolder.getContext().getAuthentication().getName());
+        UserResponse u = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenResponse.getRefreshToken())
                 .httpOnly(true)
                 .secure(true)
