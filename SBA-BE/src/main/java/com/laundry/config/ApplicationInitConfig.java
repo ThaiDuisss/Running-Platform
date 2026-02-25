@@ -38,7 +38,6 @@ public class ApplicationInitConfig {
                 roles.add(adminRole);
                 Users user = Users.builder().username("ADMIN")
                         .password(passwordEncoder.encode("admin"))
-                        .createAt(LocalDateTime.now())
                         .roles(roles)
                         .emailVerified(true)
                         .build();
