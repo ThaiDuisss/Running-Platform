@@ -1,0 +1,12 @@
+.lp-wrap {
+ background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20250228/pngtree-an-athlete-running-at-night-on-the-street-with-bright-motion-image_17017648.jpg");
+ display: flex;
+ align-items: center;
+ min-height: 100vh;
+padding: 28px 12px;
+}
+
+.form-login{
+    border-radius: 20;
+    border: 1px 
+}

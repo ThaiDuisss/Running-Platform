@@ -3,13 +3,15 @@
 body {
   font-family: 'Inter', sans-serif;
   scroll-behavior: smooth;
+transition: background-color 0.3s ease, color 0.3s ease;
+
 }
 
 .italic { font-style: italic; }
 
 .hero-section {
   background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
-              url('https://media.istockphoto.com/id/892658004/vi/anh/một-nhóm-lớn-các-vận-động-viên-có-động-lực-chạy-marathon-trong-tự-nhiên.jpg?s=2048x2048&w=is&k=20&c=5ixBxsvp2O5jF_Hm4SSQiaMlYK1BldEKQvbNzbAckgk=') center/cover;
+              url("hero.jpg") center/cover;
   min-height: 90vh;
 }
 

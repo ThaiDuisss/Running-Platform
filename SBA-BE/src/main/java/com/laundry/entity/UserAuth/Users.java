@@ -1,7 +1,9 @@
 package com.laundry.entity.UserAuth;
 
+import com.laundry.constant.ErrorEnum;
 import com.laundry.entity.AbstractEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
@@ -50,8 +52,9 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
     LocalDateTime vipExpiredAt;
 
     @Column(name = "email_verified", nullable = false, columnDefinition = "boolean default false")
-    boolean emailVerified;
+    boolean emailVerified = true;
 
+    String phoneNumber;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
