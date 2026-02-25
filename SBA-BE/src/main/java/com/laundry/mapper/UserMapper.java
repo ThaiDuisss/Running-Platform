@@ -4,7 +4,6 @@ package com.laundry.mapper;
 import com.laundry.dto.request.AdminCreateUserRequest;
 import com.laundry.dto.request.AdminUpdateUserRequest;
 import com.laundry.dto.request.UserRequest;
-import com.laundry.dto.response.ProfileResponse;
 import com.laundry.dto.response.UserResponse;
 import com.laundry.entity.UserAuth.Users;
 import org.mapstruct.Mapper;

@@ -21,11 +21,11 @@ const AuthProvider = ({ children }) => {
     const login = async (payload) => {
         try {
             const data = await authService.login(payload);
+            console.log("Login successful:", data);
+            const { tokenResponse, userResponse } = data.data;
 
-            const { accessToken, user } = data;
-
-            localStorage.setItem("ACCESS-TOKEN", accessToken);
-            localStorage.setItem("userInfo", JSON.stringify(user));
+            localStorage.setItem("ACCESS-TOKEN", tokenResponse);
+            localStorage.setItem("userInfo", JSON.stringify(userResponse));
 
             setUser(user);
         } catch (error) {
