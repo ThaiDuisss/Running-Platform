@@ -1,9 +1,15 @@
 package com.laundry.controller;
 
 
+import com.laundry.dto.response.ApiResponse;
+import com.laundry.dto.response.UserResponse;
 import com.laundry.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,23 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserServiceImpl service;
-//
-//    @GetMapping("/get-info/{userId}")
-//    ApiResponse<ProfileResponse> getMyInfo(@PathVariable() Long userId ) {
-//        return ApiResponse.<ProfileResponse>builder()
-//                .code(200)
-//                .status("Get Information Successful")
-//                .data(service.getMyInfo(userId))
-//                .build();
-//    }
-//
-//    @GetMapping("/my-info")
-//    ApiResponse<ProfileResponse> getMyInfo() {
-//
-//        return ApiResponse.<ProfileResponse>builder()
-//                .data(service.getMyInfo(null))
-//                .code(200)
-//                .status("Get Information Successful")
-//                .build();
-//    }
+
+    @GetMapping("/get-info/{userId}")
+    ApiResponse<UserResponse> getMyInfo(@PathVariable() Long userId) {
+        return ApiResponse.<UserResponse>builder()
+                .code(200)
+                .status("Get Information Successful")
+                .data(service.getUserById(userId))
+                .build();
+    }
+
+    @GetMapping("/my-info")
+    ApiResponse<UserResponse> getMyInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return ApiResponse.<UserResponse>builder()
+                .data(service.getUserByUsername(username))
+                .code(200)
+                .status("Get Information Successful")
+                .build();
+    }
 }
