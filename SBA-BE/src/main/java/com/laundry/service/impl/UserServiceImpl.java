@@ -4,6 +4,7 @@ import com.laundry.config.AuthConfig;
 
 import com.laundry.constant.ErrorEnum;
 import com.laundry.dto.request.UserRequest;
+import com.laundry.dto.response.ProfileResponse;
 import com.laundry.dto.response.UserResponse;
 import com.laundry.entity.UserAuth.Roles;
 import com.laundry.entity.UserAuth.Users;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
@@ -47,23 +49,32 @@ public class UserServiceImpl implements UserService {
                 .password(authConfig.passwordEncoder().encode(userRegister.getPassword()))
                 .roles(roles)
                 .emailVerified(false)
+                .createAt(LocalDateTime.now())
                 .build();
 
         user = repository.save(user);
         Users userProfile = mapper.toUserProfile(userRegister);
         userProfile.setId(user.getId());
         UserResponse userResponse = mapper.toUserResponse(userProfile);
-        userResponse.setId(user.getId());
+        userResponse.setUserId(user.getId());
         sendEmail(userRegister.getUsername());
         return userResponse;
     }
 
-    @Override
-    public UserResponse getMyInfo(String username) {
-        Users u = repository.findByUsername(username).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
-        return  mapper.toUserResponse(u);
+    public UserResponse getUserById(Long userId) {
+        Users user = repository.findById(userId).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        UserResponse userResponse = mapper.toUserResponse(user);
+        userResponse.setRoles(roleMapper.toResponse(user.getRoles()));
+        return userResponse;
     }
 
+    @Override
+    public UserResponse getUserByUsername(String username) {
+        Users user = repository.findByUsername(username).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        UserResponse userResponse = mapper.toUserResponse(user);
+        userResponse.setRoles(roleMapper.toResponse(user.getRoles()));
+        return userResponse;
+    }
 
     public boolean verifyEmail(String token) {
         try {
