@@ -13,6 +13,7 @@ import com.laundry.mapper.RoleMapper;
 import com.laundry.mapper.UserMapper;
 import com.laundry.repository.RoleRepository;
 import com.laundry.repository.AuthRepository;
+import com.laundry.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Slf4j(topic = "USER_SERVICE")
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
     AuthRepository repository;
     RoleRepository roleRepository;
     UserMapper mapper;
@@ -52,18 +53,17 @@ public class UserServiceImpl {
         Users userProfile = mapper.toUserProfile(userRegister);
         userProfile.setId(user.getId());
         UserResponse userResponse = mapper.toUserResponse(userProfile);
-        userResponse.setUserId(user.getId());
+        userResponse.setId(user.getId());
         sendEmail(userRegister.getUsername());
         return userResponse;
     }
 
-//    public ProfileResponse getMyInfo(Long userId) {
-//        Users user = repository.findById(userId).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
-//        ProfileResponse profileResponse = mapper.toProfileResponse(users);
-//        profileResponse.setRole(roleMapper.toResponse(user.getRoles()));
-//        profileResponse.setUsername(user.getUsername());
-//        return profileResponse;
-//    }
+    @Override
+    public UserResponse getMyInfo(String username) {
+        Users u = repository.findByUsername(username).orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        return  mapper.toUserResponse(u);
+    }
+
 
     public boolean verifyEmail(String token) {
         try {
