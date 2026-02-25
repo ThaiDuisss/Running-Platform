@@ -11,6 +11,8 @@ import java.util.Set;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Roles, Long> {
-    @Query("SELECT r FROM Roles r WHERE r.roleName IN :names")
-    Set<Roles> findByRoleNameIn(@Param("names") Set<RoleEnum> names);
+    @Query("SELECT r FROM Roles r WHERE r.roleName IN :roleName")
+    Set<Roles> findByRoleNameIn(@Param("roleName") Set<RoleEnum> names);
+
+    Roles findByRoleName(RoleEnum roleName);
 }

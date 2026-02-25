@@ -45,14 +45,14 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
 
     String avatar;
 
-    @Column(name = "create_at", nullable = false, columnDefinition = "LocalDateTime default false")
-    boolean isVip;
+    @Column(name = "create_at", nullable = false)
+    LocalDateTime createAt;
 
-    @Column(name = "vip_expired_at", nullable = false, columnDefinition = "LocalDateTime default false")
+    @Column(name = "vip_expired_at")
     LocalDateTime vipExpiredAt;
 
     @Column(name = "email_verified", nullable = false, columnDefinition = "boolean default false")
-    boolean emailVerified = true;
+    boolean emailVerified = false;
 
     String phoneNumber;
 
