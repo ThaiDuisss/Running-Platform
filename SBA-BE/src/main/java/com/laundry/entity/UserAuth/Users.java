@@ -21,9 +21,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
 public class Users extends AbstractEntity<Long> implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long userId;
 
     @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(25)")
     String username;
@@ -51,9 +48,6 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
 
     @Column(name = "vip_expired_at", nullable = false, columnDefinition = "LocalDateTime default false")
     LocalDateTime vipExpiredAt;
-
-    @Column(name = "create_at", nullable = false, columnDefinition = "LocalDateTime default false")
-    LocalDateTime createAt;
 
     @Column(name = "email_verified", nullable = false, columnDefinition = "boolean default false")
     boolean emailVerified;
