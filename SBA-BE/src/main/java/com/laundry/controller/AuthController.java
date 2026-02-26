@@ -4,7 +4,9 @@ import com.laundry.dto.request.IntrospectToken;
 import com.laundry.dto.request.UserRequest;
 import com.laundry.dto.response.ApiResponse;
 import com.laundry.dto.request.SignInRequest;
+import com.laundry.dto.response.SignInResponse;
 import com.laundry.dto.response.TokenResponse;
+import com.laundry.dto.response.UserResponse;
 import com.laundry.enums.TokenType;
 import com.laundry.service.AuthenticationService;
 import com.laundry.service.impl.JwtServiceImp;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,7 +36,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> signIn(@RequestBody SignInRequest signInRequest) {
         TokenResponse tokenResponse = authenticationService.getAccessToken(signInRequest);
-
+        UserResponse u = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenResponse.getRefreshToken())
                 .httpOnly(true)
                 .secure(true)
@@ -48,7 +51,7 @@ public class AuthController {
                         .code(200)
                         .status("OK")
                         .message("User logged in successfully")
-                        .data(tokenResponse.getAccessToken())
+                        .data(SignInResponse.builder().tokenResponse(tokenResponse).userResponse(u).build())
                         .build());
     }
 

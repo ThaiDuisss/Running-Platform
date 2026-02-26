@@ -5,7 +5,6 @@ import com.laundry.config.AuthConfig;
 import com.laundry.constant.ErrorEnum;
 import com.laundry.constant.RoleEnum;
 import com.laundry.dto.request.UserRequest;
-import com.laundry.dto.response.ProfileResponse;
 import com.laundry.dto.response.UserResponse;
 import com.laundry.entity.UserAuth.Roles;
 import com.laundry.entity.UserAuth.Users;
@@ -57,10 +56,10 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         user = repository.save(user);
-        Users userCreate = mapper.toUser(userRegister);
-        userCreate.setId(user.getId());
-        UserResponse userResponse = mapper.toUserResponse(userCreate);
-        userResponse.setUserId(user.getId());
+        Users userProfile = mapper.toUserProfile(userRegister);
+        userProfile.setId(user.getId());
+        UserResponse userResponse = mapper.toUserResponse(userProfile);
+        userResponse.setId(user.getId());
         sendEmail(userRegister.getUsername());
         return userResponse;
     }
