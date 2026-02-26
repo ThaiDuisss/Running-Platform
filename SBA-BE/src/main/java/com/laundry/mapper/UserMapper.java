@@ -14,7 +14,6 @@ import org.mapstruct.MappingTarget;
 public interface UserMapper {
     Users toUser(UserRequest users);
     Users toUserProfile(UserRequest users);
-    @Mapping(source = "id", target = "userId")
     UserResponse toUserResponse(Users user);
     Users toUser(AdminCreateUserRequest req);
 
