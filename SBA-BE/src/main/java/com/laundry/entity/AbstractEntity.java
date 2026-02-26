@@ -1,7 +1,10 @@
 package com.laundry.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
@@ -11,6 +14,9 @@ import java.time.Instant;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @MappedSuperclass
 public abstract class AbstractEntity<T extends Serializable> implements Serializable {
     @Id
@@ -25,7 +31,7 @@ public abstract class AbstractEntity<T extends Serializable> implements Serializ
 
     @Column(name = "createdAt")
     @CreationTimestamp
-    Instant creatDate;
+    Instant createDate;
 
     @Column(name = "updateAt")
     @UpdateTimestamp

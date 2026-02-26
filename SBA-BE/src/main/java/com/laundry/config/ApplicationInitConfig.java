@@ -28,13 +28,18 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner initApplicationRunner(AuthRepository userRepository, RoleRepository roleRepository) {
         return args -> {
+            for (RoleEnum roleEnum : RoleEnum.values()) {
+                boolean exists = roleRepository.existsByRoleName(roleEnum);
+                if (!exists) {
+                    Roles role = Roles.builder()
+                            .roleName(roleEnum)
+                            .build();
+                    roleRepository.save(role);
+                }
+            }
             if (userRepository.findByUsername(("ADMIN")).isEmpty()) {
                 Set<Roles> roles = new HashSet<Roles>();
                 Roles adminRole = roleRepository.findByRoleName(RoleEnum.ADMIN);
-                if (adminRole == null) {
-                    adminRole = Roles.builder().roleName(RoleEnum.ADMIN).build();
-                    roleRepository.save(adminRole);
-                }
                 roles.add(adminRole);
                 Users user = Users.builder().username("ADMIN")
                         .password(passwordEncoder.encode("admin"))
