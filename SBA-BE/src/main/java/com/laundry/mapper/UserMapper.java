@@ -13,7 +13,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     Users toUserProfile(UserRequest users);
-    @Mapping(source = "id", target = "userId")
+    @Mapping(source = "id", target = "id")
     UserResponse toUserResponse(Users user);
     Users toUser(AdminCreateUserRequest req);
 
