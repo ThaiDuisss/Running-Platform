@@ -12,6 +12,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    Users toUser(UserRequest users);
     Users toUserProfile(UserRequest users);
     @Mapping(source = "id", target = "userId")
     UserResponse toUserResponse(Users user);

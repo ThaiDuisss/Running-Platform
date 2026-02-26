@@ -33,7 +33,4 @@ public class UserRequest {
 
     @Pattern(regexp = "^0[0-9]{9,10}$", message = ErrorEnum.INVALID_PHONE)
     String phoneNumber;
-
-    @NotBlank
-    Set<RoleEnum> roles;
 }

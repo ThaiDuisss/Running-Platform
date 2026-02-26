@@ -4,6 +4,7 @@ import com.laundry.entity.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Where;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
