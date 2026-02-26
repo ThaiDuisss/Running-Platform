@@ -1,6 +1,8 @@
 package com.laundry.mapper;
 
 import com.laundry.constant.RoleEnum;
+import com.laundry.dto.request.AdminCreateUserRequest;
+import com.laundry.dto.request.AdminUpdateUserRequest;
 import com.laundry.dto.request.UserRequest;
 import com.laundry.dto.response.PermissionResponse;
 import com.laundry.dto.response.RoleResponse;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-25T19:27:15+0700",
+    date = "2026-02-25T20:19:34+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Eclipse Adoptium)"
 )
 @Component
@@ -57,6 +59,35 @@ public class UserMapperImpl implements UserMapper {
         userResponse.phoneNumber( user.getPhoneNumber() );
 
         return userResponse.build();
+    }
+
+    @Override
+    public Users toUser(AdminCreateUserRequest req) {
+        if ( req == null ) {
+            return null;
+        }
+
+        Users.UsersBuilder users = Users.builder();
+
+        users.username( req.getUsername() );
+        users.password( req.getPassword() );
+        users.roles( roleEnumSetToRolesSet( req.getRoles() ) );
+        users.phoneNumber( req.getPhoneNumber() );
+
+        return users.build();
+    }
+
+    @Override
+    public void updateUser(Users user, AdminUpdateUserRequest req) {
+        if ( req == null ) {
+            return;
+        }
+
+        user.setUsername( req.getUsername() );
+        if ( req.getEmailVerified() != null ) {
+            user.setEmailVerified( req.getEmailVerified() );
+        }
+        user.setPhoneNumber( req.getPhoneNumber() );
     }
 
     protected Roles roleEnumToRoles(RoleEnum roleEnum) {
