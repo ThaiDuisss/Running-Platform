@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @FieldDefaults(level =  AccessLevel.PRIVATE)
-@Builder
+@SuperBuilder// Cho phép kế thừa builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
@@ -44,9 +45,6 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
     String longitude;
 
     String avatar;
-
-    @Column(name = "create_at", nullable = false)
-    LocalDateTime createAt;
 
     @Column(name = "vip_expired_at")
     LocalDateTime vipExpiredAt;

@@ -3,6 +3,7 @@ package com.laundry.service.impl;
 import com.laundry.config.AuthConfig;
 
 import com.laundry.constant.ErrorEnum;
+import com.laundry.constant.RoleEnum;
 import com.laundry.dto.request.UserRequest;
 import com.laundry.dto.response.ProfileResponse;
 import com.laundry.dto.response.UserResponse;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -43,19 +45,21 @@ public class UserServiceImpl implements UserService {
         if (repository.existsByUsername(userRegister.getUsername())) {
             throw new AppException(ErrorEnum.USERNAME_EXIST);
         }
-        Set<Roles> roles = roleRepository.findByRoleNameIn(userRegister.getRoles());
+        Set<Roles> roles = new HashSet<Roles>();
+
+        Roles userRole = roleRepository.findByRoleName(RoleEnum.USER);
+        roles.add(userRole);
         Users user = Users.builder()
                 .username(userRegister.getUsername())
                 .password(authConfig.passwordEncoder().encode(userRegister.getPassword()))
                 .roles(roles)
                 .emailVerified(false)
-                .createAt(LocalDateTime.now())
                 .build();
 
         user = repository.save(user);
-        Users userProfile = mapper.toUserProfile(userRegister);
-        userProfile.setId(user.getId());
-        UserResponse userResponse = mapper.toUserResponse(userProfile);
+        Users userCreate = mapper.toUser(userRegister);
+        userCreate.setId(user.getId());
+        UserResponse userResponse = mapper.toUserResponse(userCreate);
         userResponse.setUserId(user.getId());
         sendEmail(userRegister.getUsername());
         return userResponse;
