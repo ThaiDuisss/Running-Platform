@@ -1,6 +1,8 @@
 package com.laundry.mapper;
 
 import com.laundry.constant.RoleEnum;
+import com.laundry.dto.request.AdminCreateUserRequest;
+import com.laundry.dto.request.AdminUpdateUserRequest;
 import com.laundry.dto.request.UserRequest;
 import com.laundry.dto.response.PermissionResponse;
 import com.laundry.dto.response.RoleResponse;
@@ -15,11 +17,26 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-25T19:27:15+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Eclipse Adoptium)"
+    date = "2026-02-26T08:59:07+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.15 (Microsoft)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
+
+    @Override
+    public Users toUser(UserRequest users) {
+        if ( users == null ) {
+            return null;
+        }
+
+        Users.UsersBuilder users1 = Users.builder();
+
+        users1.username( users.getUsername() );
+        users1.password( users.getPassword() );
+        users1.phoneNumber( users.getPhoneNumber() );
+
+        return users1.build();
+    }
 
     @Override
     public Users toUserProfile(UserRequest users) {
@@ -31,7 +48,6 @@ public class UserMapperImpl implements UserMapper {
 
         users1.username( users.getUsername() );
         users1.password( users.getPassword() );
-        users1.roles( roleEnumSetToRolesSet( users.getRoles() ) );
         users1.phoneNumber( users.getPhoneNumber() );
 
         return users1.build();
@@ -59,27 +75,33 @@ public class UserMapperImpl implements UserMapper {
         return userResponse.build();
     }
 
-    protected Roles roleEnumToRoles(RoleEnum roleEnum) {
-        if ( roleEnum == null ) {
+    @Override
+    public Users toUser(AdminCreateUserRequest req) {
+        if ( req == null ) {
             return null;
         }
 
-        Roles.RolesBuilder roles = Roles.builder();
+        Users.UsersBuilder users = Users.builder();
 
-        return roles.build();
+        users.username( req.getUsername() );
+        users.password( req.getPassword() );
+        users.roles( roleEnumSetToRolesSet( req.getRoles() ) );
+        users.phoneNumber( req.getPhoneNumber() );
+
+        return users.build();
     }
 
-    protected Set<Roles> roleEnumSetToRolesSet(Set<RoleEnum> set) {
-        if ( set == null ) {
-            return null;
+    @Override
+    public void updateUser(Users user, AdminUpdateUserRequest req) {
+        if ( req == null ) {
+            return;
         }
 
-        Set<Roles> set1 = new LinkedHashSet<Roles>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
-        for ( RoleEnum roleEnum : set ) {
-            set1.add( roleEnumToRoles( roleEnum ) );
+        user.setUsername( req.getUsername() );
+        if ( req.getEmailVerified() != null ) {
+            user.setEmailVerified( req.getEmailVerified() );
         }
-
-        return set1;
+        user.setPhoneNumber( req.getPhoneNumber() );
     }
 
     protected PermissionResponse permissionsToPermissionResponse(Permissions permissions) {
@@ -129,6 +151,29 @@ public class UserMapperImpl implements UserMapper {
         Set<RoleResponse> set1 = new LinkedHashSet<RoleResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
         for ( Roles roles : set ) {
             set1.add( rolesToRoleResponse( roles ) );
+        }
+
+        return set1;
+    }
+
+    protected Roles roleEnumToRoles(RoleEnum roleEnum) {
+        if ( roleEnum == null ) {
+            return null;
+        }
+
+        Roles.RolesBuilder<?, ?> roles = Roles.builder();
+
+        return roles.build();
+    }
+
+    protected Set<Roles> roleEnumSetToRolesSet(Set<RoleEnum> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<Roles> set1 = new LinkedHashSet<Roles>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( RoleEnum roleEnum : set ) {
+            set1.add( roleEnumToRoles( roleEnum ) );
         }
 
         return set1;
