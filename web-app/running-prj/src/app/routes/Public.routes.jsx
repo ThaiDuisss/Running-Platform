@@ -9,7 +9,7 @@ import PostMedia from '@/features/user/components/Post/PostMedia'
 import Register from '../guards/Register'
 const publicRoutes = [
   { path: "/login", element: <UserLogin /> },
-  {path: "/register", element: <Register /> },
+  { path: "/register", element: <Register /> },
   {
     path: "/", element: <PublicLayouts />,
     children: [
