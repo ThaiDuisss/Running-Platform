@@ -5,7 +5,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 const RunWiseNavbar = () => {
     const { user, theme } = useContext(AuthDataContext);
-    const { changeTheme } = useContext(AuthActionContext);
+    const { changeTheme, logout } = useContext(AuthActionContext);
     const navLinkCustom = ({ isActive }) =>
         "nav-link " +
         (isActive
@@ -63,8 +63,8 @@ const RunWiseNavbar = () => {
                         <NavLink className="btn btn-outline-primary" to="/register">Đăng ký</NavLink>
                     </div>) :
                     (<Nav>
-                        <NavDropdown title="Dropdown" id="nav-dropdown">
-                            <NavDropdown.Item eventKey="4.1">Action</NavDropdown.Item>
+                        <NavDropdown title="Profile" id="nav-dropdown">
+                            <NavDropdown.Item eventKey="4.1" onClick={logout}>Log Out</NavDropdown.Item>
                             <NavDropdown.Item eventKey="4.2">Another action</NavDropdown.Item>
                             <NavDropdown.Item eventKey="4.3">Something else here</NavDropdown.Item>
                             <NavDropdown.Divider />
