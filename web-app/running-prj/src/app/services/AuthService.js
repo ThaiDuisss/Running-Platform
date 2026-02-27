@@ -1,9 +1,5 @@
 import axiosClient from "@/shared/services/axiosClient";
-import {
-    useNavigate
-} from "react-router-dom";
 
-const navigate = useNavigate();
 export const authService = {
     login: async (payload) => {
 
@@ -45,8 +41,9 @@ export const authService = {
     },
 
     logout: () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        console.log("Logging out...");
+        localStorage.removeItem("ACCESS-TOKEN");
+        localStorage.removeItem("userInfo");
     },
 
 };
