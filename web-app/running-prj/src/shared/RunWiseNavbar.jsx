@@ -52,26 +52,24 @@ const RunWiseNavbar = () => {
                         <li className="nav-item">
                             <NavLink className={navLinkCustom} to="/blog">Tin tức</NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink className={navLinkCustom} to="/friends">Bạn bè</NavLink>
-                        </li>
                     </ul>
+                    {!user ?
+                        (<div className="d-flex gap-2 ms-5">
+                            <NavLink className="btn btn-outline-primary me-2" to="/login">Đăng nhập</NavLink>
+                            <NavLink className="btn btn-outline-primary" to="/register">Đăng ký</NavLink>
+                        </div>) :
+                        (<Nav variant="pills" activeKey="1" onSelect={(selectedKey) => console.log(`selected ${selectedKey}`)}>
+                            <NavDropdown title={user?.username || "Profile"} id="nav-dropdown">
+                                <NavDropdown.Item eventKey="4.1" onClick={logout}>Log Out</NavDropdown.Item>
+                                <NavDropdown.Item eventKey="4.2">Another action</NavDropdown.Item>
+                                <NavDropdown.Item eventKey="4.3">Something else here</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>)
+                    }
                 </div>
-                {!user ?
-                    (<div className="d-flex gap-2 ms-5">
-                        <NavLink className="btn btn-outline-primary me-2" to="/login">Đăng nhập</NavLink>
-                        <NavLink className="btn btn-outline-primary" to="/register">Đăng ký</NavLink>
-                    </div>) :
-                    (<Nav>
-                        <NavDropdown title="Profile" id="nav-dropdown">
-                            <NavDropdown.Item eventKey="4.1" onClick={logout}>Log Out</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="4.2">Another action</NavDropdown.Item>
-                            <NavDropdown.Item eventKey="4.3">Something else here</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>)
-                }
+
             </nav>
         </div>
 
