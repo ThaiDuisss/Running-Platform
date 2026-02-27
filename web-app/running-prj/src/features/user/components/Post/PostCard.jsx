@@ -1,52 +1,95 @@
 import React from "react";
+import { Card } from "react-bootstrap";
 
 export default function PostCard({ post }) {
 
     return (
-        <div className="post">
+        <Card className="post">
 
-            <div className="post-header">
+            {/* HEADER */}
+            <Card.Body className="post-header">
 
-                <img src="https://i.pravatar.cc/40" />
+                <img
+                    src="https://i.pravatar.cc/40"
+                    alt="avatar"
+                    className="avatar"
+                />
 
-                <div>
-                    <div className="name">{post.user}</div>
-                    <div className="time">{post.time}</div>
+                <div className="user-info">
+
+                    <div className="user-name">
+                        {post.user}
+                    </div>
+
+                    <div className="post-time">
+                        {post.time} · 🌍
+                    </div>
+
                 </div>
 
-            </div>
+            </Card.Body>
 
-            <div className="post-content">
-                {post.content}
-            </div>
 
-            <div className="running-stats">
+            {/* CONTENT */}
+            <Card.Body className="post-content">
 
-                <div>
-                    <div className="stat-value">{post.distance}</div>
-                    <div className="stat-label">Distance</div>
+                <div className="post-text">
+                    {post.content}
                 </div>
 
-                <div>
-                    <div className="stat-value">{post.pace}</div>
-                    <div className="stat-label">Pace</div>
+
+                {/* RUNNING STATS */}
+                <div className="running-box">
+
+                    <div className="stat">
+                        <div className="stat-value">
+                            {post.distance}
+                        </div>
+                        <div className="stat-label">
+                            Distance
+                        </div>
+                    </div>
+
+                    <div className="stat">
+                        <div className="stat-value">
+                            {post.pace}
+                        </div>
+                        <div className="stat-label">
+                            Pace
+                        </div>
+                    </div>
+
+                    <div className="stat">
+                        <div className="stat-value">
+                            {post.duration}
+                        </div>
+                        <div className="stat-label">
+                            Time
+                        </div>
+                    </div>
+
                 </div>
 
-                <div>
-                    <div className="stat-value">{post.duration}</div>
-                    <div className="stat-label">Time</div>
+            </Card.Body>
+
+
+            {/* ACTION BAR */}
+            <Card.Body className="actions">
+
+                <div className="action-btn">
+                    👍 Like
                 </div>
 
-            </div>
+                <div className="action-btn">
+                    💬 Comment
+                </div>
 
-            <div className="post-actions">
+                <div className="action-btn">
+                    ↗ Share
+                </div>
 
-                <div>👍 Like</div>
-                <div>💬 Comment</div>
-                <div>↗ Share</div>
+            </Card.Body>
 
-            </div>
-
-        </div>
-    )
+        </Card>
+    );
 }
