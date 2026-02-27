@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 const Community = () => {
     return (
         <section id="community" className="py-5 bg-white text-center">
-            <Container className="py-5 border-top border-bottom">
+            <Container className="py-5">
                 <div className="d-flex justify-content-center mb-4">
                     <div className="bg-light p-3 rounded-circle">
                         <Users size={40} className="text-dark" />
@@ -17,7 +17,7 @@ const Community = () => {
                     Tham gia cùng hơn 10.000 runner và trekker khác để chia sẻ lộ trình,
                     bí quyết luyện tập và cùng nhau chinh phục những đỉnh cao mới tại Việt Nam.
                 </p>
-                <NavLink to="/postMedia" className="btn btn-dark rounded-0 px-5 py-3 fw-bold">
+                <NavLink to="/feed" className="btn btn-dark rounded-0 px-5 py-3 fw-bold">
                     THAM GIA NGAY
                 </NavLink>
             </Container>
