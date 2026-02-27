@@ -12,7 +12,7 @@ const RunWiseNavbar = () => {
             ? "border-bottom border-black text-info"
             : "text-gray");
 
-
+    console.log("Navbar render - user:", user, "theme:", theme);
     return (
 
         <div className=' border-bottom '>
@@ -53,7 +53,7 @@ const RunWiseNavbar = () => {
                             <NavLink className={navLinkCustom} to="/blog">Tin tức</NavLink>
                         </li>
                     </ul>
-                    {!user ?
+                    {user === null || user === undefined || Object.keys(user).length === 0 ?
                         (<div className="d-flex gap-2 ms-5">
                             <NavLink className="btn btn-outline-primary me-2" to="/login">Đăng nhập</NavLink>
                             <NavLink className="btn btn-outline-primary" to="/register">Đăng ký</NavLink>

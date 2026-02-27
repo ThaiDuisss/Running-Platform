@@ -35,9 +35,8 @@ const AuthProvider = ({ children }) => {
 
     // 🚪 LOGOUT
     const logout = () => {
-        localStorage.removeItem("ACCESS-TOKEN");
-        localStorage.removeItem("userInfo");
-        setUser(null);
+        authService.logout();
+        setUser("");
     };
 
     // 👤 CHANGE USER
