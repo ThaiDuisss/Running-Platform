@@ -11,6 +11,10 @@ body{
 .sidebar-left{
   width:280px;
   padding:15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-right: #d0d4d8 solid 1px;
 }
 
 .feed{
@@ -21,6 +25,10 @@ body{
 .sidebar-right{
   width:320px;
   padding:15px;
+display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-left: #d0d4d8 solid 1px;
 }
 
 .create-post{
