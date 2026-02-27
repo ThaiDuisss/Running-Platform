@@ -4,7 +4,7 @@ import { Facebook, Instagram, Youtube, Mail, Send } from 'lucide-react';
 
 const Footer = () => {
     return (
-        <footer className="bg-dark text-white pt-3 pb-1">
+        <footer className="bg-dark text-white pt-3 pb-1 mt-4">
             <Container className="py-3">
                 <Row className="gy-5">
                     <Col lg={4} md={12}>
