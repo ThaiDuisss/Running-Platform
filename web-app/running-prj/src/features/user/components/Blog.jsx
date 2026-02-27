@@ -44,7 +44,7 @@ const Blog = () => {
                                     <p className="text-muted small">{post.desc}</p>
                                     <div className="d-flex justify-content-between align-items-center mt-4">
                                         <span className="text-muted extra-small">{post.date}</span>
-                                        <a href="#" className="text-dark text-decoration-none fw-bold small">
+                                        <a href="/blog/feed" className="text-dark text-decoration-none fw-bold small">
                                             Đọc thêm <ChevronRight size={14} />
                                         </a>
                                     </div>

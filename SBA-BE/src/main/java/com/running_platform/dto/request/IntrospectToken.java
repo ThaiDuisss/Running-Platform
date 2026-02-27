@@ -1,0 +1,17 @@
+package com.running_platform.dto.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+public class IntrospectToken {
+    String token;
+}
+
