@@ -6,9 +6,10 @@ import Routes from '@/features/user/components/Routes'
 import Community from '@/features/user/components/Community'
 import Blog from '@/features/user/components/Blog'
 import PostMedia from '@/features/user/components/Post/PostMedia'
-
+import Register from '../guards/Register'
 const publicRoutes = [
   { path: "/login", element: <UserLogin /> },
+  {path: "/register", element: <Register /> },
   {
     path: "/", element: <PublicLayouts />,
     children: [
