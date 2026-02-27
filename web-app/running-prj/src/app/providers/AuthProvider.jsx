@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
             localStorage.setItem("ACCESS-TOKEN", tokenResponse);
             localStorage.setItem("userInfo", JSON.stringify(userResponse));
 
-            setUser(user);
+            setUser(userResponse);
         } catch (error) {
             throw error;
         }
