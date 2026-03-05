@@ -1,7 +1,7 @@
 import React from 'react'
 import Hero from './Hero'
 import { Routes } from 'react-router-dom'
-import Community from './Community'
+import Community from './Post/Community'
 import Gear from './Gear'
 import Blog from './Blog'
 

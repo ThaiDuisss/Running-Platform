@@ -27,18 +27,18 @@ const AuthProvider = ({ children }) => {
             localStorage.setItem("ACCESS-TOKEN", tokenResponse);
             localStorage.setItem("userInfo", JSON.stringify(userResponse));
 
-            setUser(user);
+            setUser(userResponse);
         } catch (error) {
             throw error;
         }
-        
     };
 
     // 🚪 LOGOUT
     const logout = () => {
         localStorage.removeItem("ACCESS-TOKEN");
         localStorage.removeItem("userInfo");
-        setUser(null);
+        authService.logout();
+        setUser("");
     };
 
     // 👤 CHANGE USER

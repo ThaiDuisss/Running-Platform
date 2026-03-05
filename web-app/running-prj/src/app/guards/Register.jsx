@@ -3,7 +3,8 @@ import React, { useState } from "react";
 function Register() {
   const [formData, setFormData] = useState({
     username: "",
-    email: "",
+    fullName: "",
+    phoneNumber: "",
     password: "",
     confirmPassword: ""
   });
@@ -18,13 +19,27 @@ function Register() {
     });
   };
 
+  const validatePhone = (phone) => {
+    return /^0[0-9]{9,10}$/.test(phone);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
+      return;
+    }
+
+    if (!validatePhone(formData.phoneNumber)) {
+      setError("Phone number must start with 0 and contain 10-11 digits");
       return;
     }
 
@@ -36,22 +51,26 @@ function Register() {
         },
         body: JSON.stringify({
           username: formData.username,
-          email: formData.email,
+          fullName: formData.fullName,
+          phoneNumber: formData.phoneNumber,
           password: formData.password
         })
       });
 
       if (!response.ok) {
-        throw new Error("Registration failed");
+        const data = await response.text();
+        throw new Error(data || "Registration failed");
       }
 
       setSuccess("Registration successful!");
       setFormData({
         username: "",
-        email: "",
+        fullName: "",
+        phoneNumber: "",
         password: "",
         confirmPassword: ""
       });
+
     } catch (err) {
       setError(err.message);
     }
@@ -73,10 +92,20 @@ function Register() {
         />
 
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
+          type="text"
+          name="fullName"
+          placeholder="Full Name"
+          value={formData.fullName}
+          onChange={handleChange}
+          required
+          style={styles.input}
+        />
+
+        <input
+          type="text"
+          name="phoneNumber"
+          placeholder="Phone Number"
+          value={formData.phoneNumber}
           onChange={handleChange}
           required
           style={styles.input}
