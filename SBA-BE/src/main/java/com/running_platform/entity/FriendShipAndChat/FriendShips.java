@@ -1,0 +1,32 @@
+package com.running_platform.entity.FriendShipAndChat;
+
+import com.running_platform.entity.AbstractEntity;
+import com.running_platform.entity.UserAuth.Users;
+import com.running_platform.enums.FriendStatus;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Where;
+
+@Entity
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Where(clause = "is_deleted=false")
+public class FriendShips extends AbstractEntity<Long> {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requester_id", nullable = false)
+    Users requester;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "addressee_id", nullable = false)
+    Users addressee;
+
+    FriendStatus status;
+}
