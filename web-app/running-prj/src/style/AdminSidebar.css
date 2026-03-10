@@ -1,0 +1,13 @@
+.sidebar-link {
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.sidebar-link:hover {
+    background: #e9ecef;
+}
+
+.sidebar-link.active {
+    background: #dee2e6;
+    font-weight: 600;
+}
