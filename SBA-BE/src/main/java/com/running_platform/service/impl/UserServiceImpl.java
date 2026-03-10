@@ -3,6 +3,7 @@ package com.running_platform.service.impl;
 import com.running_platform.config.AuthConfig;
 
 import com.running_platform.constant.ErrorEnum;
+import com.running_platform.constant.RoleEnum;
 import com.running_platform.dto.request.UserRequest;
 import com.running_platform.dto.response.UserResponse;
 import com.running_platform.entity.UserAuth.Roles;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -41,12 +43,16 @@ public class UserServiceImpl implements UserService {
         if (repository.existsByUsername(userRegister.getUsername())) {
             throw new AppException(ErrorEnum.USERNAME_EXIST);
         }
-        Set<Roles> roles = roleRepository.findByRoleNameIn(userRegister.getRoles());
+        Set<Roles> roles = new HashSet<>();
+        Roles roleUser = roleRepository.findByRoleName(RoleEnum.USER);
+        roles.add(roleUser);
         Users user = Users.builder()
                 .username(userRegister.getUsername())
                 .password(authConfig.passwordEncoder().encode(userRegister.getPassword()))
                 .roles(roles)
                 .emailVerified(false)
+                .fullName(userRegister.getFullName())
+                .phoneNumber(userRegister.getPhoneNumber())
                 .build();
 
         user = repository.save(user);
