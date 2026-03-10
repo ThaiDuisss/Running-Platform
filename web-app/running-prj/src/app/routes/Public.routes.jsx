@@ -8,6 +8,7 @@ import Blog from '@/features/user/components/Blog'
 import FeedPage from '@/features/user/components/Post/FeedPage'
 import PlanPage from '@/features/user/components/Plans/PlanPage'
 import { redirect } from 'react-router-dom'
+import Register from '../guards/Register'
 
 // ✅ loader đúng
 const communityLoader = () => {
