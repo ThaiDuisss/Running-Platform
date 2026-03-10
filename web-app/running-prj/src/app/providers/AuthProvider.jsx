@@ -21,13 +21,13 @@ const AuthProvider = ({ children }) => {
     const login = async (payload) => {
         try {
             const data = await authService.login(payload);
+            console.log("Login successful:", data);
+            const { tokenResponse, userResponse } = data.data;
 
-            const { accessToken, user } = data;
+            localStorage.setItem("ACCESS-TOKEN", tokenResponse);
+            localStorage.setItem("userInfo", JSON.stringify(userResponse));
 
-            localStorage.setItem("ACCESS-TOKEN", accessToken);
-            localStorage.setItem("userInfo", JSON.stringify(user));
-
-            setUser(user);
+            setUser(userResponse);
         } catch (error) {
             throw error;
         }
@@ -37,7 +37,8 @@ const AuthProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem("ACCESS-TOKEN");
         localStorage.removeItem("userInfo");
-        setUser(null);
+        authService.logout();
+        setUser("");
     };
 
     // 👤 CHANGE USER
