@@ -62,10 +62,7 @@ const RunWiseNavbar = () => {
                         (<Nav variant="pills" activeKey="1" onSelect={(selectedKey) => console.log(`selected ${selectedKey}`)}>
                             <NavDropdown title={user?.username || "Profile"} id="nav-dropdown">
                                 <NavDropdown.Item eventKey="4.1" onClick={logout}>Log Out</NavDropdown.Item>
-                                <NavDropdown.Item eventKey="4.2" onClick={navigator("/profile")}>Profile</NavDropdown.Item>
-                                <NavDropdown.Item eventKey="4.3">Something else here</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item>
+                                <NavDropdown.Item eventKey="4.2" onClick={() => navigator("/profile")}>Profile</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>)
                     }

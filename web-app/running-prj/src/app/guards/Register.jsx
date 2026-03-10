@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { authService } from "../services/authService";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -19,50 +20,17 @@ function Register() {
     });
   };
 
-  const validatePhone = (phone) => {
-    return /^0[0-9]{9,10}$/.test(phone);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match!");
-      return;
-    }
-
-    if (!validatePhone(formData.phoneNumber)) {
-      setError("Phone number must start with 0 and contain 10-11 digits");
-      return;
-    }
-
     try {
-      const response = await fetch("http://localhost:8080/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          fullName: formData.fullName,
-          phoneNumber: formData.phoneNumber,
-          password: formData.password
-        })
-      });
-
-      if (!response.ok) {
-        const data = await response.text();
-        throw new Error(data || "Registration failed");
-      }
+      const data = await authService.register(formData);
 
       setSuccess("Registration successful!");
+      setError("");
+
       setFormData({
         username: "",
         fullName: "",
@@ -70,9 +38,16 @@ function Register() {
         password: "",
         confirmPassword: ""
       });
-
     } catch (err) {
-      setError(err.message);
+      console.error("Registration error:", err);
+
+      const message =
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.message ||
+        "Registration failed";
+
+      setError(message);
     }
   };
 
@@ -134,6 +109,9 @@ function Register() {
         <button type="submit" style={styles.button}>
           Register
         </button>
+        <a href="/login" style={{ display: "block", marginTop: "10px", textAlign: "center" }}>
+          Already have an account? Login
+        </a>
 
         {error && <p style={styles.error}>{error}</p>}
         {success && <p style={styles.success}>{success}</p>}
