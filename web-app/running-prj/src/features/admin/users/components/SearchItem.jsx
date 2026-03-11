@@ -9,9 +9,11 @@ const SearchItem = ({ search, onSearch }) => {
                 type="text"
                 className="search-input"
                 placeholder="Search user..."
+                value={search}
+                onChange={(e) => onSearch(e.target.value)}
             />
 
-            <i className="bi bi-search search-icon"></i>
+            <FaSearch className="search-icon" />
         </div>
     );
 };
