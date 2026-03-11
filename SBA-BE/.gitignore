@@ -39,3 +39,5 @@ build/
 client_serest.json
 
 tokens/StoredCredential
+
+.idea/

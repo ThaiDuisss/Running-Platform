@@ -39,6 +39,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public TokenResponse getAccessToken(SignInRequest request) {
 
         Users user = authRepository.findByUsername(request.getUsername()).orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
+        if(!user.isEmailVerified()) {
+            throw new AppException(ErrorEnum.EMAIL_NOT_VERIFIED);
+        }
 
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
