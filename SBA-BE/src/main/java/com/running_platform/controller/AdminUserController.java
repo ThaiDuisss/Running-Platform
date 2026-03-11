@@ -53,7 +53,7 @@ public class AdminUserController {
 
     @GetMapping("/{id}")
     public ApiResponse<UserResponse> detail(@PathVariable Long id) {
-        UserResponse data = adminUserService.getUser(id);
+        UserResponse data = adminUserService.getUserById(id);
 
         return ApiResponse.<UserResponse>builder()
                 .status("SUCCESS")
