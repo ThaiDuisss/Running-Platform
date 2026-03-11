@@ -22,14 +22,8 @@ export const authService = {
     },
 
     register: async (payload) => {
-        try {
-            const res = await axiosClient.post("/auth/register", payload);
-            return res.data;
-        } catch (error) {
-            console.error("Registration error:", error);
-            throw error;
-        }
-
+        const res = await axiosClient.post("/auth/register", payload);
+        return res.data;
     },
 
     refreshToken: async () => {

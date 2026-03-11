@@ -25,7 +25,8 @@ public enum ErrorEnum {
     UNKNOWN_ERROR(9999, "Unknown error"),
     PHONE_EXIST(2002, "Phone is used to register."),
     CONVERSATION_NOT_FOUND(3001,"Conversation not found"),
-    FILE_NOT_FOUND(4001,"File not found");
+    FILE_NOT_FOUND(4001,"File not found"),
+    EMAIL_NOT_VERIFIED(4004, "Email not verified");
 
 
     public static final String INVALID_STATUS_MS = "Status is invalid";
@@ -33,7 +34,7 @@ public enum ErrorEnum {
     public static final String INVALID_EMAIL_MS = "Email is invalid";
     public static final String NOT_EMPTY_EMAIL = "Email must not be empty";
     public static final String NOT_EMPTY_PASSWORD = "Password must not be empty";
-    public static final String INVALID_PASSWORD = "Password must be at least 5 characters";
+    public static final String INVALID_PASSWORD = "Password must be at least 6 characters";
     public static final String INVALID_NAME = "Fullname be more than 1 character and less than 50 charaters";
     public static final String INVALID_NAME2 = "Full name must have no numbers or special characters allowed";
     public static final String NOT_EMPTY_NAME = "Full name cannot be null";

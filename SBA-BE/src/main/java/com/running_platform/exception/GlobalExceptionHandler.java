@@ -23,11 +23,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ApiResponse<Object>> handleNotFoundException(AppException exception) {
         returnError(exception);
+        List<FieldValidateException> errors = exception.getFieldValidateExceptions();
         ApiResponse<Object> response = ApiResponse.builder()
                 .status("error")
                 .code(exception.getCode())
                 .message(exception.getMessage())
-                .data(null)
+                .data(errors)
                 .build();
         return ResponseEntity.badRequest().body(response);
     }

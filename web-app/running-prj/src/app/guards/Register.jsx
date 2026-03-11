@@ -10,7 +10,7 @@ function Register() {
     confirmPassword: ""
   });
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState({});
   const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
@@ -22,15 +22,16 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
     setSuccess("");
 
+    if (!handleComparePassword()) {
+      return;
+    }
     try {
-      const data = await authService.register(formData);
-
-      setSuccess("Registration successful!");
-      setError("");
-
+     await authService.register(formData);
+      setSuccess("The verification link has been sent to your email address. Please check your email.");
       setFormData({
         username: "",
         fullName: "",
@@ -39,16 +40,26 @@ function Register() {
         confirmPassword: ""
       });
     } catch (err) {
-      console.error("Registration error:", err);
-
-      const message =
-        err.response?.data?.message ||
-        err.response?.data ||
-        err.message ||
-        "Registration failed";
-
-      setError(message);
+      const res = err.response?.data;
+      if (res?.data && Array.isArray(res.data)) {
+        const errors = {};
+        res.data.forEach(e => {
+          errors[e.field] = e.message;
+        });
+        setError(errors); // object lỗi
+      } else {
+        setError(res?.message || "Registration failed");
+      }
     }
+  };
+
+  const handleComparePassword = () => {
+    if (formData.password !== formData.confirmPassword) {
+      console.log("confirmPassword do not match");
+      setError({ confirmPassword: "Passwords do not match" });
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -59,12 +70,13 @@ function Register() {
         <input
           type="text"
           name="username"
-          placeholder="Username"
+          placeholder="Gmail"
           value={formData.username}
           onChange={handleChange}
           required
           style={styles.input}
         />
+        {error.username && <p className="text-danger">{error.username}</p>}
 
         <input
           type="text"
@@ -75,6 +87,7 @@ function Register() {
           required
           style={styles.input}
         />
+        {error.fullName && <p className="text-danger">{error.fullName}</p>}
 
         <input
           type="text"
@@ -85,6 +98,7 @@ function Register() {
           required
           style={styles.input}
         />
+        {error.phoneNumber && <p className="text-danger">{error.phoneNumber}</p>}
 
         <input
           type="password"
@@ -95,6 +109,7 @@ function Register() {
           required
           style={styles.input}
         />
+        {error.password && <p className="text-danger">{error.password}</p>}
 
         <input
           type="password"
@@ -105,6 +120,7 @@ function Register() {
           required
           style={styles.input}
         />
+        {error.confirmPassword && <p className="text-danger">{error.confirmPassword}</p>}
 
         <button type="submit" style={styles.button}>
           Register
@@ -113,7 +129,7 @@ function Register() {
           Already have an account? Login
         </a>
 
-        {error && <p style={styles.error}>{error}</p>}
+        {/* {error && <p style={styles.error}>{error}</p>} */}
         {success && <p style={styles.success}>{success}</p>}
       </form>
     </div>

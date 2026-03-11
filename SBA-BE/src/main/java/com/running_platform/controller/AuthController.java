@@ -7,11 +7,16 @@ import com.running_platform.dto.request.SignInRequest;
 import com.running_platform.dto.response.SignInResponse;
 import com.running_platform.dto.response.TokenResponse;
 import com.running_platform.dto.response.UserResponse;
+import com.running_platform.entity.UserAuth.Users;
+import com.running_platform.entity.UserAuth.VerificationTokens;
 import com.running_platform.enums.TokenType;
+import com.running_platform.repository.UserRepository;
+import com.running_platform.repository.VerificationTokenRepository;
 import com.running_platform.service.AuthenticationService;
 import com.running_platform.service.impl.JwtServiceImp;
 import com.running_platform.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,6 +37,26 @@ public class AuthController {
     AuthenticationService authenticationService;
     UserServiceImpl userService;
     JwtServiceImp jwtService;
+    VerificationTokenRepository tokenRepository;
+    UserRepository userRepository;
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyAccount(@RequestParam String token) {
+
+        VerificationTokens verificationToken =
+                tokenRepository.findByToken(token);
+
+        if (verificationToken == null) {
+            return ResponseEntity.badRequest().body("Invalid token");
+        }
+
+        Users user = verificationToken.getUser();
+        user.setEmailVerified(true);
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Account verified successfully");
+    }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> signIn(@RequestBody SignInRequest signInRequest) {
@@ -56,7 +81,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Object>> register(@RequestBody UserRequest userRegister) {
+    public ResponseEntity<ApiResponse<Object>> register(@Valid @RequestBody UserRequest userRegister) {
         return ResponseEntity.ok()
                 .body(ApiResponse.<Object>builder()
                         .code(200)
