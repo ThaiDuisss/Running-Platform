@@ -26,9 +26,12 @@ public enum ErrorEnum {
     PHONE_EXIST(2002, "Phone is used to register."),
     CONVERSATION_NOT_FOUND(3001,"Conversation not found"),
     FILE_NOT_FOUND(4001,"File not found"),
-    EMAIL_NOT_VERIFIED(4004, "Email not verified");
-
-
+    EMAIL_NOT_VERIFIED(4004, "Email not verified"),
+    INVALID_TOKEN(4005, "Token is invalid or expired"),
+    EXPIRED_TOKEN(4006, "Token is expired"),
+    EXISTING_RESET_PASSWORD_REQUEST(4007, "A reset password request already exists. Please check your email for the reset link or try again later."),
+    EMAIL_NOT_FOUND(4007, "If the email exists, a reset link has been sent")
+    ;
     public static final String INVALID_STATUS_MS = "Status is invalid";
     public static final String INVALID_MEMBERSHIP_MS = "Membership level is invalid";
     public static final String INVALID_EMAIL_MS = "Email is invalid";
