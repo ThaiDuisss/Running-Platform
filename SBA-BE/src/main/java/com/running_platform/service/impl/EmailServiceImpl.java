@@ -15,14 +15,11 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Async
-    public void sendVerificationEmail(String email, String token) {
-
-        String link = "http://localhost:8080/auth/verify?token=" + token;
-
+    public void sendVerificationEmail(String email, String content, String subject) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setSubject("Verify your account");
-        message.setText("Click this link to verify: " + link);
+        message.setSubject(subject);
+        message.setText(content);
 
         mailSender.send(message);
     }
