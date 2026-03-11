@@ -1,10 +1,11 @@
 import { AuthActionContext, AuthDataContext } from '@/app/providers/AuthProvider';
 import React, { useState, useEffect, useContext } from 'react';
 import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const RunWiseNavbar = () => {
     const { user, theme } = useContext(AuthDataContext);
+    const navigator = useNavigate();
     const { changeTheme, logout } = useContext(AuthActionContext);
     const navLinkCustom = ({ isActive }) =>
         "nav-link " +
@@ -61,10 +62,7 @@ const RunWiseNavbar = () => {
                         (<Nav variant="pills" activeKey="1" onSelect={(selectedKey) => console.log(`selected ${selectedKey}`)}>
                             <NavDropdown title={user?.username || "Profile"} id="nav-dropdown">
                                 <NavDropdown.Item eventKey="4.1" onClick={logout}>Log Out</NavDropdown.Item>
-                                <NavDropdown.Item eventKey="4.2">Another action</NavDropdown.Item>
-                                <NavDropdown.Item eventKey="4.3">Something else here</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item>
+                                <NavDropdown.Item eventKey="4.2" onClick={() => navigator("/profile")}>Profile</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>)
                     }
