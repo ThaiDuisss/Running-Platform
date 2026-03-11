@@ -55,7 +55,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public UserResponse getUser(Long id) {
+    public UserResponse getUserById(Long id) {
         Users user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -69,11 +69,10 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         userMapper.updateUser(user, req);
-
-        if (req.getRoles() != null) {
-            Set<Roles> roles = roleRepository.findByRoleNameIn(req.getRoles());
-            user.setRoles(roles);
-        }
+//
+//        Roles role = roleRepository.findByRoleName(req.getRole());
+//
+//        user.setRoles(Set.of(role));
 
         userRepository.save(user);
 
