@@ -4,16 +4,22 @@ import com.running_platform.config.AuthConfig;
 
 import com.running_platform.constant.ErrorEnum;
 import com.running_platform.constant.RoleEnum;
+import com.running_platform.dto.request.ResetPasswordRequest;
 import com.running_platform.dto.request.UserRequest;
 import com.running_platform.dto.response.UserResponse;
+import com.running_platform.entity.UserAuth.PasswordResetTokens;
 import com.running_platform.entity.UserAuth.Roles;
 import com.running_platform.entity.UserAuth.Users;
 
+import com.running_platform.entity.UserAuth.VerificationTokens;
 import com.running_platform.exception.AppException;
 import com.running_platform.mapper.RoleMapper;
 import com.running_platform.mapper.UserMapper;
+import com.running_platform.repository.PasswordResetTokenRepository;
 import com.running_platform.repository.RoleRepository;
 import com.running_platform.repository.AuthRepository;
+import com.running_platform.repository.VerificationTokenRepository;
+import com.running_platform.service.EmailService;
 import com.running_platform.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -23,8 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -37,6 +46,9 @@ public class UserServiceImpl implements UserService {
     RoleMapper roleMapper;
     AuthConfig authConfig;
     JwtServiceImp jwtService;
+    VerificationTokenRepository tokenRepository;
+    PasswordResetTokenRepository passwordResetTokenRepository;
+    EmailService emailService;
 
     @Transactional
     public UserResponse register(UserRequest userRegister) {
@@ -56,12 +68,29 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         user = repository.save(user);
+
+        sendVerificationLink(user);
+
         Users userProfile = mapper.toUserProfile(userRegister);
         userProfile.setId(user.getId());
         UserResponse userResponse = mapper.toUserResponse(userProfile);
         userResponse.setId(user.getId());
-        sendEmail(userRegister.getUsername());
         return userResponse;
+    }
+
+    private void sendVerificationLink(Users user) {
+        String token = UUID.randomUUID().toString();
+
+        VerificationTokens verificationToken = VerificationTokens.builder()
+                .user(user)
+                .token(token)
+                .expiryDate(LocalDateTime.now().plusMinutes(15))
+                .build();
+
+        tokenRepository.save(verificationToken);
+        String content = "Click this link to verify: " + "http://localhost:8080/auth/verify?token=" + token;
+        String subject = "Email Verification";
+        emailService.sendVerificationEmail(user.getUsername(), content, subject);
     }
 
     public UserResponse getUserById(Long userId) {
@@ -115,10 +144,56 @@ public class UserServiceImpl implements UserService {
 //        kafkaTemplate.send("notification-delivery", notificationEvent);
     }
 
-
     public void delete(Long id) {
         Users users = repository.findById(id).orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
         repository.delete(users);
+    }
+
+    @Override
+    public void forgotPassword(String email) {
+
+        Optional<Users> optionalUser = repository.findByUsername(email);
+        if (optionalUser.isEmpty()) {
+            return;
+        }
+        Users user = optionalUser.get();
+        PasswordResetTokens token = passwordResetTokenRepository.findByUser(user);
+        if (token != null) {
+            if (token.getExpiryDate().isAfter(LocalDateTime.now())) {
+                return;
+            }
+            passwordResetTokenRepository.delete(token);
+        }
+
+        sendResetPasswordLink(user);
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequest request) {
+        PasswordResetTokens passwordResetTokens = passwordResetTokenRepository.findByToken(request.getToken())
+                .orElseThrow(() -> new AppException(ErrorEnum.INVALID_TOKEN));
+        Users user = passwordResetTokens.getUser();
+        if (passwordResetTokens.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new AppException(ErrorEnum.EXPIRED_TOKEN);
+        }
+        user.setPassword(authConfig.passwordEncoder().encode(request.getNewPassword()));
+        passwordResetTokenRepository.delete(passwordResetTokens);
+        repository.save(user);
+    }
+
+    private void sendResetPasswordLink(Users user) {
+        String token = UUID.randomUUID().toString();
+
+        PasswordResetTokens passwordResetTokens = PasswordResetTokens.builder()
+                .user(user)
+                .token(token)
+                .expiryDate(LocalDateTime.now().plusMinutes(15))
+                .build();
+
+        passwordResetTokenRepository.save(passwordResetTokens);
+        String content = "Click link to reset password: " + "http://localhost:5173/reset-password?token=" + token;
+        String subject = "Reset password";
+        emailService.sendVerificationEmail(user.getUsername(), content, subject);
     }
 
 }
