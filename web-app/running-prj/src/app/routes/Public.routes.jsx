@@ -8,6 +8,8 @@ import Blog from '@/features/user/components/Blog'
 import FeedPage from '@/features/user/components/Post/FeedPage'
 import PlanPage from '@/features/user/components/Plans/PlanPage'
 import { redirect } from 'react-router-dom'
+import Register from '../guards/Register'
+import ProfilePage from '@/features/user/components/Profile/ProfilePage'
 
 // ✅ loader đúng
 const communityLoader = () => {
@@ -19,6 +21,7 @@ const communityLoader = () => {
 
 const publicRoutes = [
   { path: "/login", element: <UserLogin /> },
+  { path: "/register", element: <Register /> },
   {
     path: "/", element: <PublicLayouts />,
     children: [
@@ -41,6 +44,10 @@ const publicRoutes = [
       {
         path: "/plans",
         element: <PlanPage />
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />
       },
     ]
   }
