@@ -12,7 +12,7 @@ public interface AdminUserService {
 
     Page<UserResponse> getUsers(String keyword, Pageable pageable);
 
-    UserResponse getUser(Long id);
+    UserResponse getUserById(Long id);
 
     UserResponse updateUser(Long id, AdminUpdateUserRequest req);
 
