@@ -37,6 +37,9 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
 
     String location;
 
+    @Column(name = "full_name", columnDefinition = "VARCHAR(50)")
+    String fullName;
+
     String latitude;
 
     String longitude;

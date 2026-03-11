@@ -109,7 +109,7 @@ const UserLogin = () => {
                                 </Form>
                                 <div className='text-center mt-3 lp-muted'>
                                     Don't have an account? {" "}
-                                    <NavLink to="/signup">Sign up</NavLink>
+                                    <NavLink to="/register">Sign up</NavLink>
                                 </div>
                                 <div className='text-center my-3 lp-divider'>
                                     or connect width
