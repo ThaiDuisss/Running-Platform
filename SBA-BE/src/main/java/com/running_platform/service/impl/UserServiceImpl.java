@@ -14,6 +14,7 @@ import com.running_platform.mapper.RoleMapper;
 import com.running_platform.mapper.UserMapper;
 import com.running_platform.repository.RoleRepository;
 import com.running_platform.repository.AuthRepository;
+import com.running_platform.repository.UserRepository;
 import com.running_platform.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -21,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -37,6 +40,7 @@ public class UserServiceImpl implements UserService {
     RoleMapper roleMapper;
     AuthConfig authConfig;
     JwtServiceImp jwtService;
+    UserRepository userRepository;
 
     @Transactional
     public UserResponse register(UserRequest userRegister) {
@@ -119,6 +123,15 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         Users users = repository.findById(id).orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
         repository.delete(users);
+    }
+
+    @Override
+    public Page<UserResponse> getUsers(String keyword, Pageable pageable) {
+
+        Page<Users> page = userRepository
+                .findByUsernameContainingIgnoreCase(keyword, pageable);
+
+        return page.map(mapper::toUserResponse);
     }
 
 }
