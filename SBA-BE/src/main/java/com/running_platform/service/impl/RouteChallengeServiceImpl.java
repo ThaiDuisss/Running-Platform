@@ -6,16 +6,19 @@ import com.running_platform.dto.request.AdminUpdateRouteChallengeRequest;
 import com.running_platform.dto.response.AdminRouteChallengeResponse;
 import com.running_platform.dto.response.PageResponse;
 import com.running_platform.entity.RouteChallege.RouteChallenge;
+import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.ChallengeStatus;
 import com.running_platform.exception.AppException;
 import com.running_platform.mapper.RouteChallengeMapper;
 import com.running_platform.repository.RouteChallengeRepository;
+import com.running_platform.repository.UserRepository;
 import com.running_platform.service.RouteChallengeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +28,7 @@ public class RouteChallengeServiceImpl implements RouteChallengeService {
 
     RouteChallengeRepository routeChallengeRepository;
     RouteChallengeMapper routeChallengeMapper;
-
+    UserRepository userRepository;
 
     @Override
     public AdminRouteChallengeResponse createRouteChallenge(
@@ -33,6 +36,15 @@ public class RouteChallengeServiceImpl implements RouteChallengeService {
     ) {
 
         RouteChallenge challenge = routeChallengeMapper.toEntity(request);
+
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        Users user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        challenge.setCreator(user);
 
         challenge.setStatus(ChallengeStatus.ACTIVE);
 
