@@ -1,0 +1,27 @@
+.search-container {
+    position: relative;
+    width: 260px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    /* chừa chỗ bên phải cho icon */
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #0d6efd;
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    /* icon nằm bên phải */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    pointer-events: none;
+}
