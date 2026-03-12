@@ -15,10 +15,7 @@ import com.running_platform.entity.UserAuth.VerificationTokens;
 import com.running_platform.exception.AppException;
 import com.running_platform.mapper.RoleMapper;
 import com.running_platform.mapper.UserMapper;
-import com.running_platform.repository.PasswordResetTokenRepository;
-import com.running_platform.repository.RoleRepository;
-import com.running_platform.repository.AuthRepository;
-import com.running_platform.repository.VerificationTokenRepository;
+import com.running_platform.repository.*;
 import com.running_platform.service.EmailService;
 import com.running_platform.service.UserService;
 import jakarta.transaction.Transactional;
@@ -27,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -49,6 +48,7 @@ public class UserServiceImpl implements UserService {
     VerificationTokenRepository tokenRepository;
     PasswordResetTokenRepository passwordResetTokenRepository;
     EmailService emailService;
+    UserRepository userRepository;
 
     @Transactional
     public UserResponse register(UserRequest userRegister) {
@@ -144,6 +144,7 @@ public class UserServiceImpl implements UserService {
 //        kafkaTemplate.send("notification-delivery", notificationEvent);
     }
 
+
     public void delete(Long id) {
         Users users = repository.findById(id).orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
         repository.delete(users);
@@ -194,6 +195,15 @@ public class UserServiceImpl implements UserService {
         String content = "Click link to reset password: " + "http://localhost:5173/reset-password?token=" + token;
         String subject = "Reset password";
         emailService.sendVerificationEmail(user.getUsername(), content, subject);
+    }
+
+    @Override
+    public Page<UserResponse> getUsers(String keyword, Pageable pageable) {
+
+        Page<Users> page = userRepository
+                .findByUsernameContainingIgnoreCase(keyword, pageable);
+
+        return page.map(mapper::toUserResponse);
     }
 
 }
