@@ -22,14 +22,8 @@ export const authService = {
     },
 
     register: async (payload) => {
-        try {
-            const res = await axiosClient.post("/auth/register", payload);
-            return res.data;
-        } catch (error) {
-            console.error("Registration error:", error);
-            throw error;
-        }
-
+        const res = await axiosClient.post("/auth/register", payload);
+        return res.data;
     },
 
     refreshToken: async () => {
@@ -51,5 +45,16 @@ export const authService = {
         localStorage.removeItem("ACCESS-TOKEN");
         localStorage.removeItem("userInfo");
     },
+    
+    forgotPassword: async (email) => {
+        const res = await axiosClient.post(`/auth/forgot-password?email=${email}`);
+        return res.data;
+    },
+
+    resetPassword: async ({ token, newPassword }) => {
+        const res = await axiosClient.post("/auth/reset-password", { token, newPassword });
+        return res.data;
+    },
+    
 
 };

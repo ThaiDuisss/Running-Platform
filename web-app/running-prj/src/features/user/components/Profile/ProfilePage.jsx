@@ -34,6 +34,27 @@ const ProfilePage = () => {
         setIsEditing(false);
     }, [user]);
 
+    // const getCurrentPossition = () => {
+    //     if (!navigator.geolocation) {
+    //         alert("Geolocation is not supported by your browser");
+    //         return;
+    //     }
+
+    //     navigator.geolocation.getCurrentPosition(
+    //         (position) => {
+    //             setForm((prev) => ({
+    //                 ...prev,
+    //                 latitude: position.coords.latitude,
+    //                 longitude: position.coords.longitude,
+    //             }));
+    //         },
+    //         (error) => {
+    //             console.error("Error getting location:", error);
+    //             alert("Unable to retrieve your location");
+    //         }
+    //     );
+    // };
+
     const onChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
