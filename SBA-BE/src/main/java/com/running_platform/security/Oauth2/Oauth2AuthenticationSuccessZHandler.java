@@ -1,11 +1,11 @@
-package com.example.oauth2.security.Oauth2;
+package com.running_platform.security.Oauth2;
 
-import com.example.oauth2.config.AppProperties;
-import com.example.oauth2.security.JwtTokenProvider;
-import com.example.oauth2.security.Oauth2.common.HttpCookieOauth2AuthorizationRequestRepository;
-import com.example.oauth2.security.Oauth2.common.Oauth2Util;
-import com.example.oauth2.util.AppWebUtils;
-import com.example.oauth2.util.exceptions.BadRequestException;
+import com.running_platform.config.AppProperties;
+import com.running_platform.constant.ErrorEnum;
+import com.running_platform.exception.AppException;
+import com.running_platform.security.JwtTokenProvider;
+import com.running_platform.security.Oauth2.common.HttpCookieOauth2AuthorizationRequestRepository;
+import com.running_platform.util.AppWebUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,9 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static com.example.oauth2.security.Oauth2.common.Oauth2Util.*;
+import static com.running_platform.security.Oauth2.common.Oauth2Util.ORIGINAL_REQUEST_URI_PARAM_COOKIE_NAME;
+import static com.running_platform.security.Oauth2.common.Oauth2Util.REDIRECT_SUCCESS_URI_PARAM_COOKIE_NAME;
+
 
 @Service
 @RequiredArgsConstructor
@@ -47,17 +49,16 @@ public class Oauth2AuthenticationSuccessZHandler extends SimpleUrlAuthentication
         getRedirectStrategy().sendRedirect(request, response, uriRedirect);
     }
 
-    public String determineTargetUrl (HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    public String determineTargetUrl (HttpServletRequest request, HttpServletResponse response, Authentication  authentication) {
         Optional<String> redirectUri = Optional.of(REDIRECT_SUCCESS_URI_PARAM_COOKIE_NAME);
 //                AppWebUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
         Optional<String> originalRequestUri = AppWebUtils.getCookie(request, ORIGINAL_REQUEST_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         if(redirectUri.isPresent() && !isRedirectOriginAuthorized(redirectUri.get())) {
-            throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
+            throw new AppException(ErrorEnum.FAILED_OAUTH2_REDIRECT);
         }
 
         String uri = redirectUri.orElse(getDefaultTargetUrl());
-        log.info(" adad {}{}", uri);
         String jwtToken = tokenProvider.generateAccessToken(authentication);
 
         return UriComponentsBuilder.fromUriString(uri)

@@ -1,8 +1,10 @@
-package com.example.oauth2.security;
+package com.running_platform.security;
 
-import com.example.oauth2.entity.UserEntity;
-import com.example.oauth2.repository.UserRepository;
-import com.example.oauth2.util.exceptions.AppExceptionConstants;
+
+import com.running_platform.constant.ErrorEnum;
+import com.running_platform.entity.UserAuth.Users;
+import com.running_platform.exception.AppException;
+import com.running_platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,15 +18,15 @@ public class CustomUserDetailsService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException(AppExceptionConstants.BAD_LOGIN_CREDENTIALS));
+        Users userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
         return CustomUserDetails.buildFromUserEntity(userEntity);
     }
 
     public UserDetails loadUserById(Long id) {
-        UserEntity user =
+        Users user =
                 userRepository.findById(id)
-                        .orElseThrow(() -> new UsernameNotFoundException(AppExceptionConstants.BAD_LOGIN_CREDENTIALS));
+                        .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
         return CustomUserDetails.buildFromUserEntity(user);
     }
 }

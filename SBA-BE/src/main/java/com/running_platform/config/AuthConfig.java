@@ -1,5 +1,11 @@
 package com.running_platform.config;
 
+import com.running_platform.security.CustomAuthenticationEntrypoint;
+import com.running_platform.security.CustomUserDetailsService;
+import com.running_platform.security.Oauth2.CustomOauth2UserService;
+import com.running_platform.security.Oauth2.Oauth2AuthenticationFailureHandler;
+import com.running_platform.security.Oauth2.Oauth2AuthenticationSuccessZHandler;
+import com.running_platform.security.Oauth2.common.HttpCookieOauth2AuthorizationRequestRepository;
 import com.running_platform.service.UserServiceDetail;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,29 +30,37 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Slf4j(topic = "AUTH_CONFIG")
 public class AuthConfig {
-     UserServiceDetail userServiceDetail;
-     CustomizeRequestFilter customizeRequestFilter;
+    CustomUserDetailsService customUserDetailsService;
+    UserServiceDetail userServiceDetail;
+    CustomizeRequestFilter customizeRequestFilter;
+    CustomAuthenticationEntrypoint customAuthenticationEntrypoint;
+    CustomOauth2UserService customOauth2UserService;
 
-     String[] PUBLIC_ENDPOINTS = {
+    Oauth2AuthenticationSuccessZHandler authenticationSuccessZHandler;
+    Oauth2AuthenticationFailureHandler authenticationFailureHandler;
+    HttpCookieOauth2AuthorizationRequestRepository httpCookieOauth2AuthorizationRequestRepository;
+    PasswordEncoder passwordEncoder;
+    String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
-             "/swagger-ui/**",
-             "/api-docs/**",
-             "/swagger-ui.html",
-             "/webjars/**",
-             "/actuator/**",
-             "/auth/validateEmail/**",
-             "/validateEmail/**",
-             "/mail-again/**",
-             "error",
-             "success",
-             "/get-info/**"
+            "/swagger-ui/**",
+            "/api-docs/**",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/actuator/**",
+            "/auth/validateEmail/**",
+            "/validateEmail/**",
+            "/mail-again/**",
+            "error",
+            "success",
+            "/get-info/**"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Configuring security filter chain");
         http
-                .cors(cors -> {})   // 🔥 bật CORS trong Security
+                .cors(cors -> {
+                })   // 🔥 bật CORS trong Security
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(mgr -> mgr.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
@@ -55,6 +69,14 @@ public class AuthConfig {
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
+                .exceptionHandling(e -> e.authenticationEntryPoint(customAuthenticationEntrypoint))
+                .oauth2Login(o ->
+                        o.authorizationEndpoint(a -> a.baseUri("/oauth2/authorize")
+                                        .authorizationRequestRepository(httpCookieOauth2AuthorizationRequestRepository)
+                                ).redirectionEndpoint(a -> a.baseUri("/oauth2/callback/*"))
+                                .userInfoEndpoint(a -> a.userService(customOauth2UserService))
+                                .successHandler(authenticationSuccessZHandler)
+                                .failureHandler(authenticationFailureHandler))
                 .addFilterBefore(customizeRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -64,17 +86,13 @@ public class AuthConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userServiceDetail.userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(customUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
 }

@@ -1,17 +1,15 @@
-package com.example.oauth2.security;
+package com.running_platform.security;
 
-import com.example.oauth2.entity.UserEntity;
+import com.running_platform.entity.UserAuth.Users;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 @Getter
 @Setter
@@ -20,7 +18,7 @@ public class    CustomUserDetails implements UserDetails, OAuth2User {
     String email;
     String password;
 
-    UserEntity userEntity;
+    Users userEntity;
 
     Collection<? extends GrantedAuthority> authorities;
 
@@ -28,7 +26,7 @@ public class    CustomUserDetails implements UserDetails, OAuth2User {
 
     public CustomUserDetails(String email,
                              String password,
-                             UserEntity userEntity,
+                             Users userEntity,
                              Collection<? extends GrantedAuthority> authorities,
                              Map<String, Object> attributes) {
         this.email = email;
@@ -38,11 +36,11 @@ public class    CustomUserDetails implements UserDetails, OAuth2User {
         this.attributes = attributes;
     }
 
-    public static CustomUserDetails buildFromUserEntity(UserEntity userEntity) {
+    public static CustomUserDetails buildFromUserEntity(Users userEntity) {
         Collection<? extends GrantedAuthority> grantedAuthorities = AppSecurityUtils
                 .convertRolesSetToGrantedAuthorityList(userEntity.getRoles());
         return new CustomUserDetails(
-                userEntity.getEmail(),
+                userEntity.getUsername(),
                 userEntity.getPassword(),
                 userEntity,
                 grantedAuthorities,
@@ -50,7 +48,7 @@ public class    CustomUserDetails implements UserDetails, OAuth2User {
         );
     }
 
-    public static CustomUserDetails buildWithAuthAttributesAndAuthorities(UserEntity userEntity,
+    public static CustomUserDetails buildWithAuthAttributesAndAuthorities(Users userEntity,
                                                                           Collection<? extends GrantedAuthority> authorities,
                                                                           Map<String, Object> attributes) {
 

@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,8 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     UserMapper mapper;
     RoleMapper roleMapper;
-    AuthConfig authConfig;
     JwtServiceImp jwtService;
+    PasswordEncoder passwordEncoder;
     VerificationTokenRepository tokenRepository;
     PasswordResetTokenRepository passwordResetTokenRepository;
     EmailService emailService;
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
         roles.add(roleUser);
         Users user = Users.builder()
                 .username(userRegister.getUsername())
-                .password(authConfig.passwordEncoder().encode(userRegister.getPassword()))
+                .password(passwordEncoder.encode(userRegister.getPassword()))
                 .roles(roles)
                 .emailVerified(false)
                 .fullName(userRegister.getFullName())
@@ -204,6 +205,22 @@ public class UserServiceImpl implements UserService {
                 .findByUsernameContainingIgnoreCase(keyword, pageable);
 
         return page.map(mapper::toUserResponse);
+    }
+
+    @Override
+    public UserResponse updateUser(UserResponse userResponse) {
+        Users userEntity = repository.findById(userResponse.getId())
+                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        userEntity.setFullName(userResponse.getFullName());
+        userEntity.setImageUrl(userResponse.getImageUrl());
+        userEntity.setPhoneNumber(userResponse.getPhoneNumber());
+        repository.save(userEntity);
+        return mapper.toUserResponse(userEntity);
+    }
+
+    @Override
+    public Optional<UserResponse> findOptionalUserByEmail(String email) {
+        return repository.findByUsername(email).map(mapper::toUserResponse);
     }
 
 }

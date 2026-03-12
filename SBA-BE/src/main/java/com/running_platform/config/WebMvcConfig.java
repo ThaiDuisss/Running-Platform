@@ -1,6 +1,6 @@
-package com.example.oauth2.config;
+package com.running_platform.config;
 
-import com.example.oauth2.util.StringToEnumConverter;
+import com.running_platform.util.StringToEnumConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
