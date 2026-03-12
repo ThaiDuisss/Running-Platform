@@ -5,10 +5,14 @@ import com.running_platform.dto.request.AdminUpdateRouteChallengeRequest;
 import com.running_platform.dto.response.AdminRouteChallengeResponse;
 import com.running_platform.dto.response.ApiResponse;
 import com.running_platform.dto.response.PageResponse;
+import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.service.RouteChallengeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +28,6 @@ public class AdminRouteChallengeController {
     public ApiResponse<AdminRouteChallengeResponse> createRouteChallenge(
             @Valid @RequestBody AdminCreateRouteChallengeRequest request
     ) {
-
         return ApiResponse.created(
                 "Route challenge created successfully",
                 routeChallengeService.createRouteChallenge(request)

@@ -20,7 +20,7 @@ public class AdminUpdateRouteChallengeRequest {
 
     String description;
 
-    ChallengeType type;
+    ChallengeType challengeType;
 
     BigDecimal targetValue;
 
@@ -30,5 +30,4 @@ public class AdminUpdateRouteChallengeRequest {
 
     VisibilityEnum visibility;
 
-    ChallengeType challengeType;
 }
