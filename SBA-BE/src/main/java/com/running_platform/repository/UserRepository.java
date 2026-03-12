@@ -20,8 +20,6 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             Pageable pageable
     );
 
-    Optional<Users> findByUsername(String username);
-
     @Query("SELECT u.id FROM Users u WHERE u.username = :username")
     Optional<Long> findIdByUsername(@Param("username") String username);
 }

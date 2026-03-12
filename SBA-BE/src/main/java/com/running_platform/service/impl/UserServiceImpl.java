@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
         if (passwordResetTokens.getExpiryDate().isBefore(LocalDateTime.now())) {
             throw new AppException(ErrorEnum.EXPIRED_TOKEN);
         }
-        user.setPassword(authConfig.passwordEncoder().encode(request.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         passwordResetTokenRepository.delete(passwordResetTokens);
         repository.save(user);
     }

@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -42,5 +43,7 @@ public class UserRequest {
 
     @Pattern(regexp = "^0[0-9]{9,10}$", message = ErrorEnum.INVALID_PHONE)
     String phoneNumber;
+
+    Set<RoleEnum> roles;
 
 }
