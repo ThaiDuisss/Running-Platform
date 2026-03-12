@@ -6,7 +6,6 @@ import com.running_platform.security.Oauth2.CustomOauth2UserService;
 import com.running_platform.security.Oauth2.Oauth2AuthenticationFailureHandler;
 import com.running_platform.security.Oauth2.Oauth2AuthenticationSuccessZHandler;
 import com.running_platform.security.Oauth2.common.HttpCookieOauth2AuthorizationRequestRepository;
-import com.running_platform.service.UserServiceDetail;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +19,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -31,7 +29,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j(topic = "AUTH_CONFIG")
 public class AuthConfig {
     CustomUserDetailsService customUserDetailsService;
-    UserServiceDetail userServiceDetail;
     CustomizeRequestFilter customizeRequestFilter;
     CustomAuthenticationEntrypoint customAuthenticationEntrypoint;
     CustomOauth2UserService customOauth2UserService;
@@ -39,7 +36,7 @@ public class AuthConfig {
     Oauth2AuthenticationSuccessZHandler authenticationSuccessZHandler;
     Oauth2AuthenticationFailureHandler authenticationFailureHandler;
     HttpCookieOauth2AuthorizationRequestRepository httpCookieOauth2AuthorizationRequestRepository;
-    AppBeanConfiguration appBeanConfiguration;
+    PasswordEncoder passwordEncoder;
     String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/auth/login",
@@ -53,15 +50,14 @@ public class AuthConfig {
             "/mail-again/**",
             "error",
             "success",
-            "/get-info/**"
+            "/get-info/**",
+            "/oauth2/**"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Configuring security filter chain");
         http
-                .cors(cors -> {
-                })   // 🔥 bật CORS trong Security
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(mgr -> mgr.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
@@ -90,9 +86,8 @@ public class AuthConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(passwordEncoder);
         authProvider.setUserDetailsService(customUserDetailsService);
-        authProvider.setPasswordEncoder(appBeanConfiguration.getPasswordEncoder());
         return authProvider;
     }
 

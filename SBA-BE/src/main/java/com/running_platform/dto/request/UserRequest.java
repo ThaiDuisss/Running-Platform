@@ -4,6 +4,7 @@ package com.running_platform.dto.request;
 import com.running_platform.constant.ErrorEnum;
 import com.running_platform.constant.RoleEnum;
 import com.running_platform.security.Oauth2.common.SecurityEnums;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -37,8 +38,10 @@ public class UserRequest {
 
     private boolean emailVerified;
 
-    private SecurityEnums.AuthProviderId registeredProviderName;
+    @Nullable
+    private SecurityEnums.AuthProviderId registeredProviderName = SecurityEnums.AuthProviderId.app_custom_authentication;
 
+    @Nullable
     private String registeredProviderId;
 
     @Pattern(regexp = "^0[0-9]{9,10}$", message = ErrorEnum.INVALID_PHONE)

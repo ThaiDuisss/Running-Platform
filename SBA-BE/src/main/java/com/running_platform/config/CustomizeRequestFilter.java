@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,7 +29,7 @@ import java.io.IOException;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class CustomizeRequestFilter extends OncePerRequestFilter {
     JwtServiceImp jwtService;
-    UserServiceDetail userServiceDetail;
+    UserDetailsService userServiceDetail;
     AuthRepository authRepository;
 
     @Override
@@ -44,7 +45,7 @@ public class CustomizeRequestFilter extends OncePerRequestFilter {
                 if(jwtService.validateToken(token, TokenType.ACCESSTOKEN)) {
                     Long userId = jwtService.extractToken(token, TokenType.ACCESSTOKEN);
                     Users users = authRepository.findById(userId).orElse(null);
-                    UserDetails user = userServiceDetail.userDetailsService().loadUserByUsername(users.getUsername());
+                    UserDetails user = userServiceDetail.loadUserByUsername(users.getUsername());
                     if (user != null) {
                         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

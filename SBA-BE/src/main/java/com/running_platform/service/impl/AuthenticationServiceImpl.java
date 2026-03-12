@@ -35,7 +35,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     AuthenticationManager authenticationManager;
     JwtService jwtService;
     AuthRepository authRepository;
-    AuthConfig authConfig;
     @Override
     public TokenResponse getAccessToken(SignInRequest request) {
 
@@ -45,7 +44,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         try {
-            log.info("tesssttt{}{}", request.getUsername(), request.getPassword());
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }catch(AuthenticationException e) {
