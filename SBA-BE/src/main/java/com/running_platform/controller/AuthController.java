@@ -1,17 +1,24 @@
 package com.running_platform.controller;
 
 import com.running_platform.dto.request.IntrospectToken;
+import com.running_platform.dto.request.ResetPasswordRequest;
 import com.running_platform.dto.request.UserRequest;
 import com.running_platform.dto.response.ApiResponse;
 import com.running_platform.dto.request.SignInRequest;
 import com.running_platform.dto.response.SignInResponse;
 import com.running_platform.dto.response.TokenResponse;
 import com.running_platform.dto.response.UserResponse;
+import com.running_platform.entity.UserAuth.Users;
+import com.running_platform.entity.UserAuth.VerificationTokens;
 import com.running_platform.enums.TokenType;
+import com.running_platform.repository.UserRepository;
+import com.running_platform.repository.VerificationTokenRepository;
 import com.running_platform.service.AuthenticationService;
 import com.running_platform.service.impl.JwtServiceImp;
 import com.running_platform.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +28,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -32,6 +41,50 @@ public class AuthController {
     AuthenticationService authenticationService;
     UserServiceImpl userService;
     JwtServiceImp jwtService;
+    VerificationTokenRepository tokenRepository;
+    UserRepository userRepository;
+
+    @GetMapping("/verify")
+    public void verifyAccount(@RequestParam String token,
+                              HttpServletResponse response) throws IOException {
+
+        VerificationTokens verificationToken =
+                tokenRepository.findByToken(token);
+
+        if (verificationToken == null) {
+            response.sendRedirect("http://localhost:5173/login");
+        }
+        Users user = verificationToken.getUser();
+        user.setEmailVerified(true);
+
+        userRepository.save(user);
+
+        response.sendRedirect("http://localhost:5173/login");
+
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<?>> forgotPassword(@RequestParam String email) {
+        userService.forgotPassword(email);
+        log.info("[BUSINESS] Password reset email sent successfully to: {}", email);
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .code(200)
+                        .status("OK")
+                        .message("If the email exists, a reset link has been sent")
+                        .build());
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<?>> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
+        userService.resetPassword(request);
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .code(200)
+                        .status("OK")
+                        .message("Password reset successfully")
+                        .build());
+    }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> signIn(@RequestBody SignInRequest signInRequest) {
@@ -56,7 +109,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Object>> register(@RequestBody UserRequest userRegister) {
+    public ResponseEntity<ApiResponse<Object>> register(@Valid @RequestBody UserRequest userRegister) {
         return ResponseEntity.ok()
                 .body(ApiResponse.<Object>builder()
                         .code(200)
@@ -93,13 +146,13 @@ public class AuthController {
 
     @GetMapping("/logout")
     public ResponseEntity<ApiResponse<Object>> logout() {
-            ResponseCookie deleteCookie = ResponseCookie.from("refreshToken", "")
-                    .httpOnly(true)
-                    .secure(true)
-                    .path("/")
-                    .sameSite("None")
-                    .maxAge(0)
-                    .build();
+        ResponseCookie deleteCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .maxAge(0)
+                .build();
 
         log.info("User logged out successfully");
         return ResponseEntity.ok()
@@ -110,6 +163,7 @@ public class AuthController {
                         .message("User logged out successfully")
                         .build());
     }
+
     @PostMapping("/introspect")
     public ResponseEntity<ApiResponse<Long>> getInfoFromToken(@RequestBody IntrospectToken accessToken) {
         return ResponseEntity.ok()
