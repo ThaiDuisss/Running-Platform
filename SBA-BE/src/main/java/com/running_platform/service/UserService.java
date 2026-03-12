@@ -1,5 +1,6 @@
 package com.running_platform.service;
 
+import com.running_platform.dto.request.ResetPasswordRequest;
 import com.running_platform.dto.request.UserRequest;
 import com.running_platform.dto.response.UserResponse;
 
@@ -10,4 +11,6 @@ public interface UserService  {
     boolean verifyEmail(String token);
     void sendEmail(String email);
     void delete(Long id);
+    void forgotPassword(String email);
+    void resetPassword(ResetPasswordRequest request);
 }
