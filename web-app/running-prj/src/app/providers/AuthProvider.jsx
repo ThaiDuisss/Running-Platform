@@ -41,10 +41,11 @@ const AuthProvider = ({ children }) => {
         try {
             const data = await authService.login(payload);
             console.log("Login successful:", data);
-            const access_token = data.data;
+            const access_token = data.data.accessToken;
 
-            localStorage.setItem("ACCESS-TOKEN", tokenResponse.accessToken);
-            localStorage.setItem("userInfo", JSON.stringify(userResponse));
+
+
+            localStorage.setItem("access_token", access_token);
 
             checkAuth();
         } catch (error) {
@@ -54,7 +55,7 @@ const AuthProvider = ({ children }) => {
 
     // 🚪 LOGOUT
     const logout = () => {
-        localStorage.removeItem("ACCESS-TOKEN");
+        localStorage.removeItem("access_token");
         localStorage.removeItem("userInfo");
         authService.logout();
         setUser("");
