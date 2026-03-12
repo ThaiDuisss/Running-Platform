@@ -1,14 +1,14 @@
-package com.laundry.repository;
+package com.running_platform.repository;
 
-import com.laundry.entity.ChatMessage;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import com.running_platform.entity.FriendShipAndChat.ChatMessage;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
-    @Query(value = "{'conversationId' : ?0}", sort = "{'createDate' : -1}")
-    List<ChatMessage> findByConversationId(String conversationId);
+public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
+    List<ChatMessage> findByConversationIdOrderByCreatDateDesc(Long conversationId);
 }

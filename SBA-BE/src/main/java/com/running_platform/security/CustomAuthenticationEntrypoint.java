@@ -1,4 +1,4 @@
-package com.example.oauth2.security;
+package com.running_platform.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

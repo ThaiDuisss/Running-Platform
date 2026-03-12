@@ -12,6 +12,9 @@ import Register from '../guards/Register'
 import ProfilePage from '@/features/user/components/Profile/ProfilePage'
 import ForgotPassword from '../guards/ForgotPassword'
 import ResetPassword from '../guards/ResetPassword'
+import Oauth2Redirect from '../guards/Oauth2Redirect'
+import { oauthRedirectLoader } from './LoadFile/oauthRedirectLoader'
+import Chat from '@/features/user/components/Chat/components/Chat'
 
 // ✅ loader đúng
 const communityLoader = () => {
@@ -26,6 +29,7 @@ const publicRoutes = [
   { path: "/register", element: <Register /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
   { path: "/reset-password", element: <ResetPassword /> },
+  { path: "/oauth2/redirect", element: <Oauth2Redirect />, loader: oauthRedirectLoader },
   {
     path: "/", element: <PublicLayouts />,
     children: [
@@ -53,8 +57,11 @@ const publicRoutes = [
         path: "/profile",
         element: <ProfilePage />
       },
+      { path: "/chat", element: <Chat /> },
+
     ]
   }
 ]
+
 
 export default publicRoutes

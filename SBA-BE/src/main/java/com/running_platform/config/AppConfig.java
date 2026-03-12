@@ -1,8 +1,9 @@
-package com.example.oauth2.config;
+package com.running_platform.config;
 
-import com.example.oauth2.util.AppUtils;
-import com.example.oauth2.util.AppWebUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.running_platform.util.AppUtils;
+import com.running_platform.util.AppWebUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

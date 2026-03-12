@@ -19,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
-public class Roles extends AbstractEntity<Long> implements GrantedAuthority {
+public class Roles extends AbstractEntity<Long>{
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     RoleEnum roleName;
@@ -27,16 +27,12 @@ public class Roles extends AbstractEntity<Long> implements GrantedAuthority {
     @ManyToMany(mappedBy = "roles")
     List<Users> users;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "role_permission",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    Set<Permissions> permissions;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "role_permission",
+//            joinColumns = @JoinColumn(name = "role_id"),
+//            inverseJoinColumns = @JoinColumn(name = "permission_id")
+//    )
+//    Set<Permissions> permissions;
 
-    @Override
-    public String getAuthority() {
-        return "ROLE_" + roleName.name();
-    }
 }

@@ -1,5 +1,6 @@
-package com.example.oauth2.security;
+package com.running_platform.security;
 
+import com.running_platform.entity.UserAuth.Roles;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,10 +22,10 @@ public class AppSecurityUtils {
      * @param roles
      * @return Collection<? extends GrantedAuthority>
      */
-    public static Collection<? extends GrantedAuthority> convertRolesSetToGrantedAuthorityList(Set<String> roles) {
+    public static Collection<? extends GrantedAuthority> convertRolesSetToGrantedAuthorityList(Set<Roles> roles) {
         Collection<GrantedAuthority> authorities = new HashSet<>();
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role));
+        for (Roles role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName().toString()));
         }
         return authorities;
     }

@@ -1,12 +1,12 @@
-package com.example.oauth2.util;
+package com.running_platform.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.SerializationUtils;
 
+import java.io.Serializable;
 import java.util.Base64;
 import java.util.UUID;
-import java.io.Serializable;
 
 
 public class AppUtils {

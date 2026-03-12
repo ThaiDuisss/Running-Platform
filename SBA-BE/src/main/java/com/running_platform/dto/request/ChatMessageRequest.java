@@ -1,4 +1,4 @@
-package com.laundry.dto.request;
+package com.running_platform.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class ChatMessageRequest {
     @NotBlank
-    String conversationId;
+    Long conversationId;
     @NotBlank
     String message;
 }

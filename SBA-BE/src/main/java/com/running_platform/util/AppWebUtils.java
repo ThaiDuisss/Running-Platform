@@ -1,13 +1,12 @@
-package com.example.oauth2.util;
+package com.running_platform.util;
 
 
-import jakarta.servlet.http.HttpServletRequest;
-
-import java.net.http.HttpResponse;
-import java.util.Optional;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseCookie;
+
+import java.util.Optional;
 
 public class AppWebUtils {
     private static int cookieExpireSeconds;

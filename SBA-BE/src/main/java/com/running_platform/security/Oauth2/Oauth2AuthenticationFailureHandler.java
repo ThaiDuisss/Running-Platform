@@ -1,7 +1,7 @@
-package com.example.oauth2.security.Oauth2;
+package com.running_platform.security.Oauth2;
 
-import com.example.oauth2.security.Oauth2.common.HttpCookieOauth2AuthorizationRequestRepository;
-import com.example.oauth2.util.AppWebUtils;
+import com.running_platform.security.Oauth2.common.HttpCookieOauth2AuthorizationRequestRepository;
+import com.running_platform.util.AppWebUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,14 +9,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static com.example.oauth2.security.Oauth2.common.Oauth2Util.REDIRECT_URI_PARAM_COOKIE_NAME;
-
-
 import java.io.IOException;
+
+import static com.running_platform.security.Oauth2.common.Oauth2Util.REDIRECT_URI_PARAM_COOKIE_NAME;
+
 
 @Component
 @RequiredArgsConstructor

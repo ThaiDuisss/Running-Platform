@@ -1,4 +1,4 @@
-package com.example.oauth2.config;
+package com.running_platform.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -20,16 +20,10 @@ import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
-public class AppBeanConfiguration implements WebMvcConfigurer {
+public class AppBeanConfiguration  {
     private final AppProperties properties;
 
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .allowedOrigins(properties.getCors().getAllowedOrigins())
-                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE");
-    }
+
 
     @Bean
     ObjectMapper objectMapper () {
@@ -39,20 +33,20 @@ public class AppBeanConfiguration implements WebMvcConfigurer {
                 .addModule(new JavaTimeModule())
                 .build();
     }
-//config in security layer
-    @Bean
-        CorsConfigurationSource configuration() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(properties.getCors().getAllowedOrigins()));
-        configuration.setAllowedMethods(Arrays.asList(properties.getCors().getAllowedMethods()));
-        configuration.setAllowedHeaders(Arrays.asList(properties.getCors().getAllowedHeaders()));
-        configuration.setExposedHeaders(Arrays.asList(properties.getCors().getExposedHeaders()));
-        configuration.setAllowCredentials(true); // ⭐ THIẾU
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+////config in security layer
+//    @Bean
+//        CorsConfigurationSource configuration() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList(properties.getCors().getAllowedOrigins()));
+//        configuration.setAllowedMethods(Arrays.asList(properties.getCors().getAllowedMethods()));
+//        configuration.setAllowedHeaders(Arrays.asList(properties.getCors().getAllowedHeaders()));
+//        configuration.setExposedHeaders(Arrays.asList(properties.getCors().getExposedHeaders()));
+//        configuration.setAllowCredentials(true); // ⭐ THIẾU
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {

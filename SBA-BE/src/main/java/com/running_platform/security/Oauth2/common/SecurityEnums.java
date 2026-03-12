@@ -1,4 +1,4 @@
-package com.example.oauth2.security.Oauth2.common;
+package com.running_platform.security.Oauth2.common;
 
 public class SecurityEnums {
     public enum AuthProviderId {

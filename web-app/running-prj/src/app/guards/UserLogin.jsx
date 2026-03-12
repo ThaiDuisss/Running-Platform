@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import "@/style/signin.css"
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
+
 import {
     FaUser,
     FaLock,
@@ -21,6 +22,7 @@ import {
 } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
 import { AuthActionContext } from '../providers/AuthProvider';
+import { authService } from '../services/authService';
 const UserLogin = () => {
     const [formData, setFormData] = useState({
         username: "",
@@ -31,7 +33,7 @@ const UserLogin = () => {
     const [showPassword, setShowPassWord] = useState(false);
     const navigate = useNavigate();
     const { login } = useContext(AuthActionContext)
-
+    const [searchParams] = useSearchParams();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,10 +49,19 @@ const UserLogin = () => {
             );
         }
     }
+
     const handleOnChange = (e) => {
         const { name, value } = e.target;
 
         setFormData((prev) => ({ ...prev, [name]: value }))
+    }
+    const handleLoginWithSocialPlatform = (type) => {
+        try {
+            authService.signinWithSocialPlatform(type, searchParams);
+        } catch (error) {
+            console.error(`Error during ${type} login:`, error);
+            setMessage(`Failed to login with ${type}. Please try again.`);
+        }
     }
     return (
         <div className="lp-wrap">
@@ -114,11 +125,12 @@ const UserLogin = () => {
                                 <div className='text-center my-3 lp-divider'>
                                     or connect width
                                 </div>
-                                <div className="d-flex justify-content-center gap-3">
+                                <div className="d-flex justify-content-center gap-4">
                                     <button
                                         type="button"
                                         className="lp-social lp-social-fb"
                                         aria-label="Continue with Facebook"
+                                        onClick={() => handleLoginWithSocialPlatform("facebook")}
                                     >
                                         <FaFacebookF />
                                     </button>
@@ -126,15 +138,9 @@ const UserLogin = () => {
                                         type="button"
                                         className="lp-social lp-social-gg"
                                         aria-label="Continue with Google"
+                                        onClick={() => handleLoginWithSocialPlatform("google")}
                                     >
                                         <FcGoogle />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="lp-social lp-social-gh"
-                                        aria-label="Continue with GitHub"
-                                    >
-                                        <FaGithub />
                                     </button>
                                 </div>
                             </Card.Body>

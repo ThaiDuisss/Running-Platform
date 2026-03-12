@@ -1,14 +1,15 @@
-package com.example.oauth2.security.Oauth2;
-
-import com.example.oauth2.entity.UserEntity;
-import com.example.oauth2.security.AppSecurityUtils;
-import com.example.oauth2.security.CustomUserDetails;
-import com.example.oauth2.security.Oauth2.common.CustomAbstractOAuth2UserInfo;
-import com.example.oauth2.security.Oauth2.common.Oauth2Util;
-import com.example.oauth2.security.Oauth2.common.SecurityEnums;
-import com.example.oauth2.service.webapp.user.UserMapper;
-import com.example.oauth2.service.webapp.user.UserService;
-import com.example.oauth2.service.webapp.user.dto.UserDTO;
+package com.running_platform.security.Oauth2;
+import com.running_platform.constant.RoleEnum;
+import com.running_platform.dto.request.UserRequest;
+import com.running_platform.dto.response.UserResponse;
+import com.running_platform.entity.UserAuth.Users;
+import com.running_platform.mapper.UserMapper;
+import com.running_platform.security.AppSecurityUtils;
+import com.running_platform.security.CustomUserDetails;
+import com.running_platform.security.Oauth2.common.CustomAbstractOAuth2UserInfo;
+import com.running_platform.security.Oauth2.common.Oauth2Util;
+import com.running_platform.security.Oauth2.common.SecurityEnums;
+import com.running_platform.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,17 +19,14 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -37,11 +35,10 @@ import java.util.Set;
 public class CustomOauth2UserService extends DefaultOAuth2UserService {
     UserService userService;
     UserMapper userMapper;
-
+    PasswordEncoder passwordEncoder;
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        log.info("Vao day roi");
         try {
             return processOauth2User(userRequest, oAuth2User);
         } catch (AuthenticationException ex) {
@@ -65,11 +62,11 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         if (userEmail.isEmpty()) {
             throw new InternalAuthenticationServiceException("Sorry, Couldn't retrieve your email from Provider " + clientRegistrationId + ". Email not available or Private by default");
         }
-        Optional<UserDTO> userFindByEmail = userService.findOptionalUserByEmail(userEmail);
+        Optional<UserResponse> userFindByEmail = userService.findOptionalUserByEmail(userEmail);
         if (userFindByEmail.isEmpty()) {
             userFindByEmail = Optional.of(registerNewOAuthUser(oAuth2UserRequest, abstractOAuth2UserInfo));
         }
-        UserDTO userDTO = userFindByEmail.get();
+        UserResponse userDTO = userFindByEmail.get();
 
         if(userDTO.getRegisteredProviderName().equals(registeredProviderId)) {
             updateExistingOAuthUser(userDTO, abstractOAuth2UserInfo);
@@ -82,27 +79,29 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
         List<GrantedAuthority> role = new ArrayList<>(oAuth2User.getAuthorities());
         role.add(new SimpleGrantedAuthority(AppSecurityUtils.ROLE_DEFAULT));
-        UserEntity user = userMapper.toResponse(userDTO);
+        Users user = userMapper.responseToUserProfile(userDTO);
         return CustomUserDetails.buildWithAuthAttributesAndAuthorities(user, role, oAuth2User.getAttributes());
     }
 
-    private UserDTO registerNewOAuthUser(OAuth2UserRequest oAuth2UserRequest,
+    private UserResponse registerNewOAuthUser(OAuth2UserRequest oAuth2UserRequest,
                                          CustomAbstractOAuth2UserInfo customAbstractOAuth2UserInfo) {
-        UserDTO userDTO = new UserDTO();
+        UserRequest userDTO = new UserRequest();
         userDTO.setFullName(customAbstractOAuth2UserInfo.getName());
-        userDTO.setEmail(customAbstractOAuth2UserInfo.getEmail());
+        userDTO.setUsername(customAbstractOAuth2UserInfo.getEmail());
         userDTO.setRegisteredProviderName(SecurityEnums.AuthProviderId.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         userDTO.setRegisteredProviderId(customAbstractOAuth2UserInfo.getId());
-        userDTO.setRoles(Set.of(AppSecurityUtils.ROLE_DEFAULT));
+        userDTO.setRoles(Set.of(RoleEnum.USER));
         userDTO.setEmailVerified(true);
-        return  userService.createUser(userDTO);
+        userDTO.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+
+        return  userService.register(userDTO);
     }
 
-    private void updateExistingOAuthUser(UserDTO existingUserDTO,
+    private void updateExistingOAuthUser(UserResponse existingUserDTO,
                                          CustomAbstractOAuth2UserInfo customAbstractOAuth2UserInfo) {
         existingUserDTO.setFullName(customAbstractOAuth2UserInfo.getName());
         existingUserDTO.setImageUrl(customAbstractOAuth2UserInfo.getImageUrl());
-        UserDTO updatedUserDTO = userService.updateUser(existingUserDTO);
+        UserResponse updatedUserDTO = userService.updateUser(existingUserDTO);
         BeanUtils.copyProperties(updatedUserDTO, existingUserDTO);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.oauth2.util;
+package com.running_platform.util;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

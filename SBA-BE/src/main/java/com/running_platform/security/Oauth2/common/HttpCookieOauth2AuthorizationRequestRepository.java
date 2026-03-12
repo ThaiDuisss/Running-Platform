@@ -1,8 +1,9 @@
-package com.example.oauth2.security.Oauth2.common;
+package com.running_platform.security.Oauth2.common;
 
 
-import com.example.oauth2.util.AppUtils;
-import com.example.oauth2.util.AppWebUtils;
+
+import com.running_platform.util.AppUtils;
+import com.running_platform.util.AppWebUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,7 +12,8 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import static com.example.oauth2.security.Oauth2.common.Oauth2Util.*;
+import static com.running_platform.security.Oauth2.common.Oauth2Util.*;
+
 
 @Component
 public class HttpCookieOauth2AuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
@@ -37,7 +39,7 @@ public class HttpCookieOauth2AuthorizationRequestRepository implements Authoriza
 
         AppWebUtils.createCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, 0L, AppUtils.serialize(authorizationRequest));
         AppWebUtils.createCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, 0L, request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME));
-        AppWebUtils.createCookie(response, ORIGINAL_REQUEST_URI_PARAM_COOKIE_NAME, 0L, request.getParameter(ORIGINAL_REQUEST_URI_PARAM_COOKIE_NAME));
+        AppWebUtils.createCookie(response,  ORIGINAL_REQUEST_URI_PARAM_COOKIE_NAME, 0L, request.getParameter(ORIGINAL_REQUEST_URI_PARAM_COOKIE_NAME));
 
     }
 

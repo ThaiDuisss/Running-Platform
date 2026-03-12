@@ -20,6 +20,7 @@ public class Permissions extends AbstractEntity<Long> {
     String name;
     String description;
 
-    @ManyToMany(mappedBy = "permissions")
-    List<Roles> roles;
+
 }
+//@ManyToMany(mappedBy = "permissions")
+//List<Roles> roles;

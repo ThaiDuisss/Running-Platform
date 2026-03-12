@@ -1,11 +1,9 @@
-package com.example.oauth2.security;
+package com.running_platform.security;
 
-import com.example.oauth2.config.AppProperties;
-import com.example.oauth2.security.Oauth2.common.SecurityEnums;
-import com.example.oauth2.service.webapp.user.UserMapper;
-import com.example.oauth2.util.AppUtils;
+import com.running_platform.config.AppProperties;
+import com.running_platform.mapper.UserMapper;
+import com.running_platform.security.Oauth2.common.SecurityEnums;
 import io.jsonwebtoken.*;
-
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -15,12 +13,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 @Slf4j
