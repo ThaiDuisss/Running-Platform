@@ -2,6 +2,8 @@ package com.running_platform.entity.UserAuth;
 
 import com.running_platform.entity.AbstractEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
@@ -24,6 +26,7 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
 
     @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(25)")
     String username;
+
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     String password;
 
@@ -36,6 +39,9 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
     Set<Roles> roles;
 
     String location;
+
+    @Column(name = "full_name", columnDefinition = "VARCHAR(50)")
+    String fullName;
 
     String latitude;
 

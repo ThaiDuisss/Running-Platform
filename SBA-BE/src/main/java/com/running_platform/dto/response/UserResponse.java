@@ -18,6 +18,8 @@ public class UserResponse {
     Set<RoleResponse> roles;
     String location;
 
+    String fullName;
+
     String latitude;
 
     String longitude;
