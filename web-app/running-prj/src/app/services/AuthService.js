@@ -45,5 +45,16 @@ export const authService = {
         localStorage.removeItem("ACCESS-TOKEN");
         localStorage.removeItem("userInfo");
     },
+    
+    forgotPassword: async (email) => {
+        const res = await axiosClient.post(`/auth/forgot-password?email=${email}`);
+        return res.data;
+    },
+
+    resetPassword: async ({ token, newPassword }) => {
+        const res = await axiosClient.post("/auth/reset-password", { token, newPassword });
+        return res.data;
+    },
+    
 
 };
