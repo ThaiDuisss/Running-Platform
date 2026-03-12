@@ -7,7 +7,7 @@ let socket = null;
 
 export function connectSocket(variable, port) {
     let socketUrl;
-
+    
     if (variable) {
         // Nếu variable có giá trị -> gửi email
         socketUrl = `http://localhost:${port}?email=${variable}`;

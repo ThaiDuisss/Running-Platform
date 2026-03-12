@@ -33,7 +33,7 @@ const publicRoutes = [
   {
     path: "/", element: <PublicLayouts />,
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <HomePage /> }, 
       { path: "/routes", element: <Routes /> },
 
       {
