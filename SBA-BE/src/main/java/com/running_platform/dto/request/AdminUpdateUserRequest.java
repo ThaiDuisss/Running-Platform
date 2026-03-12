@@ -16,6 +16,5 @@ public class AdminUpdateUserRequest {
 
     String username;
     String phoneNumber;
-    Set<RoleEnum> roles;
-    Boolean emailVerified;
+    RoleEnum role;
 }
