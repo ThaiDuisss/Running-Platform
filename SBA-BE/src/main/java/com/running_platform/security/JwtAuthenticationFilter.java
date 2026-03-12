@@ -1,6 +1,6 @@
-package com.example.oauth2.security;
+package com.running_platform.security;
 
-import com.example.oauth2.security.Oauth2.common.SecurityEnums;
+import com.running_platform.security.Oauth2.common.SecurityEnums;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;

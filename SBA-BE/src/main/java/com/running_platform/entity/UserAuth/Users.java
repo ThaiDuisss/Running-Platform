@@ -1,6 +1,8 @@
 package com.running_platform.entity.UserAuth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.running_platform.entity.AbstractEntity;
+import com.running_platform.security.Oauth2.common.SecurityEnums;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -10,6 +12,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
@@ -22,13 +25,14 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
-public class Users extends AbstractEntity<Long> implements UserDetails {
+public class Users extends AbstractEntity<Long> {
 
     @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(25)")
     String username;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
-    String password;
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = true)
+    private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -40,45 +44,35 @@ public class Users extends AbstractEntity<Long> implements UserDetails {
 
     String location;
 
-    @Column(name = "full_name", columnDefinition = "VARCHAR(50)")
+    @Column( columnDefinition = "VARCHAR(50)")
     String fullName;
 
     String latitude;
 
     String longitude;
 
-    String avatar;
 
-    @Column(name = "vip_expired_at")
+//    @Column(name = "registered_provider_name")
+    @Enumerated(EnumType.STRING)
+    private SecurityEnums.AuthProviderId registeredProviderName;
+
+//    @Column(name = "registered_provider_id")
+    private String registeredProviderId;
+
+    String imageUrl;
+
+    @Column
     LocalDateTime vipExpiredAt;
 
-    @Column(name = "email_verified", nullable = false, columnDefinition = "boolean default false")
+    @Column(nullable = false, columnDefinition = "boolean default false")
     boolean emailVerified = false;
 
     String phoneNumber;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
+    // Will be using same verificationCode and verificationCodeExpiresAt for both (email-verification and password reset)
+//    @Column(name = "verification_code")
+    private String verificationCode;
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+//    @Column(name = "verification_code_expires_at")
+    private Instant verificationCodeExpiresAt;
 }

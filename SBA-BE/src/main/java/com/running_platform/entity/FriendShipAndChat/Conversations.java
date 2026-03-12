@@ -1,13 +1,12 @@
 package com.running_platform.entity.FriendShipAndChat;
 
 import com.running_platform.entity.AbstractEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,4 +26,8 @@ public class Conversations extends AbstractEntity<Long> {
     String conversationHash;
 
     boolean isGroup;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    List<ConversationParticipants> conversationParticipants;
+
 }

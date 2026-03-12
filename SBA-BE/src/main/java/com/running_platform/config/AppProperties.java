@@ -1,7 +1,5 @@
-package com.example.oauth2.config;
+package com.running_platform.config;
 
-import com.cloudinary.Cloudinary;
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

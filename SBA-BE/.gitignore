@@ -33,7 +33,8 @@ build/
 .vscode/
 
 ### environment ###
-.env
+ENV.env
+*.env
 
 ### client_serest file ###
 client_serest.json

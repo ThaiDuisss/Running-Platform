@@ -16,6 +16,6 @@ public class UserServiceDetail {
    AuthRepository authRepository;
 
     public UserDetailsService userDetailsService() {
-        return username -> authRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found") );
+        return username -> (org.springframework.security.core.userdetails.UserDetails) authRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found") );
     }
 }

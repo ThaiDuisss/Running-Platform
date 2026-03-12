@@ -1,17 +1,18 @@
-package com.laundry.repository;
-
-import com.laundry.entity.Conversation;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
-
-@Repository
-public interface ConversationRepository extends MongoRepository<Conversation, String> {
-        @Query("{'participants.userId': ?0}")
-        List<Conversation> findAllByParticipantsUserId(Long userId);
-        @Query("{'participantHash': ?0}")
-        Optional<Conversation> findByParticipantHash(String participantHash);
-}
+//package com.running_platform.repository;
+//
+//import com.laundry.entity.Conversation;
+//import com.running_platform.entity.FriendShipAndChat.Conversations;
+//import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.data.jpa.repository.Query;
+//import org.springframework.data.mongodb.repository.MongoRepository;
+//import org.springframework.stereotype.Repository;
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//@Repository
+//public interface ConversationRepository extends JpaRepository<Conversations, Long> {
+//        //        List<Conversations> findBy(Long userId);
+//
+//        Optional<Conversations> findByConversationHash(String conversationHash);
+//}

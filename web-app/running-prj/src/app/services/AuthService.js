@@ -1,5 +1,7 @@
 import axiosClient from "@/shared/services/axiosClient";
-
+import {
+    ApiEndpoints
+} from "./AppUrlConstant";
 export const authService = {
     login: async (payload) => {
 
@@ -57,4 +59,24 @@ export const authService = {
     },
     
 
-};
+    signinWithSocialPlatform: async (platform, routeQueryParams) => {
+        console.log("Signing in with platform:", platform, routeQueryParams);
+        const queryString = Object.entries(routeQueryParams).map(([key, value]) => `${key}=${value}`).join('&');
+        const appendQueryParams = queryString ? `&${queryString}` : '';
+        let oauth2Url = '';
+        switch (platform) {
+            case "google":
+                oauth2Url = ApiEndpoints.AUTH.GOOGLE_AUTH + appendQueryParams;
+                break;
+            case "facebook":
+                oauth2Url = ApiEndpoints.AUTH.FACEBOOK_AUTH + appendQueryParams;
+                break;
+            case "github":
+                oauth2Url = ApiEndpoints.AUTH.GITHUB_AUTH + appendQueryParams;
+                break;
+            default:
+                throw new Error("Unsupported platform: " + platform);
+        }
+        window.location.href = oauth2Url;
+    }
+}
