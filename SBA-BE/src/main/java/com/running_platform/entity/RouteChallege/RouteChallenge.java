@@ -3,6 +3,7 @@ package com.running_platform.entity.RouteChallege;
 import com.running_platform.entity.AbstractEntity;
 import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.ChallengeStatus;
+import com.running_platform.enums.ChallengeType;
 import com.running_platform.enums.VisibilityEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,4 +43,7 @@ public class RouteChallenge extends AbstractEntity<Long> {
     ChallengeStatus status;
 
     BigDecimal targetValue;
+
+    @Enumerated(EnumType.STRING)
+    ChallengeType challengeType;
 }

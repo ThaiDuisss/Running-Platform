@@ -101,7 +101,7 @@ const UserLogin = () => {
                                             value={formData.rememberMe}
                                             name='rememberMe'
                                             label="Remember me" />
-                                        <NavLink className="lp-link" to="#">Forget your password</NavLink>
+                                        <NavLink className="lp-link" to="/forgot-password">Forget your password</NavLink>
                                     </div>
                                     <Button type='submit' className='lp-login-btn w-100'>
                                         Login
