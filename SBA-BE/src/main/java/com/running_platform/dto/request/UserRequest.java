@@ -20,11 +20,11 @@ import java.util.Set;
 public class UserRequest {
     @NotBlank
     @Size(min = 6, max = 30)
-    @Email
+    @Email(message = "Invalid email format")
     String username;
 
     @NotBlank
-    @Size(min = 6)
+    @Size(min = 6, message= ErrorEnum.INVALID_PASSWORD)
     String password;
 
     @NotBlank
@@ -34,6 +34,4 @@ public class UserRequest {
     @Pattern(regexp = "^0[0-9]{9,10}$", message = ErrorEnum.INVALID_PHONE)
     String phoneNumber;
 
-    @NotBlank
-    Set<RoleEnum> roles;
 }

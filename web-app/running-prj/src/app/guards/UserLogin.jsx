@@ -101,7 +101,7 @@ const UserLogin = () => {
                                             value={formData.rememberMe}
                                             name='rememberMe'
                                             label="Remember me" />
-                                        <NavLink className="lp-link" to="#">Forget your password</NavLink>
+                                        <NavLink className="lp-link" to="/forgot-password">Forget your password</NavLink>
                                     </div>
                                     <Button type='submit' className='lp-login-btn w-100'>
                                         Login
@@ -109,7 +109,7 @@ const UserLogin = () => {
                                 </Form>
                                 <div className='text-center mt-3 lp-muted'>
                                     Don't have an account? {" "}
-                                    <NavLink to="/signup">Sign up</NavLink>
+                                    <NavLink to="/register">Sign up</NavLink>
                                 </div>
                                 <div className='text-center my-3 lp-divider'>
                                     or connect width
