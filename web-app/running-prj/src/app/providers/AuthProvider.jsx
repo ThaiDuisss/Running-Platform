@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
             console.log("Login successful:", data);
             const { tokenResponse, userResponse } = data.data;
 
-            localStorage.setItem("ACCESS-TOKEN", tokenResponse);
+            localStorage.setItem("ACCESS-TOKEN", tokenResponse.accessToken);
             localStorage.setItem("userInfo", JSON.stringify(userResponse));
 
             setUser(userResponse);

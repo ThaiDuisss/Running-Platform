@@ -6,7 +6,8 @@ import {
     House,
     People,
     BoxArrowRight,
-    List
+    List, 
+    FileText
 } from "react-bootstrap-icons";
 import "@/style/AdminSidebar.css"
 const AdminSidebar = ({ collapsed, setCollapsed }) => {
@@ -62,6 +63,15 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
                 >
                     <People />
                     {!collapsed && "Users"}
+                </Nav.Link>
+
+                <Nav.Link
+                    active={location.pathname.includes("posts")}
+                    onClick={() => navigate("/admin/posts")}
+                    className="d-flex align-items-center gap-2"
+                >
+                    <FileText />
+                    {!collapsed && "Posts"}
                 </Nav.Link>
 
             </Nav>
