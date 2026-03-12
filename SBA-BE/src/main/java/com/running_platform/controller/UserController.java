@@ -6,12 +6,11 @@ import com.running_platform.dto.response.UserResponse;
 import com.running_platform.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping
@@ -38,4 +37,19 @@ public class UserController {
                 .status("Get Information Successful")
                 .build();
     }
+
+    // chua lam fe ket ban
+    @GetMapping("/search")
+    public ApiResponse<Page<UserResponse>> list(
+            @RequestParam(defaultValue = "") String keyword,
+            Pageable pageable
+    ) {
+        Page<UserResponse> data = service.getUsers(keyword, pageable);
+
+        return ApiResponse.success(
+                "Users search successfully",
+                data
+        );
+    }
+
 }

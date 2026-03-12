@@ -21,6 +21,7 @@ public class AppException extends RuntimeException {
         super(errorEnum.getMessage());
         this.code = errorEnum.getCode();
     }
+
     public AppException(int code, String message) {
         super(message);
         this.code = code;
@@ -30,6 +31,15 @@ public class AppException extends RuntimeException {
         super(message);
         this.code = code;
         this.fieldValidateExceptions = fieldValidateExceptions;
+    }
+
+    public List<FieldValidateException> getFieldValidateExceptions() {
+        if (fieldValidateExceptions != null && !fieldValidateExceptions.isEmpty()) {
+            return fieldValidateExceptions;
+        }
+
+        // nếu không có field error thì tạo lỗi chung
+        return List.of(new FieldValidateException(this.getMessage().split(" ")[0].toLowerCase(), this.getMessage()));
     }
 
 }

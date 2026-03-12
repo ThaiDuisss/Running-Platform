@@ -1,7 +1,10 @@
 package com.running_platform.service;
 
+import com.running_platform.dto.request.ResetPasswordRequest;
 import com.running_platform.dto.request.UserRequest;
 import com.running_platform.dto.response.UserResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService  {
     UserResponse register(UserRequest userRegister);
@@ -10,4 +13,7 @@ public interface UserService  {
     boolean verifyEmail(String token);
     void sendEmail(String email);
     void delete(Long id);
+    void forgotPassword(String email);
+    void resetPassword(ResetPasswordRequest request);
+    Page<UserResponse> getUsers(String keyword, Pageable pageable);
 }
