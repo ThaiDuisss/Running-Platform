@@ -1,6 +1,7 @@
 import AdminDashboard from "@/features/admin/dashboard/pages/AdminDashboard";
 import AdminLayout from "../layouts/AdminLayout"; "../layouts/AdminLayout";
-import UserPage from "@/features/admin/users/pages/UserPage"; "@/features/admin/users/pages/UserPage";
+import UserPage from "@/features/admin/users/pages/UserPage";
+import PostPage from "@/features/admin/posts/PostPage";
 
 const adminRoutes = [
     {
@@ -8,7 +9,7 @@ const adminRoutes = [
         element: <AdminLayout />,
         children: [
             { path: "user", element: <UserPage /> },
-            { index: true, path: "dashboard", element: <AdminDashboard /> },
+            { path: "posts", element: <PostPage /> },
 
         ]
     }
