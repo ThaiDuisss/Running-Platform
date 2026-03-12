@@ -12,6 +12,15 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope: email, profile
 #  data:
 #    redis:
 #      host: localhost
@@ -32,13 +41,50 @@ spring:
 #          spring.json.add.type.header: false
 
 
-jwt:
-  accessTokenSecret: sqWbT3cxuKh1Qg2zWc3RSdvLN0PAZE8mpNqpTxGTxw0=
-  refreshTokenSecret: RpHz5z6LHjsAjGfX1txgCO9D/PmNlZJMRRKbM925joU=
-  mailSecret: RpHz5z6LHjsAjGfX1txgCO9D/1105ZJMRRKbM925joU=
-  accessTokenExpiration: 30000000
-  refreshTokenExpiration: 2592000000
-  mailExpiration: 300000
+myapp:
+
+  appName: spring security OAuth2 and JWT starter example
+  officialCompanyName: XYZ-Company Inc.
+  officialCompanyDomain: http://localhost:5173
+
+  mail:
+    defaultEmailAddress: thai1105044@gmail.com
+    verificationCodeExpirationSeconds: 900 # 30 minutes
+
+  jwt:
+    secretAccessKey: bXlTdXBlclNlY3JldEtleUZvckpXVEF1dGhlbnRpY2F0aW9uMTIzNDU2
+    secretRefreshKey: RpHz5z6LHjsAjGfX1txgCO9D/PmNlZJMRRKbM925joU=
+    mailSecret: RpHz5z6LHjsAjGfX1txgCO9D/1105ZJMRRKbM925joU=
+    expirationAccessMillis: 3600000
+    expirationRefreshMillis: 3600000
+    shortLivedMillis: 120000
+    mailExpiration: 300000
+
+
+  cloudinary:
+    cloud-name: { CLOUD_NAME }
+    api-key: { API_KEY }
+    api-secret: { API_Secret }
+
+  cors:
+    allowedOrigins:
+      - http://localhost:8080
+      - http://localhost:5173
+    allowedMethods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+
+  oauth2:
+    authorizedRedirectOrigins: http://localhost:8080,http://localhost:5173
+    cookieExpireSeconds: 120
+
+  defaults:
+    defaultPageStart: 0
+    defaultPageSize: 50
+
 
 springdoc:
   api-docs:
