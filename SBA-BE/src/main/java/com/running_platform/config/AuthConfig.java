@@ -39,9 +39,10 @@ public class AuthConfig {
     Oauth2AuthenticationSuccessZHandler authenticationSuccessZHandler;
     Oauth2AuthenticationFailureHandler authenticationFailureHandler;
     HttpCookieOauth2AuthorizationRequestRepository httpCookieOauth2AuthorizationRequestRepository;
-    PasswordEncoder passwordEncoder;
+    AppBeanConfiguration appBeanConfiguration;
     String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
+            "/auth/login",
             "/swagger-ui/**",
             "/api-docs/**",
             "/swagger-ui.html",
@@ -91,7 +92,7 @@ public class AuthConfig {
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(customUserDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder);
+        authProvider.setPasswordEncoder(appBeanConfiguration.getPasswordEncoder());
         return authProvider;
     }
 

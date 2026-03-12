@@ -43,12 +43,8 @@ const AuthProvider = ({ children }) => {
             console.log("Login successful:", data);
             const access_token = data.data;
 
-<<<<<<< HEAD
             localStorage.setItem("ACCESS-TOKEN", tokenResponse.accessToken);
             localStorage.setItem("userInfo", JSON.stringify(userResponse));
-=======
-            localStorage.setItem("AccessToken", JSON.stringify(access_token));
->>>>>>> cfcbcb1 (update login)
 
             checkAuth();
         } catch (error) {
