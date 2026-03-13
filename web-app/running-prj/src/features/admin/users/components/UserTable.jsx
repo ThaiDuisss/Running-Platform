@@ -39,8 +39,7 @@ const UserTable = (props) => {
                                 <td>{user.id}</td>
                                 <td>{user.username}</td>
                                 <td>{user.phoneNumber}</td>
-                                <td>{user.roles?.roleName}</td>
-                                <td>
+                                <td>{user.roles?.[0]?.roleName}</td>                                <td>
                                     <div className="action-buttons">
                                         <i
                                             className="bi bi-pencil-square action-icon icon-edit"
