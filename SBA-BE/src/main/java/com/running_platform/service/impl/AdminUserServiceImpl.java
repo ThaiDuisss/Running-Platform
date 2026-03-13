@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -69,11 +71,13 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         userMapper.updateUser(user, req);
-//
-//        Roles role = roleRepository.findByRoleName(req.getRole());
-//
-//        user.setRoles(Set.of(role));
 
+        Roles role = roleRepository.findByRoleName(req.getRole());
+        if (role == null) {
+            throw new RuntimeException("Role not found: " + req.getRole());
+        }
+
+        user.setRoles(new HashSet<>(List.of(role)));
         userRepository.save(user);
 
         return userMapper.toUserResponse(user);
