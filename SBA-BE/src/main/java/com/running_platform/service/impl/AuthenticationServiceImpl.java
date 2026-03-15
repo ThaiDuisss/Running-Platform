@@ -8,6 +8,7 @@ import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.TokenType;
 import com.running_platform.exception.AppException;
 import com.running_platform.repository.AuthRepository;
+import com.running_platform.security.AppSecurityUtils;
 import com.running_platform.service.AuthenticationService;
 import com.running_platform.service.JwtService;
 import lombok.AccessLevel;
@@ -34,7 +35,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     AuthenticationManager authenticationManager;
     JwtService jwtService;
     AuthRepository authRepository;
-    AuthConfig authConfig;
     @Override
     public TokenResponse getAccessToken(SignInRequest request) {
 
@@ -49,8 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }catch(AuthenticationException e) {
             throw new AppException(ErrorEnum.FORBIDDEN);
         }
-        Set<GrantedAuthority> roles = new HashSet<>();
-        user.getRoles().stream().map(role ->roles.add(role));
+        Set<GrantedAuthority> roles = new HashSet<>(AppSecurityUtils.convertRolesSetToGrantedAuthorityList(user.getRoles()));
         String accessToken = jwtService.generateToken(user.getId(), roles, TokenType.ACCESSTOKEN);
         String refreshToken = jwtService.generateToken(user.getId(), roles, TokenType.REFRESHTOKEN);
 
@@ -67,8 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
             Users user = authRepository.findById(id).orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
-            Set<GrantedAuthority> roles = new HashSet<>();
-            user.getRoles().stream().map(roles1 -> roles.add(roles1));
+            Set<GrantedAuthority> roles = new HashSet<>(AppSecurityUtils.convertRolesSetToGrantedAuthorityList(user.getRoles()));
             accessToken = jwtService.generateToken(id, roles, TokenType.ACCESSTOKEN);
         } catch (Exception e) {
             log.error("Error generating refresh token: {}", e.getMessage());

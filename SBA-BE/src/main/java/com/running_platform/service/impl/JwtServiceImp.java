@@ -24,17 +24,17 @@ import java.util.Collection;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j(topic = "JWT_SERVICE")
 public class JwtServiceImp implements JwtService {
-    @Value("${jwt.accessTokenSecret}")
+    @Value("${myapp.jwt.secretAccessKey}")
     String accessTokenSecret;
-    @Value("${jwt.refreshTokenSecret}")
+    @Value("${myapp.jwt.secretRefreshKey}")
     String refreshTokenSecret;
-    @Value("${jwt.mailSecret}")
+    @Value("${myapp.jwt.mailSecret}")
     String mailTokenSecret;
-    @Value("${jwt.accessTokenExpiration}")
+    @Value("${myapp.jwt.expirationAccessMillis}")
     long accessTokenExpiration;
-    @Value("${jwt.refreshTokenExpiration}")
+    @Value("${myapp.jwt.expirationRefreshMillis}")
     long refreshTokenExpiration;
-    @Value("${jwt.mailExpiration}")
+    @Value("${myapp.jwt.mailExpiration}")
     long mailExpiration;
 
     @Override

@@ -15,10 +15,7 @@ import com.running_platform.entity.UserAuth.VerificationTokens;
 import com.running_platform.exception.AppException;
 import com.running_platform.mapper.RoleMapper;
 import com.running_platform.mapper.UserMapper;
-import com.running_platform.repository.PasswordResetTokenRepository;
-import com.running_platform.repository.RoleRepository;
-import com.running_platform.repository.AuthRepository;
-import com.running_platform.repository.VerificationTokenRepository;
+import com.running_platform.repository.*;
 import com.running_platform.service.EmailService;
 import com.running_platform.service.UserService;
 import jakarta.transaction.Transactional;
@@ -27,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -44,11 +44,12 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     UserMapper mapper;
     RoleMapper roleMapper;
-    AuthConfig authConfig;
     JwtServiceImp jwtService;
+    PasswordEncoder passwordEncoder;
     VerificationTokenRepository tokenRepository;
     PasswordResetTokenRepository passwordResetTokenRepository;
     EmailService emailService;
+    UserRepository userRepository;
 
     @Transactional
     public UserResponse register(UserRequest userRegister) {
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
         roles.add(roleUser);
         Users user = Users.builder()
                 .username(userRegister.getUsername())
-                .password(authConfig.passwordEncoder().encode(userRegister.getPassword()))
+                .password(passwordEncoder.encode(userRegister.getPassword()))
                 .roles(roles)
                 .emailVerified(false)
                 .fullName(userRegister.getFullName())
@@ -144,6 +145,7 @@ public class UserServiceImpl implements UserService {
 //        kafkaTemplate.send("notification-delivery", notificationEvent);
     }
 
+
     public void delete(Long id) {
         Users users = repository.findById(id).orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
         repository.delete(users);
@@ -176,7 +178,7 @@ public class UserServiceImpl implements UserService {
         if (passwordResetTokens.getExpiryDate().isBefore(LocalDateTime.now())) {
             throw new AppException(ErrorEnum.EXPIRED_TOKEN);
         }
-        user.setPassword(authConfig.passwordEncoder().encode(request.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         passwordResetTokenRepository.delete(passwordResetTokens);
         repository.save(user);
     }
@@ -194,6 +196,31 @@ public class UserServiceImpl implements UserService {
         String content = "Click link to reset password: " + "http://localhost:5173/reset-password?token=" + token;
         String subject = "Reset password";
         emailService.sendVerificationEmail(user.getUsername(), content, subject);
+    }
+
+    @Override
+    public Page<UserResponse> getUsers(String keyword, Pageable pageable) {
+
+        Page<Users> page = userRepository
+                .findByUsernameContainingIgnoreCase(keyword, pageable);
+
+        return page.map(mapper::toUserResponse);
+    }
+
+    @Override
+    public UserResponse updateUser(UserResponse userResponse) {
+        Users userEntity = repository.findById(userResponse.getId())
+                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        userEntity.setFullName(userResponse.getFullName());
+        userEntity.setImageUrl(userResponse.getImageUrl());
+        userEntity.setPhoneNumber(userResponse.getPhoneNumber());
+        repository.save(userEntity);
+        return mapper.toUserResponse(userEntity);
+    }
+
+    @Override
+    public Optional<UserResponse> findOptionalUserByEmail(String email) {
+        return repository.findByUsername(email).map(mapper::toUserResponse);
     }
 
 }

@@ -1,5 +1,7 @@
 import axiosClient from "@/shared/services/axiosClient";
-
+import {
+    ApiEndpoints
+} from "./AppUrlConstant";
 export const authService = {
     login: async (payload) => {
 
@@ -22,8 +24,14 @@ export const authService = {
     },
 
     register: async (payload) => {
-        const res = await axiosClient.post("/auth/register", payload);
-        return res.data;
+        try {
+            const res = await axiosClient.post("/auth/register", payload);
+            return res.data;
+        } catch (error) {
+            console.error("Registration error:", error);
+            throw error;
+        }
+
     },
 
     refreshToken: async () => {
@@ -45,16 +53,26 @@ export const authService = {
         localStorage.removeItem("ACCESS-TOKEN");
         localStorage.removeItem("userInfo");
     },
-    
-    forgotPassword: async (email) => {
-        const res = await axiosClient.post(`/auth/forgot-password?email=${email}`);
-        return res.data;
-    },
 
-    resetPassword: async ({ token, newPassword }) => {
-        const res = await axiosClient.post("/auth/reset-password", { token, newPassword });
-        return res.data;
-    },
-    
+    signinWithSocialPlatform: async (platform, routeQueryParams) => {
+        console.log("Signing in with platform:", platform, routeQueryParams);
+        const queryString = Object.entries(routeQueryParams).map(([key, value]) => `${key}=${value}`).join('&');
+        const appendQueryParams = queryString ? `&${queryString}` : '';
+        let oauth2Url = '';
+        switch (platform) {
+            case "google":
+                oauth2Url = ApiEndpoints.AUTH.GOOGLE_AUTH + appendQueryParams;
+                break;
+            case "facebook":
+                oauth2Url = ApiEndpoints.AUTH.FACEBOOK_AUTH + appendQueryParams;
+                break;
+            case "github":
+                oauth2Url = ApiEndpoints.AUTH.GITHUB_AUTH + appendQueryParams;
+                break;
+            default:
+                throw new Error("Unsupported platform: " + platform);
+        }
+        window.location.href = oauth2Url;
+    }
 
-};
+}

@@ -3,6 +3,7 @@ package com.running_platform.dto.response;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.running_platform.security.Oauth2.common.SecurityEnums;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,19 +15,26 @@ import lombok.experimental.FieldDefaults;
 public class UserResponse {
     Long id;
     String username;
+
     boolean emailVerified;
+
     Set<RoleResponse> roles;
+
     String location;
 
     String fullName;
+
+    String imageUrl;
 
     String latitude;
 
     String longitude;
 
-    String avatar;
-
     LocalDateTime createAt;
+
+    private SecurityEnums.AuthProviderId registeredProviderName;
+
+    private String registeredProviderId;
 
     LocalDateTime vipExpiredAt;
 

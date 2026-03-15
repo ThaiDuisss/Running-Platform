@@ -1,7 +1,11 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState, } from 'react'
 import { authService } from '../services/authService';
+import { ApiEndpoints } from '../services/AppUrlConstant';
+import axiosClient from '@/shared/services/axiosClient';
+import { getUserInfo } from '@/features/admin/users/services/UserService';
 export const AuthDataContext = createContext();
 export const AuthActionContext = createContext();
+
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState({});
     const [theme, setTheme] = useState("Light");
@@ -15,19 +19,35 @@ const AuthProvider = ({ children }) => {
         if (storedUser) setUser(JSON.parse(storedUser));
         if (storedTheme) setTheme(storedTheme);
         if (storedLang) setLanguage(storedLang);
+
     }, []);
+
+
+    const checkAuth = async () => {
+        try {
+            console.log("Checking authentication..." + ApiEndpoints.USERS_API_ENDPOINTS.ME);
+            const res = await getUserInfo();
+            console.log("Authentication check successful:", res);
+            setUser(res.data);
+        } catch (error) {
+            setUser(null);
+            console.error("Authentication check failed:", error);
+            throw error;
+        }
+    }
 
     // 🔐 LOGIN
     const login = async (payload) => {
         try {
             const data = await authService.login(payload);
             console.log("Login successful:", data);
-            const { tokenResponse, userResponse } = data.data;
+            const access_token = data.data.accessToken;
 
-            localStorage.setItem("ACCESS-TOKEN", tokenResponse);
-            localStorage.setItem("userInfo", JSON.stringify(userResponse));
 
-            setUser(userResponse);
+
+            localStorage.setItem("access_token", access_token);
+
+            checkAuth();
         } catch (error) {
             throw error;
         }
@@ -35,7 +55,7 @@ const AuthProvider = ({ children }) => {
 
     // 🚪 LOGOUT
     const logout = () => {
-        localStorage.removeItem("ACCESS-TOKEN");
+        localStorage.removeItem("access_token");
         localStorage.removeItem("userInfo");
         authService.logout();
         setUser("");
@@ -65,6 +85,7 @@ const AuthProvider = ({ children }) => {
         changeUser,
         changeTheme,
         changeLanguage,
+        checkAuth
     };
 
     return (

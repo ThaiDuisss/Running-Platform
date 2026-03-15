@@ -89,7 +89,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> signIn(@RequestBody SignInRequest signInRequest) {
         TokenResponse tokenResponse = authenticationService.getAccessToken(signInRequest);
-        UserResponse u = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenResponse.getRefreshToken())
                 .httpOnly(true)
                 .secure(true)
@@ -104,7 +103,7 @@ public class AuthController {
                         .code(200)
                         .status("OK")
                         .message("User logged in successfully")
-                        .data(SignInResponse.builder().tokenResponse(tokenResponse).userResponse(u).build())
+                        .data(tokenResponse.getAccessToken())
                         .build());
     }
 

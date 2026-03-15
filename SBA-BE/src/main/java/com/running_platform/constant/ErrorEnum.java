@@ -32,7 +32,10 @@ public enum ErrorEnum {
     EXISTING_RESET_PASSWORD_REQUEST(4007, "A reset password request already exists. Please check your email for the reset link or try again later."),
     EMAIL_NOT_FOUND(4007, "If the email exists, a reset link has been sent"),
     ARTICLE_NOT_FOUND(4008, "Article not found"),
-    CATEGORY_NOT_FOUND(4009, "Category not found");
+    CATEGORY_NOT_FOUND(4009, "Category not found"),
+    FAILED_OAUTH2_REDIRECT(1111, "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
+
+
     public static final String INVALID_STATUS_MS = "Status is invalid";
     public static final String INVALID_MEMBERSHIP_MS = "Membership level is invalid";
     public static final String INVALID_EMAIL_MS = "Email is invalid";

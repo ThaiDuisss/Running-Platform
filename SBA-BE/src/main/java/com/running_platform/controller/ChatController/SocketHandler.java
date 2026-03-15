@@ -1,4 +1,4 @@
-//package com.laundry.controller;
+//package com.running_platform.controller.ChatController;
 //
 //import com.corundumstudio.socketio.SocketIOClient;
 //import com.corundumstudio.socketio.SocketIOServer;
