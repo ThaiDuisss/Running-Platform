@@ -1,48 +1,89 @@
-/* Table layout */
+/* UserTable.css */
 .user-table {
-    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
+    background: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(99, 179, 237, 0.10);
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
+    font-size: 0.92rem;
 }
 
-/* Header style */
-.user-table th {
+.user-table thead tr th {
+    background: #eaf4fd;
+    color: #3a87c4;
     font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    border: none;
+    border-bottom: 2px solid #c9e6f7;
+}
+
+.user-table tbody tr {
+    transition: background 0.18s;
+}
+
+.user-table tbody tr:hover {
+    background: #f0f8ff;
+}
+
+.user-table tbody tr td {
+    padding: 13px 18px;
+    border: none;
+    border-bottom: 1px solid #e8f4fb;
+    color: #2d4a62;
     vertical-align: middle;
 }
 
-/* Action column width */
-.user-table th:last-child,
-.user-table td:last-child {
-    width: 90px;
-    text-align: center;
+.user-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
-/* Action buttons container */
+.user-table tbody tr td img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #b3d9f5;
+    box-shadow: 0 1px 6px rgba(99, 179, 237, 0.18);
+}
+
 .action-buttons {
     display: flex;
-    justify-content: center;
+    gap: 10px;
     align-items: center;
-    gap: 12px;
 }
 
-/* Action icon style */
 .action-icon {
+    font-size: 1.05rem;
     cursor: pointer;
-    font-size: 18px;
-    transition: transform 0.15s ease;
+    padding: 6px;
+    border-radius: 7px;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
 }
 
-/* Hover effect */
-.action-icon:hover {
-    transform: scale(1.15);
-}
-
-/* Update icon */
 .icon-edit {
-    color: #0d6efd;
+    color: #3a87c4;
+    background: #e3f2fd;
 }
 
-/* Delete icon */
+.icon-edit:hover {
+    background: #3a87c4;
+    color: #fff;
+    transform: scale(1.12);
+}
+
 .icon-delete {
-    color: #dc3545;
+    color: #e05a5a;
+    background: #fdeaea;
+}
+
+.icon-delete:hover {
+    background: #e05a5a;
+    color: #fff;
+    transform: scale(1.12);
 }
