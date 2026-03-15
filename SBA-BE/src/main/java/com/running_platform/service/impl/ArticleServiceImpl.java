@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
@@ -38,6 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleResponse addArticle(ArticleRequest articleRequest) {
         Articles article = articleMapper.toEntity(articleRequest);
+        article.setPublishedAt(LocalDateTime.now());
         Articles savedArticle = articleRepository.save(article);
         return articleMapper.toResponse(savedArticle);
     }
