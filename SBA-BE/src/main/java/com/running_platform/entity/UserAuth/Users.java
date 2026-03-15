@@ -27,7 +27,7 @@ import java.util.Set;
 @Where(clause = "is_deleted=false")
 public class Users extends AbstractEntity<Long> {
 
-    @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(25)")
+    @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(50)")
     String username;
 
     @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
