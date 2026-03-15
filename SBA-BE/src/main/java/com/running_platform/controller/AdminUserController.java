@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/admin/users")
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class AdminUserController {
-     final AdminUserService adminUserService;
+    final AdminUserService adminUserService;
 
     @PostMapping
     public ApiResponse<UserResponse> create(
@@ -66,9 +67,10 @@ public class AdminUserController {
     @PutMapping("/{id}")
     public ApiResponse<UserResponse> update(
             @PathVariable Long id,
-            @RequestBody AdminUpdateUserRequest req
+            @ModelAttribute AdminUpdateUserRequest req,
+            @RequestParam MultipartFile avatar
     ) {
-        UserResponse data = adminUserService.updateUser(id, req);
+        UserResponse data = adminUserService.updateUser(id, req,avatar);
 
         return ApiResponse.<UserResponse>builder()
                 .status("SUCCESS")
@@ -87,6 +89,21 @@ public class AdminUserController {
                 .code(200)
                 .message("Delete user successfully")
                 .data(null)
+                .build();
+    }
+    @PostMapping(value = "/{id}/avatar")
+    public ApiResponse<UserResponse> uploadAvatar(
+            @PathVariable Integer id,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam String username,
+            @RequestParam String phoneNumber,
+            @RequestParam String role) {
+        UserResponse data = adminUserService.updateAvatar(id, file);
+        return ApiResponse.<UserResponse>builder()
+                .status("SUCCESS")
+                .code(200)
+                .message("Update avt sucessfully")
+                .data(data)
                 .build();
     }
 }

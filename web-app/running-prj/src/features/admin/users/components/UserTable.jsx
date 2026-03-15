@@ -14,6 +14,7 @@ const UserTable = (props) => {
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Avatar</th>
                         <th>Name</th>
                         <th>Phone Number</th>
                         <th>Role</th>
@@ -37,6 +38,7 @@ const UserTable = (props) => {
 
                             <tr key={user.id}>
                                 <td>{user.id}</td>
+                                <td><img src={user.imageUrl} alt="avatar" /></td>
                                 <td>{user.username}</td>
                                 <td>{user.phoneNumber}</td>
                                 <td>{user.roles?.[0]?.roleName}</td>                                <td>

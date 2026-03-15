@@ -9,40 +9,83 @@ const UpdateUser = ({ show, selectedUser, onClose, fetchUsers }) => {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [username, setUsername] = useState("");
     const [role, setRole] = useState("");
-
+    const [avatar, setAvatar] = useState(null);
+    const [preview, setPreview] = useState("");
     useEffect(() => {
         if (selectedUser) {
             setUsername(selectedUser.username || "");
             setPhoneNumber(selectedUser.phoneNumber || "");
-            setRole(selectedUser.roles?.roleName || "");
+            selectedUser.roles?.[0]?.roleName
+            setPreview(selectedUser.imageUrl || "");
+
         }
     }, [selectedUser]);
 
     const handleSubmit = async () => {
+
+        const formData = new FormData();
+
+        formData.append("username", username);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("role", role);
+
+        if (avatar) {
+            formData.append("avatar", avatar);
+        }
+
         try {
-            const data = {
-                username,
-                phoneNumber,
-                role
-            };
-            const res = await updateUserAPI(data, selectedUser.id)
-            console.log("Update user:", res);
-            fetchUsers()
-            onClose()
+
+            const res = await updateUserAPI(formData, selectedUser.id);
+
+            fetchUsers();
+            onClose();
+
         } catch (error) {
-            console.error(error.message)
+
+            console.error(error);
+
         }
     };
+    const handleAvatarChange = (e) => {
+        const file = e.target.files[0];
 
+        if (file) {
+            setAvatar(file);
+
+            const previewUrl = URL.createObjectURL(file);
+            setPreview(previewUrl);
+        }
+    };
     return (
         <Modal show={show} onHide={onClose}>
 
             <Modal.Header closeButton>
-                <Modal.Title>Update User</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
+                <div style={{ textAlign: "center", marginBottom: "20px" }}>
+                    <label htmlFor="avatarUpload" style={{ cursor: "pointer" }}>
+                        <img
+                            src={preview || "https://via.placeholder.com/100"}
+                            alt="avatar"
+                            style={{
+                                width: "100px",
+                                height: "100px",
+                                borderRadius: "50%",
+                                objectFit: "cover",
+                                border: "2px solid #ddd"
+                            }}
+                        />
+                    </label>
 
+                    <input
+                        id="avatarUpload"
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleAvatarChange}
+                    />
+                </div>
                 <Form>
 
                     <Form.Group className="mb-3">
