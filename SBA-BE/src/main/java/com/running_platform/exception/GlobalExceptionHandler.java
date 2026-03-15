@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 @Slf4j(topic = "ERROR-EXCEPTION")
@@ -64,7 +63,7 @@ public class GlobalExceptionHandler {
                         cv.getPropertyPath().toString(),
                         cv.getMessage()
                 ))
-                .collect(Collectors.toList());
+                .toList();
 
         ApiResponse<List<FieldValidateException>> response = ApiResponse.<List<FieldValidateException>>builder()
                 .status("error")
