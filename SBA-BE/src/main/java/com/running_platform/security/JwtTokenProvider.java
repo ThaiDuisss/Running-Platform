@@ -71,7 +71,7 @@ public class JwtTokenProvider {
     public String generateAccessToken(Authentication authentication) {
         CustomUserDetails userDetails =(CustomUserDetails) authentication.getPrincipal();
         Set<String> authoritiesSet = AppSecurityUtils.convertGrantedAuthorityListToRolesSet(authentication.getAuthorities());
-
+        log.info(String.valueOf(userDetails.getUserEntity()));
         Map<String, Object> claimMap = new HashMap<>();
 //        claimMap.put("email", userDetails.getEmail());
 //        claimMap.put("user", mapper.toEntity(userDetails.getUserEntity()));

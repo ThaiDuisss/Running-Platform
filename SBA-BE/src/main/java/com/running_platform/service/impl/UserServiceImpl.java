@@ -64,19 +64,23 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(userRegister.getPassword()))
                 .roles(roles)
                 .emailVerified(false)
+                .registeredProviderName(userRegister.getRegisteredProviderName())
+                .registeredProviderId(userRegister.getRegisteredProviderId())
                 .fullName(userRegister.getFullName())
+                .emailVerified(userRegister.isEmailVerified())
                 .phoneNumber(userRegister.getPhoneNumber())
                 .build();
 
         user = repository.save(user);
 
-        sendVerificationLink(user);
+        if (!userRegister.isEmailVerified()) {
+            sendVerificationLink(user);
+        }
+
 
         Users userProfile = mapper.toUserProfile(userRegister);
         userProfile.setId(user.getId());
-        UserResponse userResponse = mapper.toUserResponse(userProfile);
-        userResponse.setId(user.getId());
-        return userResponse;
+        return mapper.toUserResponse(userProfile);
     }
 
     private void sendVerificationLink(Users user) {
