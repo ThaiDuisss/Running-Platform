@@ -27,6 +27,7 @@ const AuthProvider = ({ children }) => {
         try {
             console.log("Checking authentication..." + ApiEndpoints.USERS_API_ENDPOINTS.ME);
             const res = await getUserInfo();
+            localStorage.setItem("userInfo", JSON.stringify(res.data));
             console.log("Authentication check successful:", res);
             setUser(res.data);
         } catch (error) {
@@ -41,7 +42,7 @@ const AuthProvider = ({ children }) => {
         try {
             const data = await authService.login(payload);
             console.log("Login successful:", data);
-            const access_token = data.data.accessToken;
+            const access_token = data.data;
 
 
 

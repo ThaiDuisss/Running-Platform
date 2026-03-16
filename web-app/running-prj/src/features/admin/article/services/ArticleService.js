@@ -1,4 +1,4 @@
-import { uploadFile } from '../../../../shared/services/UploadService';
+import uploadFile from '../../../../shared/services/UploadService';
 import axiosClient from "@/shared/services/axiosClient"
 
 const handleCreateArticle = async (data) => {
@@ -42,6 +42,65 @@ const handleCreateArticle = async (data) => {
     }
 };
 
+const getArticleWithPaginateAPI = async (page, size) => {
+    try {
+        const response = await axiosClient.get("/api/articles", {
+            params: {
+                page,
+                size
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching articles:", error);
+        throw new Error("Failed to fetch articles");
+    }
+}
+
+const updateArticleAPI = async (articleId, data) => {
+    console.log("data before update:", data);
+    try {
+        let thumbnailUrl = data.thumbnailUrl;
+        // Nếu có upload ảnh mới thì upload trước
+        if (data.image) {
+            thumbnailUrl = await uploadFile(data.image, "images/articles");
+        }
+        // Body gửi lên backend
+        const formData = {
+            title: data.title,
+            summary: data.summary,
+            content: data.content,
+            thumbnailUrl: thumbnailUrl,
+            category: data.category
+        };
+        const response = await axiosClient.put(
+            `/api/articles/${articleId}`,
+            formData
+        );
+        return response;
+    } catch (error) {
+        const allErrors = error.response?.data?.data
+            ?.map(e => e.message)
+            .join(", ");
+        console.error("All error:", allErrors);
+        throw new Error(allErrors || "Update article failed");
+    }
+};
+
+const deleteArticleAPI = async (articleId) => {
+    try {
+        const response = await axiosClient.delete(`/api/articles/${articleId}`);
+        return response;
+    } catch (error) {
+        const message = error.response?.data?.message;
+        console.error("Delete article error:", message);
+        throw new Error(message || "Delete article failed");
+    }
+};
+
 export {
-    handleCreateArticle
+    handleCreateArticle,
+    getArticleWithPaginateAPI,
+    updateArticleAPI,
+    deleteArticleAPI
 }

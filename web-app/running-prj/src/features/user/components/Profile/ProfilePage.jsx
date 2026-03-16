@@ -21,14 +21,15 @@ const ProfilePage = () => {
 
     // Sync form khi user thay đổi
     useEffect(() => {
-        if (!user) return;
+        console.log("User data changed, updating form:", user.data);
+        if (!user.data) return;
         setForm({
-            username: user.username ?? "",
-            phoneNumber: user.phoneNumber ?? "",
-            location: user.location ?? "",
-            latitude: user.latitude ?? "",
-            longitude: user.longitude ?? "",
-            avatar: user.avatar ?? "",
+            username: user.data.username ?? "",
+            phoneNumber: user.data.phoneNumber ?? "",
+            location: user.data.location ?? "",
+            latitude: user.data.latitude ?? "",
+            longitude: user.data.longitude ?? "",
+            avatar: user.data.avatar ?? "",
         });
 
         setIsEditing(false);

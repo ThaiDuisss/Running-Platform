@@ -82,10 +82,8 @@ public class AppProperties {
     @Getter
     @Setter
     public static class Cloudinary {
-        private String cloudName;
-        private String apiKey;
-        private String apiSecret;
+        private String cloudName = "dcglndksy";
+        private String apiKey = "811481571224712";
+        private String apiSecret= "pbZKe72EdI7QQDy4pheLKbJkpoo";
     }
-
-
 }
