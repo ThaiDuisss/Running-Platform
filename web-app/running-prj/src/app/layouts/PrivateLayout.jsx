@@ -3,12 +3,12 @@ import PrivateHeader from '@/shared/components/PrivateHeader'
 import PrivateNavbar from '@/shared/components/PrivateNavbar'
 import React, { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { authService } from '../services/authService'
+import { authService } from '../services/AuthService'
 
 const PrivateLayout = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    const isAccessToken = authService.getAccessToken() === "ACCESS_TOKEN";
+    const isAccessToken = authService.getAccessToken() === "access_token";
     if (!isAccessToken) {
       navigate("login")
     }

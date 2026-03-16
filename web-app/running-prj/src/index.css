@@ -12,7 +12,13 @@ transition: background-color 0.3s ease, color 0.3s ease;
 .hero-section {
   background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
               url("hero.jpg") center/cover;
-  min-height: 90vh;
+  min-height: 90vh; 
+}
+.hero-right {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
 }
 
 .h-300 { height: 300px; }
