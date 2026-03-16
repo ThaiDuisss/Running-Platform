@@ -7,13 +7,13 @@ let socket = null;
 
 export function connectSocket(variable, port) {
     let socketUrl;
-    
+
     if (variable) {
         // Nếu variable có giá trị -> gửi email
         socketUrl = `http://localhost:${port}?email=${variable}`;
     } else {
         // Nếu variable null/undefined -> gửi token
-        const token = localStorage.getItem("AccessToken");
+        const token = localStorage.getItem("access_token");
         socketUrl = `http://localhost:${port}?token=${token}`;
     }
 

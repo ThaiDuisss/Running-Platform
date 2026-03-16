@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState, } from 'react'
 import { authService } from '../services/authService';
-import { ApiEndpoints } from '../services/AppUrlConstant';
-import axiosClient from '@/shared/services/axiosClient';
+
 import { getUserInfo } from '@/features/admin/users/services/UserService';
 export const AuthDataContext = createContext();
 export const AuthActionContext = createContext();
@@ -15,6 +14,11 @@ const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem("userInfo");
         const storedTheme = localStorage.getItem("theme");
         const storedLang = localStorage.getItem("language");
+        console.log("AuthProvider - Stored User:", storedUser);
+        console.log("AuthProvider - Stored Theme:", storedTheme);
+        console.log("AuthProvider - Stored Language:", storedLang);
+
+        console.log("AuthProvider - Stored User:", JSON.parse(storedUser));
 
         if (storedUser) setUser(JSON.parse(storedUser));
         if (storedTheme) setTheme(storedTheme);
@@ -25,10 +29,12 @@ const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
-            console.log("Checking authentication..." + ApiEndpoints.USERS_API_ENDPOINTS.ME);
             const res = await getUserInfo();
             console.log("Authentication check successful:", res);
-            setUser(res.data);
+            const newUser = res.data.data;
+            localStorage.setItem("userInfo", JSON.stringify(newUser));
+
+            setUser(newUser);
         } catch (error) {
             setUser(null);
             console.error("Authentication check failed:", error);
@@ -41,7 +47,7 @@ const AuthProvider = ({ children }) => {
         try {
             const data = await authService.login(payload);
             console.log("Login successful:", data);
-            const access_token = data.data.accessToken;
+            const access_token = data.data;
 
 
 
