@@ -14,7 +14,11 @@ const getUserWithPaginateAPI = (currentPage, pageSize, keyword) => {
 }
 const updateUserAPI = (data, id) => {
     const URL_BACKEND = `api/admin/users/${id}`
-    return axiosClient.put(URL_BACKEND, data)
+    return axiosClient.put(URL_BACKEND, data, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
 }
 const deleteUserAPI = (id) => {
     const URL_BACKEND = `api/admin/users/${id}`
