@@ -8,7 +8,7 @@ const SearchItem = ({ search, onSearch }) => {
             <input
                 type="text"
                 className="search-input"
-                placeholder="Search user..."
+                placeholder="Search..."
                 value={search}
                 onChange={(e) => onSearch(e.target.value)}
             />

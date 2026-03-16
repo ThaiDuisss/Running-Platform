@@ -100,9 +100,9 @@ const ProfilePage = () => {
                 <Col lg={4}>
                     <Card className="shadow-sm">
                         <Card.Body className="p-4 text-center">
-                            {user?.avatar ? (
+                            {user?.imageUrl ? (
                                 <img
-                                    src={user.avatar}
+                                    src={user.imageUrl}
                                     alt="avatar"
                                     className="rounded-circle mb-3"
                                     style={{ width: 80, height: 80, objectFit: "cover" }}

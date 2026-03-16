@@ -4,7 +4,7 @@ export const oauthRedirectLoader = () => {
     const token = params.get("token");
 
     if (token) {
-        localStorage.setItem("AccessToken", token);
+        localStorage.setItem("access_token", token);
     }
 
 };
