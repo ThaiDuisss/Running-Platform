@@ -8,7 +8,8 @@ const Oauth2Redirect = () => {
 
   useEffect(() => {
 
-    const token = localStorage.getItem("AccessToken");
+    const token = localStorage.getItem("access_token");
+    console.log("OAuth2 Redirect - Access Token:", token);
     if (token) {
       checkAuth();
       navigate("/");

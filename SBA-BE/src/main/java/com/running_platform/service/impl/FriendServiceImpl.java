@@ -18,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -94,8 +93,8 @@ public class FriendServiceImpl implements FriendService {
         if (friend.getStatus() != FriendStatus.PENDING) {
             throw new AppException(ErrorEnum.UNKNOWN_ERROR);
         }
-
-        friendRepository.delete(friend);
+        friend.setStatus(FriendStatus.REJECTED);
+        friendRepository.save(friend);
     }
 
     @Override
@@ -108,8 +107,8 @@ public class FriendServiceImpl implements FriendService {
         if (friend.getStatus() != FriendStatus.PENDING) {
             throw new AppException(ErrorEnum.UNKNOWN_ERROR);
         }
-
-        friendRepository.delete(friend);
+        friend.setStatus(FriendStatus.CANCELLED);
+        friendRepository.save(friend);
     }
 
     @Override
@@ -132,7 +131,7 @@ public class FriendServiceImpl implements FriendService {
         Long currentUserId = getCurrentUserId();
 
         Page<FriendShips> friends = friendRepository
-                .findByStatusAndRequester_IdOrAddressee_Id(FriendStatus.ACCEPTED, currentUserId, currentUserId,
+                .findFriends(FriendStatus.ACCEPTED, currentUserId,
                         PageRequest.of(page, size));
 
         Page<FriendResponse> responsePage = friends.map(f -> {

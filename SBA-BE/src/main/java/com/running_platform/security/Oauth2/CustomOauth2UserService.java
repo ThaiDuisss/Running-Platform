@@ -80,18 +80,20 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         List<GrantedAuthority> role = new ArrayList<>(oAuth2User.getAuthorities());
         role.add(new SimpleGrantedAuthority(AppSecurityUtils.ROLE_DEFAULT));
         Users user = userMapper.responseToUserProfile(userDTO);
+        user.setId(userDTO.getId());
         return CustomUserDetails.buildWithAuthAttributesAndAuthorities(user, role, oAuth2User.getAttributes());
     }
 
     private UserResponse registerNewOAuthUser(OAuth2UserRequest oAuth2UserRequest,
                                          CustomAbstractOAuth2UserInfo customAbstractOAuth2UserInfo) {
+        log.info(oAuth2UserRequest.getClientRegistration().getRegistrationId());
         UserRequest userDTO = new UserRequest();
         userDTO.setFullName(customAbstractOAuth2UserInfo.getName());
         userDTO.setUsername(customAbstractOAuth2UserInfo.getEmail());
+        userDTO.setEmailVerified(true);
         userDTO.setRegisteredProviderName(SecurityEnums.AuthProviderId.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         userDTO.setRegisteredProviderId(customAbstractOAuth2UserInfo.getId());
         userDTO.setRoles(Set.of(RoleEnum.USER));
-        userDTO.setEmailVerified(true);
         userDTO.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
 
         return  userService.register(userDTO);

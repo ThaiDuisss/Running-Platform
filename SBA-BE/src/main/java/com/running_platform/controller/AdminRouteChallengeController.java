@@ -5,14 +5,9 @@ import com.running_platform.dto.request.AdminUpdateRouteChallengeRequest;
 import com.running_platform.dto.response.AdminRouteChallengeResponse;
 import com.running_platform.dto.response.ApiResponse;
 import com.running_platform.dto.response.PageResponse;
-import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.service.RouteChallengeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,9 +17,7 @@ public class AdminRouteChallengeController {
 
     private final RouteChallengeService routeChallengeService;
 
-    // Create 201 return dto
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<AdminRouteChallengeResponse> createRouteChallenge(
             @Valid @RequestBody AdminCreateRouteChallengeRequest request
     ) {
@@ -34,7 +27,6 @@ public class AdminRouteChallengeController {
         );
     }
 
-    // Get all 200 return list of dto
     @GetMapping
     public ApiResponse<PageResponse<AdminRouteChallengeResponse>> getRouteChallenges(
             @RequestParam(defaultValue = "0") int page,
@@ -47,7 +39,6 @@ public class AdminRouteChallengeController {
         );
     }
 
-    // Get by id 200 return dto
     @GetMapping("/{id}")
     public ApiResponse<AdminRouteChallengeResponse> getRouteChallengeById(
             @PathVariable Long id
@@ -59,7 +50,6 @@ public class AdminRouteChallengeController {
         );
     }
 
-    // Update by id 200 return dto
     @PutMapping("/{id}")
     public ApiResponse<AdminRouteChallengeResponse> updateRouteChallenge(
             @PathVariable Long id,
@@ -72,13 +62,13 @@ public class AdminRouteChallengeController {
         );
     }
 
-    // Delete 204 no content
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRouteChallenge(
+    public ApiResponse<Void> deleteRouteChallenge(
             @PathVariable Long id
     ) {
-
         routeChallengeService.deleteRouteChallenge(id);
+        return ApiResponse.success(
+                "Deleted successfully",
+                null);
     }
 }

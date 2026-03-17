@@ -36,7 +36,7 @@ public class UserRequest {
 
     private String imageUrl;
 
-    private boolean emailVerified;
+     boolean emailVerified = false;
 
     @Nullable
     private SecurityEnums.AuthProviderId registeredProviderName = SecurityEnums.AuthProviderId.app_custom_authentication;

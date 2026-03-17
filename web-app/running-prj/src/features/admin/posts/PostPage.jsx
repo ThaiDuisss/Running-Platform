@@ -17,7 +17,7 @@ function PostPage() {
     const fetchPosts = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem("ACCESS-TOKEN");
+            const token = localStorage.getItem("access_token");
 
             const response = await axios.get(
                 `${API_BASE_URL}?page=0&size=50`,
@@ -168,10 +168,10 @@ function PostPage() {
                                     <td>
                                         <span
                                             className={`badge ${post.status === "APPROVE"
-                                                    ? "bg-success"
-                                                    : post.status === "REJECT"
-                                                        ? "bg-danger"
-                                                        : "bg-warning text-dark"
+                                                ? "bg-success"
+                                                : post.status === "REJECT"
+                                                    ? "bg-danger"
+                                                    : "bg-warning text-dark"
                                                 }`}
                                         >
                                             {post.status}
