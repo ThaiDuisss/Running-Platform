@@ -53,6 +53,12 @@ const RunWiseNavbar = () => {
                         <li className="nav-item">
                             <NavLink className={navLinkCustom} to="/blog">Tin tức</NavLink>
                         </li>
+
+                        {user && Object.keys(user).length > 0 && (
+                            <li className="nav-item">
+                                <NavLink className={navLinkCustom} to="/friends">Bạn bè</NavLink>
+                            </li>
+                        )}
                     </ul>
                     {user === null || user === undefined || Object.keys(user).length === 0 ?
                         (<div className="d-flex gap-2 ms-5">

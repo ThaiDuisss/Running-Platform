@@ -6,10 +6,12 @@ import {
     House,
     People,
     BoxArrowRight,
-    List, 
+    List,
     FileText
 } from "react-bootstrap-icons";
-import "@/style/AdminSidebar.css"
+import "@/style/AdminSidebar.css";
+import { Trophy } from "react-bootstrap-icons";
+
 const AdminSidebar = ({ collapsed, setCollapsed }) => {
 
     const navigate = useNavigate();
@@ -74,7 +76,16 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
                     {!collapsed && "Posts"}
                 </Nav.Link>
 
+                <Nav.Link
+                    active={location.pathname.includes("route-challenges")}
+                    onClick={() => navigate("/admin/route-challenges")}
+                    className="d-flex align-items-center gap-2"
+                >
+                    <Trophy />
+                    {!collapsed && "Route Challenges"}
+                </Nav.Link>
             </Nav>
+
 
             {/* Logout
             <Nav className="mt-auto px-2 mb-3">
