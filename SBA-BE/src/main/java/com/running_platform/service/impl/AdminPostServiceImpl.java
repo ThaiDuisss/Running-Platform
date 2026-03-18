@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +25,10 @@ public class AdminPostServiceImpl implements AdminPostService {
     }
 
     @Override
-    public AdminPostResponse getPostById(Long id) {
-        return postRepository.findById(id).map(adminPostMapper::toDto).orElseThrow(() -> new RuntimeException("Post not found"));
+    public AdminPostResponse getPostById(Long postId){
+        Posts post = postRepository.findPostsById(postId);
+
+        return adminPostMapper.toDto(post);
     }
 
     @Override
@@ -51,4 +54,5 @@ public class AdminPostServiceImpl implements AdminPostService {
         postRepository.save(post);
         return adminPostMapper.toDto(post);
     }
+
 }

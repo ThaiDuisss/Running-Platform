@@ -1,9 +1,11 @@
 package com.running_platform.dto.request;
 
+import com.running_platform.enums.PostStatus;
 import com.running_platform.enums.VisibilityEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -13,14 +15,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CreatePostRequest {
 
-    String content;
+    private String content;
 
-    VisibilityEnum visibility;
+    private PostStatus status;
 
-    Long runId;
-
-    Long challengeId;
-
-    List<String> mediaUrls;
-
-}
+    private List<String> images;}
