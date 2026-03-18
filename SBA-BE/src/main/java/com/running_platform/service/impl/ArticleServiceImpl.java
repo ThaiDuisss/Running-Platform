@@ -52,6 +52,8 @@ public class ArticleServiceImpl implements ArticleService {
         article.setTitle(request.getTitle());
         article.setContent(request.getContent());
         article.setCategory(CategoryEnum.fromString(request.getCategory()));
+        article.setSummary(request.getSummary());
+        article.setThumbnailUrl(request.getThumbnailUrl());
 
         Articles updatedArticle = articleRepository.save(article);
         return articleMapper.toResponse(updatedArticle);

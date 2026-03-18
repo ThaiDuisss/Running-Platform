@@ -1,7 +1,7 @@
 import uploadFile from '../../../../shared/services/UploadService';
 import axiosClient from "@/shared/services/axiosClient"
 
-const handleCreateArticle = async (data) => {
+const createArticleAPI = async (data) => {
     console.log("data before create:", data);
 
     if (!data.image) {
@@ -13,8 +13,12 @@ const handleCreateArticle = async (data) => {
     }
 
     try {
+        console.log("before create")
+
         // 1. Upload ảnh trước
-        const thumbnailUrl = await uploadFile(data.image, "images/articles");
+        const thumbnailUrl = await uploadFile(data.image, "ARTICLES");
+
+        console.log("thumbnailUrl", thumbnailUrl)
 
         // 2. Tạo request body đúng với ArticleRequest
         const formData = {
@@ -36,7 +40,7 @@ const handleCreateArticle = async (data) => {
             ?.map(e => e.message)
             .join(", ");
 
-        console.error("All error:", allErrors);
+        console.error("All error:", error);
 
         throw new Error(allErrors || "Create article failed");
     }
@@ -63,7 +67,7 @@ const updateArticleAPI = async (articleId, data) => {
         let thumbnailUrl = data.thumbnailUrl;
         // Nếu có upload ảnh mới thì upload trước
         if (data.image) {
-            thumbnailUrl = await uploadFile(data.image, "images/articles");
+            thumbnailUrl = await uploadFile(data.image, "ARTICLES");
         }
         // Body gửi lên backend
         const formData = {
@@ -73,17 +77,11 @@ const updateArticleAPI = async (articleId, data) => {
             thumbnailUrl: thumbnailUrl,
             category: data.category
         };
-        const response = await axiosClient.put(
-            `/api/articles/${articleId}`,
-            formData
-        );
+        const response = await axiosClient.put(`/api/articles/${articleId}`, formData);
         return response;
     } catch (error) {
-        const allErrors = error.response?.data?.data
-            ?.map(e => e.message)
-            .join(", ");
-        console.error("All error:", allErrors);
-        throw new Error(allErrors || "Update article failed");
+        console.error("All error:", error);
+        throw new Error(error);
     }
 };
 
@@ -99,7 +97,7 @@ const deleteArticleAPI = async (articleId) => {
 };
 
 export {
-    handleCreateArticle,
+    createArticleAPI,
     getArticleWithPaginateAPI,
     updateArticleAPI,
     deleteArticleAPI

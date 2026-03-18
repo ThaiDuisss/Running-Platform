@@ -1,6 +1,8 @@
 package com.running_platform.controller;
 
 import com.running_platform.dto.response.ApiResponse;
+import com.running_platform.enums.UploadFolder;
+import com.running_platform.service.CloudinaryService;
 import com.running_platform.service.UploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -14,19 +16,18 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 @RestController
-@RequestMapping("/uploadfile")
+@RequestMapping("/api/upload-file")
 @RequiredArgsConstructor
 public class UploadFileController {
+    private final CloudinaryService cloudinaryService;
 
-    private final UploadService uploadService;
 
     @PostMapping
-    public ApiResponse<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("targetFolder") String targetFolder) {
-        String url = uploadService.handleUploadFile(file, targetFolder);
+    public ApiResponse<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("uploadFolder") UploadFolder uploadFolder) {
         return ApiResponse.<String>builder()
                 .status("success")
                 .message("File image uploaded successfully")
-                .data(url)
+                .data(cloudinaryService.uploadFile(file, uploadFolder))
                 .build();
     }
 }

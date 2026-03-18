@@ -1,13 +1,17 @@
 import axios from "axios";
 
-const uploadFile = async (file, targetFolder) => {
+const uploadFile = async (file, uploadFolder) => {
     try {
         const formData = new FormData();
         formData.append("file", file);
-        const response = await axios.post(`/api/uploadfile?targetFolder=${targetFolder}`, formData, {
+        formData.append("uploadFolder", uploadFolder)
+        const token = localStorage.getItem("access_token");
+        const response = await axios.post(`/api/upload-file`, formData, {
             headers: {
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "multipart/form-data",
             },
+            baseURL: "http://localhost:8080",
         });
         return response.data.data
     } catch (error) {
@@ -15,6 +19,4 @@ const uploadFile = async (file, targetFolder) => {
     }
 };
 
-export default {
-    uploadFile,
-};
+export default uploadFile

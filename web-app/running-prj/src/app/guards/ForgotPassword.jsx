@@ -20,6 +20,7 @@ function ForgotPassword() {
       setEmail("");
 
     } catch (err) {
+      console.log(err)
       setError(err.response?.data?.message || "Failed to send reset link");
       setMessage("");
     }
