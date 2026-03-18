@@ -11,6 +11,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -38,4 +41,13 @@ public class Posts extends AbstractEntity<Long> {
 
     @Enumerated(EnumType.STRING)
     PostStatus status;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<PostImage> images = new ArrayList<>();
+
+
+    public void addImage(PostImage image) {
+        images.add(image);
+        image.setPost(this);
+    }
 }

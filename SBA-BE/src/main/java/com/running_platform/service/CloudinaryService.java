@@ -10,4 +10,7 @@ public interface CloudinaryService {
 
     void deleteImg(String publicId);
 
+    String uploadBytes(byte[] bytes, Long postId);
+
+
     String uploadFile(MultipartFile multipartFile, UploadFolder uploadFolder);}

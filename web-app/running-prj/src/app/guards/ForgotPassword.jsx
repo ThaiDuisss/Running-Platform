@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Row, Col, Card, Form, Button, InputGroup, Alert } from "react-bootstrap";
+import { Form, Button, InputGroup, Alert } from "react-bootstrap";
 import { FaEnvelope } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { authService } from "../services/AuthService";
@@ -14,11 +14,9 @@ function ForgotPassword() {
 
     try {
       const res = await authService.forgotPassword(email);
-
       setMessage(res.message || "Check your email for reset link");
       setError("");
       setEmail("");
-
     } catch (err) {
       console.log(err)
       setError(err.response?.data?.message || "Failed to send reset link");
@@ -27,52 +25,52 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="lp-wrap">
-      <Container>
-        <Row className="justify-content-center">
-          <Col xs={12} sm={10} md={8} lg={6} xl={5}>
-            <Card>
-              <Card.Body className="lp-body border-0 shadow-sm">
+    <div className="rg-wrap">
+      <div className="rg-container">
 
-                <Card.Title>
-                  <h2 className="lp-title">Forgot Password</h2>
+        {/* LEFT IMAGE */}
+        <div className="rg-left"></div>
 
-                  {message && <Alert variant="success">{message}</Alert>}
-                  {error && <Alert variant="danger">{error}</Alert>}
-                </Card.Title>
+        {/* RIGHT FORM */}
+        <div className="rg-right">
+          <div className="rg-form">
 
-                <Form onSubmit={handleSubmit}>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Text className="lp-icon-left">
-                      <FaEnvelope />
-                    </InputGroup.Text>
+            <h2>Forgot Password</h2>
 
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      autoComplete="email"
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="lp-control"
-                      required
-                    />
-                  </InputGroup>
+            {message && <Alert variant="success">{message}</Alert>}
+            {error && <Alert variant="danger">{error}</Alert>}
 
-                  <Button type="submit" className="lp-login-btn w-100">
-                    Send Reset Link
-                  </Button>
-                </Form>
+            <Form onSubmit={handleSubmit}>
 
-                <div className="text-center mt-3 lp-muted">
-                  Remember your password?{" "}
-                  <NavLink to="/login">Login</NavLink>
-                </div>
+              <InputGroup className="mb-3">
+                <InputGroup.Text>
+                  <FaEnvelope />
+                </InputGroup.Text>
 
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="rg-input"
+                  required
+                />
+              </InputGroup>
+
+              <Button type="submit" className="rg-button">
+                Send Reset Link
+              </Button>
+
+            </Form>
+
+            <NavLink to="/login" className="rg-link">
+              Remember your password? Login
+            </NavLink>
+
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
