@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { authService } from "../services/AuthService";
+import "@/style/register.css"
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ function Register() {
       return;
     }
     try {
-     await authService.register(formData);
+      await authService.register(formData);
       setSuccess("The verification link has been sent to your email address. Please check your email.");
       setFormData({
         username: "",
@@ -63,75 +64,80 @@ function Register() {
   };
 
   return (
-    <div style={styles.container}>
-      <form style={styles.form} onSubmit={handleSubmit}>
-        <h2>Register</h2>
+    <div className="rg-wrap">
+      <div className="rg-container">
 
-        <input
-          type="text"
-          name="username"
-          placeholder="Gmail"
-          value={formData.username}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        {error.username && <p className="text-danger">{error.username}</p>}
+        {/* LEFT IMAGE */}
+        <div className="rg-left"></div>
 
-        <input
-          type="text"
-          name="fullName"
-          placeholder="Full Name"
-          value={formData.fullName}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        {error.fullName && <p className="text-danger">{error.fullName}</p>}
+        {/* RIGHT FORM */}
+        <div className="rg-right">
+          <form className="rg-form" onSubmit={handleSubmit}>
+            <h2>Register</h2>
 
-        <input
-          type="text"
-          name="phoneNumber"
-          placeholder="Phone Number"
-          value={formData.phoneNumber}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        {error.phoneNumber && <p className="text-danger">{error.phoneNumber}</p>}
+            <input
+              type="text"
+              name="username"
+              placeholder="Gmail"
+              value={formData.username}
+              onChange={handleChange}
+              className="rg-input"
+            />
+            {error.username && <p className="rg-error">{error.username}</p>}
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        {error.password && <p className="text-danger">{error.password}</p>}
+            <input
+              type="text"
+              name="fullName"
+              placeholder="Full Name"
+              value={formData.fullName}
+              onChange={handleChange}
+              className="rg-input"
+            />
+            {error.fullName && <p className="rg-error">{error.fullName}</p>}
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        {error.confirmPassword && <p className="text-danger">{error.confirmPassword}</p>}
+            <input
+              type="text"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              className="rg-input"
+            />
+            {error.phoneNumber && <p className="rg-error">{error.phoneNumber}</p>}
 
-        <button type="submit" style={styles.button}>
-          Register
-        </button>
-        <a href="/login" style={{ display: "block", marginTop: "10px", textAlign: "center" }}>
-          Already have an account? Login
-        </a>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="rg-input"
+            />
+            {error.password && <p className="rg-error">{error.password}</p>}
 
-        {/* {error && <p style={styles.error}>{error}</p>} */}
-        {success && <p style={styles.success}>{success}</p>}
-      </form>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="rg-input"
+            />
+            {error.confirmPassword && <p className="rg-error">{error.confirmPassword}</p>}
+
+            <button type="submit" className="rg-button">
+              Register
+            </button>
+
+            <a href="/login" className="rg-link">
+              Already have an account? Login
+            </a>
+
+            {success && <p className="rg-success">{success}</p>}
+          </form>
+        </div>
+
+      </div>
     </div>
   );
 }
