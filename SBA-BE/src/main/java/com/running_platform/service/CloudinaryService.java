@@ -12,4 +12,5 @@ public interface CloudinaryService {
 
     String uploadBytes(byte[] bytes, Long postId);
 
-}
+
+    String uploadFile(MultipartFile multipartFile, UploadFolder uploadFolder);}

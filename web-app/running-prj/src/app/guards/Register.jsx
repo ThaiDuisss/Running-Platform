@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { authService } from "../services/AuthService";
-import "@/style/register.css"
+import { Container, Row, Col, Card, Form, Button, InputGroup, Alert } from "react-bootstrap";
+import { FaUser, FaLock, FaPhone, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
-function Register() {
+const RegisterPage = () => {
   const [formData, setFormData] = useState({
     username: "",
     fullName: "",
@@ -63,122 +65,114 @@ function Register() {
     return true;
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
-    <div className="rg-wrap">
-      <div className="rg-container">
+    <div className="lp-wrap">
+      <Container>
+        <Row className="justify-content-center">
+          <Col xs={12} sm={10} md={8} lg={6} xl={5}>
+            <Card>
+              <Card.Body className="lp-body border-0 shadow-sm">
 
-        {/* LEFT IMAGE */}
-        <div className="rg-left"></div>
+                <Card.Title>
+                  <h2 className="lp-title">Register</h2>
 
-        {/* RIGHT FORM */}
-        <div className="rg-right">
-          <form className="rg-form" onSubmit={handleSubmit}>
-            <h2>Register</h2>
+                  {success && <Alert variant="success">{success}</Alert>}
+                  {error.general && <Alert variant="danger">{error.general}</Alert>}
+                </Card.Title>
 
-            <input
-              type="text"
-              name="username"
-              placeholder="Gmail"
-              value={formData.username}
-              onChange={handleChange}
-              className="rg-input"
-            />
-            {error.username && <p className="rg-error">{error.username}</p>}
+                <Form onSubmit={handleSubmit}>
 
-            <input
-              type="text"
-              name="fullName"
-              placeholder="Full Name"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="rg-input"
-            />
-            {error.fullName && <p className="rg-error">{error.fullName}</p>}
+                  {/* Username / Email */}
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text><FaEnvelope /></InputGroup.Text>
+                    <Form.Control
+                      name="username"
+                      placeholder="Email"
+                      value={formData.username}
+                      onChange={handleChange}
+                      required
+                    />
+                  </InputGroup>
+                  {error.username && <p className="text-danger">{error.username}</p>}
 
-            <input
-              type="text"
-              name="phoneNumber"
-              placeholder="Phone Number"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              className="rg-input"
-            />
-            {error.phoneNumber && <p className="rg-error">{error.phoneNumber}</p>}
+                  {/* Full Name */}
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text><FaUser /></InputGroup.Text>
+                    <Form.Control
+                      name="fullName"
+                      placeholder="Full Name"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      required
+                    />
+                  </InputGroup>
+                  {error.fullName && <p className="text-danger">{error.fullName}</p>}
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="rg-input"
-            />
-            {error.password && <p className="rg-error">{error.password}</p>}
+                  {/* Phone */}
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text><FaPhone /></InputGroup.Text>
+                    <Form.Control
+                      name="phoneNumber"
+                      placeholder="Phone Number"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      required
+                    />
+                  </InputGroup>
+                  {error.phoneNumber && <p className="text-danger">{error.phoneNumber}</p>}
 
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="rg-input"
-            />
-            {error.confirmPassword && <p className="rg-error">{error.confirmPassword}</p>}
+                  {/* Password */}
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text><FaLock /></InputGroup.Text>
 
-            <button type="submit" className="rg-button">
-              Register
-            </button>
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      placeholder="Password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
 
-            <a href="/login" className="rg-link">
-              Already have an account? Login
-            </a>
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      name="confirmPassword"
+                      placeholder="Confirm Password"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      required
+                    />
 
-            {success && <p className="rg-success">{success}</p>}
-          </form>
-        </div>
+                    <Button
+                      variant="link"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </Button>
+                  </InputGroup>
+                  {error.password && <p className="text-danger">{error.password}</p>}
+                  {error.confirmPassword && <p className="text-danger">{error.confirmPassword}</p>}
 
-      </div>
+                  <Button type="submit" className="w-100">
+                    Register
+                  </Button>
+
+                </Form>
+
+                <div className="text-center mt-3">
+                  Already have an account?{" "}
+                  <NavLink to="/login">Login</NavLink>
+                </div>
+
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
-}
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#f4f4f4"
-  },
-  form: {
-    background: "white",
-    padding: "30px",
-    borderRadius: "10px",
-    width: "350px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    margin: "10px 0",
-    borderRadius: "5px",
-    border: "1px solid #ccc"
-  },
-  button: {
-    width: "100%",
-    padding: "10px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer"
-  },
-  error: {
-    color: "red"
-  },
-  success: {
-    color: "green"
-  }
 };
 
-export default Register;
+export default RegisterPage;

@@ -1,7 +1,9 @@
 package com.running_platform.enums;
 
 public enum UploadFolder {
-    AVATAR_USER("running_platform/users/avatars");
+    AVATAR_USER("running_platform/users/avatars"),
+    ARTICLES("running_platform/articles")
+    ;
 
     private final String path;
 

@@ -1,0 +1,89 @@
+/* UserTable.css */
+.user-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(99, 179, 237, 0.10);
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
+    font-size: 0.92rem;
+}
+
+.user-table thead tr th {
+    background: #eaf4fd;
+    color: #3a87c4;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    border: none;
+    border-bottom: 2px solid #c9e6f7;
+}
+
+.user-table tbody tr {
+    transition: background 0.18s;
+}
+
+.user-table tbody tr:hover {
+    background: #f0f8ff;
+}
+
+.user-table tbody tr td {
+    padding: 13px 18px;
+    border: none;
+    border-bottom: 1px solid #e8f4fb;
+    color: #2d4a62;
+    vertical-align: middle;
+}
+
+.user-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.user-table tbody tr td img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #b3d9f5;
+    box-shadow: 0 1px 6px rgba(99, 179, 237, 0.18);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.action-icon {
+    font-size: 1.05rem;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 7px;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.icon-edit {
+    color: #3a87c4;
+    background: #e3f2fd;
+}
+
+.icon-edit:hover {
+    background: #3a87c4;
+    color: #fff;
+    transform: scale(1.12);
+}
+
+.icon-delete {
+    color: #e05a5a;
+    background: #fdeaea;
+}
+
+.icon-delete:hover {
+    background: #e05a5a;
+    color: #fff;
+    transform: scale(1.12);
+}

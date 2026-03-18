@@ -9,6 +9,7 @@ import {
     BoxArrowRight,
     List,
     FileText,
+    Newspaper,
     Trophy
 } from "react-bootstrap-icons";
 import "@/style/AdminSidebar.css";
@@ -78,6 +79,14 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
                         {!collapsed && item.label}
                     </Nav.Link>
                 ))}
+                 <Nav.Link
+                    active={location.pathname.includes("articles")}
+                    onClick={() => navigate("/admin/articles")}
+                    className="d-flex align-items-center gap-2"
+                >
+                    <Newspaper />
+                    {!collapsed && "Articles"}
+                </Nav.Link>
 
             </Nav>
 

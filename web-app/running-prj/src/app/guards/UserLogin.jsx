@@ -12,8 +12,7 @@ import {
 import { Form, Button, InputGroup, Alert } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
 import { AuthActionContext } from '../providers/AuthProvider';
-import { authService } from '../services/authService';
-
+import { authService } from '../services/AuthService';
 const UserLogin = () => {
     const [formData, setFormData] = useState({
         username: "",

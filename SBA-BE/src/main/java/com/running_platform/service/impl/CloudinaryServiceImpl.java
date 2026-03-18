@@ -28,23 +28,24 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             String publicId = "user_" + entityId;
             log.info("Public ID {}", publicId);
 
-            Map<String,Object> map = Map.of(
+            Map<String, Object> map = Map.of(
                     "folder", uploadFolder.getPath(),
                     "public_id", publicId,
                     "resource_type", "auto",
                     "overwrite", true
             );
-            Map<String,Object> uploadResult = cloudinary.uploader().upload(multipartFile.getBytes(), map);
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(multipartFile.getBytes(), map);
             return uploadResult.get("secure_url").toString();
         } catch (Exception e) {
             log.error("Cloudinary upload failed for file {}", multipartFile.getOriginalFilename(), e);
             throw new RuntimeException("Error uploading file", e);
         }
     }
+
     @Override
     public void deleteImg(String publicId) {
-        try{
-            cloudinary.uploader().destroy(publicId,Map.of());
+        try {
+            cloudinary.uploader().destroy(publicId, Map.of());
         } catch (Exception e) {
             log.error("Delete cloudinary file failed {}", publicId);
         }
@@ -66,6 +67,25 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
         } catch (Exception e) {
             throw new RuntimeException("Upload failed", e);
+        }
+    }
+
+    @Override
+    public String uploadFile(MultipartFile multipartFile, UploadFolder uploadFolder) {
+        try {
+            String fileName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
+            log.info("Uploading file {}", fileName);
+            Map<String, Object> map = Map.of(
+                    "folder", uploadFolder.getPath(),
+                    "public_id", fileName,
+                    "resource_type", "auto",
+                    "overwrite", true
+            );
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(multipartFile.getBytes(), map);
+            return uploadResult.get("secure_url").toString();
+        } catch (Exception e) {
+            log.error("Cloudinary upload failed for file {}", multipartFile.getOriginalFilename(), e);
+            throw new RuntimeException("Error uploading file", e);
         }
     }
 }

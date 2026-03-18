@@ -75,6 +75,15 @@ function ResetPassword() {
                       required
                     />
 
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter confirm password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="lp-control"
+                      required
+                    />
+
                     <Button
                       variant="link"
                       className="lp-eye"
