@@ -1,6 +1,7 @@
+
 import { AuthActionContext, AuthDataContext } from '@/app/providers/AuthProvider';
 import React, { useContext } from 'react';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Image } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 
 const AdminHeader = () => {
@@ -9,80 +10,111 @@ const AdminHeader = () => {
     const { logout } = useContext(AuthActionContext);
 
     return (
-        <div className='border-bottom'>
-            <Navbar
-                expand="lg"
-                className={`px-4 py-2 ${theme === "Dark" ? "navbar-dark bg-dark" : "navbar-light bg-white"}`}
-            >
+        <>
+            {/* CSS inline để bỏ mũi tên */}
+            <style>
+                {`
+                    #admin-user-dropdown::after {
+                        display: none !important;
+                    }
+                `}
+            </style>
 
-                {/* Logo */}
-                <Navbar.Brand
-                    as={Link}
-                    to="/"
-                    className="d-flex align-items-center fw-bold fs-3"
+            <div className='border-bottom'>
+                <Navbar
+                    expand="lg"
+                    className={`px-4 py-2 ${theme === "Dark" ? "navbar-dark bg-dark" : "navbar-light bg-white"}`}
                 >
-                    <img
-                        src="/logo/logo-running.png"
-                        style={{ height: 35, width: 40, paddingRight: 10 }}
-                    />
-                    RunWise
-                    <span
-                        className='ms-1 rounded-circle'
-                        style={{
-                            backgroundColor: "#6f4ef6",
-                            height: 6,
-                            width: 6,
-                            display: "inline-block"
-                        }}
-                    />
-                </Navbar.Brand>
 
-                <Navbar.Toggle />
+                    {/* Logo */}
+                    <Navbar.Brand
+                        as={Link}
+                        to="/"
+                        className="d-flex align-items-center fw-bold fs-3"
+                    >
+                        <img
+                            src="/logo/logo-running.png"
+                            style={{ height: 25, width: 30, paddingRight: 10 }}
+                        />
+                        <span style={{ fontSize: "18px" }}>RunWise</span>
+                        <span
+                            className='ms-1 rounded-circle'
+                            style={{
+                                backgroundColor: "#6f4ef6",
+                                height: 6,
+                                width: 6,
+                                display: "inline-block"
+                            }}
+                        />
+                    </Navbar.Brand>
 
-                <Navbar.Collapse>
+                    <Navbar.Toggle />
 
-                    {!user ? (
-                        <div className="d-flex gap-2 ms-auto">
-                            <NavLink className="btn btn-outline-primary" to="/login">
-                                Đăng nhập
-                            </NavLink>
+                    <Navbar.Collapse>
 
-                            <NavLink className="btn btn-outline-primary" to="/register">
-                                Đăng ký
-                            </NavLink>
-                        </div>
-                    ) : (
+                        {!user ? (
+                            <div className="d-flex gap-2 ms-auto">
+                                <NavLink className="btn btn-outline-primary" to="/login">
+                                    Đăng nhập
+                                </NavLink>
 
-                        <Nav className="ms-auto">
+                                <NavLink className="btn btn-outline-primary" to="/register">
+                                    Đăng ký
+                                </NavLink>
+                            </div>
+                        ) : (
 
-                            <NavDropdown
-                                title={user?.name || "Account"}
-                                align="end"
-                            >
-                                <NavDropdown.Item>
-                                    Profile
-                                </NavDropdown.Item>
+                            <Nav className="ms-auto">
 
-                                <NavDropdown.Item>
-                                    Settings
-                                </NavDropdown.Item>
+                                <NavDropdown
+                                    align="end"
+                                    id="admin-user-dropdown"
+                                    title={
+                                        <div className="d-flex align-items-center gap-2">
 
-                                <NavDropdown.Divider />
+                                            <Image
+                                                src={user?.imageUrl || "/default-avatar.png"}
+                                                roundedCircle
+                                                style={{
+                                                    width: 32,
+                                                    height: 32,
+                                                    objectFit: "cover"
+                                                }}
+                                            />
 
-                                <NavDropdown.Item onClick={logout}>
-                                    Logout
-                                </NavDropdown.Item>
+                                            <span style={{ fontWeight: 500 }}>
+                                                {user?.username}
+                                            </span>
 
-                            </NavDropdown>
+                                        </div>
+                                    }
+                                >
 
-                        </Nav>
+                                    <NavDropdown.Item>
+                                        Profile
+                                    </NavDropdown.Item>
 
-                    )}
+                                    <NavDropdown.Item>
+                                        Settings
+                                    </NavDropdown.Item>
 
-                </Navbar.Collapse>
+                                    <NavDropdown.Divider />
 
-            </Navbar>
-        </div>
+                                    <NavDropdown.Item onClick={logout}>
+                                        Logout
+                                    </NavDropdown.Item>
+
+                                </NavDropdown>
+
+                            </Nav>
+
+                        )}
+
+                    </Navbar.Collapse>
+
+                </Navbar>
+            </div>
+        </>
     );
 };
 
