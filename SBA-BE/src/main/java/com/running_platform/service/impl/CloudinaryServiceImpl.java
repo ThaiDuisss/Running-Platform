@@ -1,6 +1,7 @@
 package com.running_platform.service.impl;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.running_platform.enums.UploadFolder;
 import com.running_platform.service.CloudinaryService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -45,6 +47,25 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             cloudinary.uploader().destroy(publicId,Map.of());
         } catch (Exception e) {
             log.error("Delete cloudinary file failed {}", publicId);
+        }
+    }
+
+    public String uploadBytes(byte[] bytes, Long postId) {
+        try {
+            String publicId = "post_" + postId + "_" + UUID.randomUUID();
+
+            Map uploadResult = cloudinary.uploader().upload(
+                    bytes,
+                    Map.of(
+                            "folder", "post_images",
+                            "public_id", publicId
+                    )
+            );
+
+            return uploadResult.get("secure_url").toString();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Upload failed", e);
         }
     }
 }
