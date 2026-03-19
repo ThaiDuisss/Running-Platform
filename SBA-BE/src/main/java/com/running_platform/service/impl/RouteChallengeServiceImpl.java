@@ -10,7 +10,7 @@ import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.ChallengeStatus;
 import com.running_platform.exception.AppException;
 import com.running_platform.mapper.RouteChallengeMapper;
-import com.running_platform.repository.RouteChallengeRepository;
+import com.running_platform.repository.RouteChallenge.RouteChallengeRepository;
 import com.running_platform.repository.UserRepository;
 import com.running_platform.service.RouteChallengeService;
 import lombok.AccessLevel;

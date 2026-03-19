@@ -19,7 +19,7 @@ public class PlanResponse {
 
     BigDecimal targetDistance;
 
-    LocalTime title;
+    String title;
 
     LocalTime startTime;
 

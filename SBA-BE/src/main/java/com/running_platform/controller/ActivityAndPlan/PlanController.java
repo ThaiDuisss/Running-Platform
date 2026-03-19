@@ -30,7 +30,7 @@ public class PlanController {
     ) {
         return planService.create(request);
     }
-    // ✅ UPDATE
+
     @PutMapping("/{id}")
     public ApiResponse<PlanResponse> updatePlan(
             @PathVariable Long id,
