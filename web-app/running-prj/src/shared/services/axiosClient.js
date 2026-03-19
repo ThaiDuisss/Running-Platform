@@ -5,17 +5,18 @@ const axiosClient = axios.create({
     timeout: 3000,
     headers: {
         "Content-Type": "application/json",
+        "Device-Type": "WEB"
     },
 });
 
 axiosClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem("access_token");
+        const token = localStorage.getItem("access_token");
 
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-},
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
     (error) => Promise.reject(error)
 )
 export default axiosClient;
