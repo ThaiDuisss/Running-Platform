@@ -30,6 +30,7 @@ const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
         try {
             const res = await getUserInfo();
+            localStorage.setItem("userInfo", JSON.stringify(res.data));
             console.log("Authentication check successful:", res);
             const newUser = res.data.data;
             localStorage.setItem("userInfo", JSON.stringify(newUser));

@@ -45,7 +45,7 @@ const RunWiseNavbar = () => {
                             <NavLink className={navLinkCustom} to="/routes">Tuyến đường</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className={navLinkCustom} to="/community">Cộng đồng</NavLink>
+                            <NavLink className={navLinkCustom} to="/feed">Cộng đồng</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink className={navLinkCustom} to="/plans">Lên kế hoạch</NavLink>

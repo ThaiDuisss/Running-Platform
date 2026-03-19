@@ -6,32 +6,33 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorEnum {
-    INVALID_FIELDS(1001,"Invalid fields"),
+    INVALID_FIELDS(1001, "Invalid fields"),
     SUCCESS(200, "Success"),
     BAD_REQUEST(400, "Bad Request"),
     UNAUTHORIZED(401, "Unauthorized"),
-    ACCESS_DENIED(402,"You don't have permission" ),
+    ACCESS_DENIED(402, "You don't have permission"),
     FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "Not Found"),
     DATA_INTEGRITY_VIOLATION(409, "Conflict"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     SERVICE_UNAVAILABLE(503, "Service Unavailable"),
     VALIDATION_ERROR(422, "Validation Error"),
-    USER_NOT_FOUND(4001,"User not found"),
-    SERVICE_NOT_FOUND(5001,"User not found"),
+    USER_NOT_FOUND(4001, "User not found"),
+    SERVICE_NOT_FOUND(5001, "User not found"),
     USER_PROFILE_CREATE_FAIL(4002, "User profile create fail"),
-    REFRESH_TOKEN_NOT_FOUND (4003, "Refresh token not found"),
-    USERNAME_EXIST(2003,"Username is used to register" ),
+    REFRESH_TOKEN_NOT_FOUND(4003, "Refresh token not found"),
+    USERNAME_EXIST(2003, "Username is used to register"),
     UNKNOWN_ERROR(9999, "Unknown error"),
     PHONE_EXIST(2002, "Phone is used to register."),
-    CONVERSATION_NOT_FOUND(3001,"Conversation not found"),
-    FILE_NOT_FOUND(4001,"File not found"),
+    CONVERSATION_NOT_FOUND(3001, "Conversation not found"),
+    FILE_NOT_FOUND(4001, "File not found"),
     EMAIL_NOT_VERIFIED(4004, "Email not verified"),
     INVALID_TOKEN(4005, "Token is invalid or expired"),
     EXPIRED_TOKEN(4006, "Token is expired"),
     EXISTING_RESET_PASSWORD_REQUEST(4007, "A reset password request already exists. Please check your email for the reset link or try again later."),
-    EMAIL_NOT_FOUND(4007, "If the email exists, a reset link has been sent")
-    ,
+    EMAIL_NOT_FOUND(4007, "If the email exists, a reset link has been sent"),
+    ARTICLE_NOT_FOUND(4008, "Article not found"),
+    CATEGORY_NOT_FOUND(4009, "Category not found"),
     FAILED_OAUTH2_REDIRECT(1111, "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
 
 
@@ -76,8 +77,9 @@ public enum ErrorEnum {
     public static final String INVALID_VIDEO_URL = "Video URL must be less than 255 characters";
     public static final String NOT_EMPTY_STATUS = "Status can not null";
 
-   private final int code;
-   private final String message;
+    private final int code;
+    private final String message;
+
     public static ErrorEnum fromCode(int code) {
         for (ErrorEnum e : values()) {
             if (e.code == code) return e;

@@ -51,4 +51,19 @@ public class RunActivity extends AbstractEntity<Long> {
     @Column(name = "endDatetime")
     public Date endDatetime;
 
+    BigDecimal AvgPace;
+
+    String pace;
+//
+//    public String getPace(){
+//
+//        if(distance == null || duration == null) return null;
+//
+//        double pace = duration / distance.doubleValue();
+//
+//        int minutes = (int) pace;
+//        int seconds = (int) ((pace - minutes) * 60);
+//
+//        return String.format("%d:%02d", minutes, seconds);
+//    }
 }

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,13 +23,18 @@ public class AdminPostController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){
-        Page<AdminPostResponse> data = adminPostService.getAllPosts(PageRequest.of(page, size));
+        Page<AdminPostResponse> data = adminPostService.getAllPosts(PageRequest.of(page, size, Sort.by("id").descending()));
         return ApiResponse.<Page<AdminPostResponse>>builder()
                 .status("SUCCESS")
                 .code(ErrorEnum.SUCCESS.getCode())
                 .message("Get posts successfully")
                 .data(data)
                 .build();
+    }
+
+    @GetMapping("{id}")
+    public AdminPostResponse getPost(@PathVariable Long id){
+        return adminPostService.getPostById(id);
     }
 
     @PutMapping("/{id}/approve")

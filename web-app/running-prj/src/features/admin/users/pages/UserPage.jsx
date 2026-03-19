@@ -40,6 +40,7 @@ const UserPage = () => {
             setLoading(true);
 
             const res = await getUserWithPaginateAPI(currentPage, pageSize, debouncedSearch);
+            console.log("Fetched users:", res);
 
             const data = res.data.data;
 

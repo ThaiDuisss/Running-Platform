@@ -1,12 +1,14 @@
 package com.running_platform.dto.response;
 
+import com.running_platform.enums.PostStatus;
+import com.running_platform.enums.VisibilityEnum;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Getter
 @Setter
@@ -19,12 +21,7 @@ public class PostResponse {
 
     String content;
 
-    List<String> mediaUrls;
+    PostStatus status;
 
-    Long runId;
-
-    Long challengeId;
-
-    LocalDateTime createdAt;
-
+    List<String> images;
 }

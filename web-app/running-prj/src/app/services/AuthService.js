@@ -34,6 +34,16 @@ export const authService = {
 
     },
 
+    forgotPassword: async (email) => {
+        const res = await axiosClient.post(`/auth/forgot-password?email=${email}`);
+        return res.data;
+    },
+
+    resetPassword: async (payload) => {
+        const res = await axiosClient.post(`/auth/reset-password`, payload);
+        return res.data;
+    },
+
     refreshToken: async () => {
         const res = await axiosClient.post("/auth/refresh");
         return res.data;

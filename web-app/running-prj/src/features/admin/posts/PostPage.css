@@ -1,0 +1,74 @@
+/* ── Action Buttons (Same style as UserPage) ── */
+.action-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1.5px solid #c2dff7;
+    background: #ffffff;
+    color: #3a87c4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.9rem;
+}
+
+/* Hover giống pagination */
+.action-btn:hover {
+    background: #eaf4fd;
+    border-color: #3a87c4;
+    transform: translateY(-1px);
+}
+
+/* Active */
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+/* ── Variants ── */
+
+/* Detail */
+.action-btn.detail {
+    color: #3a87c4;
+}
+
+/* Approve */
+.action-btn.approve {
+    color: #2ea44f;
+    border-color: #b7e4c7;
+}
+
+.action-btn.approve:hover {
+    background: #eafaf0;
+    border-color: #2ea44f;
+}
+
+/* Reject (tone nhẹ, KHÔNG đỏ gắt) */
+.action-btn.reject {
+    color: #d46a6a;
+    border-color: #f1caca;
+}
+
+.action-btn.reject:hover {
+    background: #fdeeee;
+    border-color: #d46a6a;
+}
+
+/* Delete (giống btn-danger nhưng soft) */
+.action-btn.delete {
+    color: #e05a5a;
+    border-color: #f3c2c2;
+}
+
+.action-btn.delete:hover {
+    background: #fdeaea;
+    border-color: #e05a5a;
+}
+/* ── Action Layout FIX ── */
+.action-group {
+    display: grid;
+    grid-template-columns: repeat(4, 34px);
+    gap: 6px;
+    justify-content: center
+}
