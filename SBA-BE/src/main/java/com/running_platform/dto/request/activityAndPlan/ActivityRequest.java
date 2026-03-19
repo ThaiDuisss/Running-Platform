@@ -24,8 +24,6 @@ public class ActivityRequest {
 
     Double avgPace;
 
-    Double avgSpeed;
-
     Double startLat;
 
     Double startLng;
