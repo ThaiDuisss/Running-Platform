@@ -7,6 +7,7 @@ import com.running_platform.service.PlanService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/plans")
 @RequiredArgsConstructor
+@Slf4j(topic = "PLANCONTROLLER")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PlanController {
     PlanService planService;
     @GetMapping()
@@ -30,12 +33,12 @@ public class PlanController {
     ) {
         return planService.create(request);
     }
-    // ✅ UPDATE
     @PutMapping("/{id}")
     public ApiResponse<PlanResponse> updatePlan(
             @PathVariable Long id,
             @RequestBody PlanRequest request
     ) {
+        log.info("Athai {}",request.toString());
         return planService.update(request, id);
     }
     @GetMapping("/{id}")

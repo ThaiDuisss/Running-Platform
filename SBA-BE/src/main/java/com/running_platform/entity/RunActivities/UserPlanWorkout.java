@@ -32,8 +32,10 @@ public class UserPlanWorkout extends AbstractEntity<Long> {
     LocalDate scheduledDate;
 
     BigDecimal targetDistance;
+    @Column(nullable = true)
 
     LocalTime startTime;
+    @Column(nullable = true)
 
     LocalTime endTime;
 
@@ -41,5 +43,6 @@ public class UserPlanWorkout extends AbstractEntity<Long> {
 
     Double duration;
 
+    @Column(nullable = true)
     boolean isCompleted;
 }

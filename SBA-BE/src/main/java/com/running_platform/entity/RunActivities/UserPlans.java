@@ -23,6 +23,7 @@ public class UserPlans extends AbstractEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+            @Nullable
     Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)

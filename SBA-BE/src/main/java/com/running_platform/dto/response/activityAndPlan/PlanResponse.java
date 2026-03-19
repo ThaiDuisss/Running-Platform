@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlanResponse {
+public class    PlanResponse {
     Long id;
 
     LocalDate scheduledDate;

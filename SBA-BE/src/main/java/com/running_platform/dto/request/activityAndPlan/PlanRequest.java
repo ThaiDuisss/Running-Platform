@@ -20,7 +20,7 @@ public class PlanRequest {
 
     BigDecimal targetDistance;
 
-    LocalTime title;
+    String title;
 
     LocalTime startTime;
 
@@ -30,5 +30,5 @@ public class PlanRequest {
 
     double duration;
 
-    boolean isCompleted;
+//    boolean isCompleted;
 }
