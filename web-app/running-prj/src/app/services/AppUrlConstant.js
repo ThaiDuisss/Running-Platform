@@ -35,4 +35,13 @@ export class ApiEndpoints {
         SEARCH: '/users/search'
     };
 
+    static PLANS_API_ENDPOINTS = {
+        MAIN: '/plans',
+        BY_MONTH: '/plans',
+        CREATE: '/plans',
+        UPDATE: '/plans',
+        DELETE: '/plans',
+        GET_BY_ID: '/plans'
+    };
+
 }

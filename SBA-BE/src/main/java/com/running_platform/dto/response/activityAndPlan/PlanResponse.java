@@ -6,20 +6,22 @@ import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class    PlanResponse {
+public class PlanResponse {
+
     Long id;
 
     LocalDate scheduledDate;
 
     BigDecimal targetDistance;
 
-    LocalTime title;
+    String title;
 
     LocalTime startTime;
 
@@ -27,7 +29,7 @@ public class    PlanResponse {
 
     boolean isSetTime;
 
-    double duration;
+    Double duration;
 
     boolean isCompleted;
 }
