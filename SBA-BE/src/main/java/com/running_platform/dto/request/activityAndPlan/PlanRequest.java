@@ -1,5 +1,9 @@
 package com.running_platform.dto.request.activityAndPlan;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,22 +17,27 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class PlanRequest {
 
+    @NotNull(message = "Scheduled date is required")
     LocalDate scheduledDate;
 
+    @Positive(message = "Target distance must be positive")
     BigDecimal targetDistance;
 
-    LocalTime title;
+    @NotBlank(message = "Title is required")
+    String title;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     LocalTime startTime;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     LocalTime endTime;
 
     boolean isSetTime;
 
-    double duration;
+    @Positive(message = "Duration must be positive")
+    Double duration;
 
     boolean isCompleted;
 }
