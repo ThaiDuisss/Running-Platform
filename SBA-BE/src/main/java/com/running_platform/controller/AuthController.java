@@ -2,14 +2,14 @@ package com.running_platform.controller;
 
 import com.running_platform.dto.request.IntrospectToken;
 import com.running_platform.dto.request.ResetPasswordRequest;
+import com.running_platform.dto.request.SignInRequest;
 import com.running_platform.dto.request.UserRequest;
 import com.running_platform.dto.response.ApiResponse;
-import com.running_platform.dto.request.SignInRequest;
 import com.running_platform.dto.response.SignInResponse;
 import com.running_platform.dto.response.TokenResponse;
-import com.running_platform.dto.response.UserResponse;
 import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.entity.UserAuth.VerificationTokens;
+import com.running_platform.enums.DeviceType;
 import com.running_platform.enums.TokenType;
 import com.running_platform.repository.UserRepository;
 import com.running_platform.repository.VerificationTokenRepository;
@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -87,8 +86,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<?>> signIn(@RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<ApiResponse<?>> signIn(@RequestHeader("Device-Type") DeviceType deviceType, @RequestBody SignInRequest signInRequest) {
         TokenResponse tokenResponse = authenticationService.getAccessToken(signInRequest);
+        if(DeviceType.APP.equals(deviceType)) {
+            return ResponseEntity.ok()
+                    .body(ApiResponse.<Object>builder()
+                            .code(200)
+                            .status("OK")
+                            .message("User logged in successfully")
+                            .data(SignInResponse.builder().tokenResponse(tokenResponse).userResponse(userService.getUserByUsername(signInRequest.getUsername())))
+                            .build());
+        }
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenResponse.getRefreshToken())
                 .httpOnly(true)
                 .secure(true)

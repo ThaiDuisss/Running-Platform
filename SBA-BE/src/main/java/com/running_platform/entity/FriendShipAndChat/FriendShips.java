@@ -3,10 +3,7 @@ package com.running_platform.entity.FriendShipAndChat;
 import com.running_platform.entity.AbstractEntity;
 import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.FriendStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
@@ -28,5 +25,7 @@ public class FriendShips extends AbstractEntity<Long> {
     @JoinColumn(name = "addressee_id", nullable = false)
     Users addressee;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     FriendStatus status;
 }

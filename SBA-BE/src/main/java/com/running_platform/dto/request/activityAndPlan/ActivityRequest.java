@@ -1,38 +1,40 @@
 package com.running_platform.dto.request.activityAndPlan;
 
-import canape.benjamin.runflutterrun.model.enums.ActivityType;
-import com.running_platform.entity.RunActivities.UserPlans;
-import com.running_platform.entity.UserAuth.Users;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Data Transfer Object (DTO) for representing an activity.
  */
 @Data
-public class ActivityResponse {
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ActivityRequest {
 
     Long planId;
 
-    BigDecimal distance;
+    Double distance;
 
     Integer duration;
 
-    BigDecimal avgPace;
+    Double avgPace;
+
+    Double avgSpeed;
+
+    Double startLat;
+
+    Double startLng;
 
     String polyline;
 
-    BigDecimal startLat;
+    Date startDatetime;
 
-    BigDecimal startLng;
+    Date endDatetime;
 
-    
+//    Integer calories;
 }
