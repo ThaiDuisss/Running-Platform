@@ -51,8 +51,6 @@ public class RunActivity extends AbstractEntity<Long> {
     @Column(name = "endDatetime")
     public Date endDatetime;
 
-    BigDecimal AvgPace;
-
     String pace;
 //
 //    public String getPace(){
