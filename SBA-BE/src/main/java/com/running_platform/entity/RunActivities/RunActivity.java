@@ -2,16 +2,14 @@ package com.running_platform.entity.RunActivities;
 
 import com.running_platform.entity.AbstractEntity;
 import com.running_platform.entity.UserAuth.Users;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -31,11 +29,26 @@ public class RunActivity extends AbstractEntity<Long> {
     @JoinColumn(name = "plan_id", nullable = true)
     UserPlans plan;
 
-    LocalDate runDate;
-
     BigDecimal distance;
 
     Integer duration;
 
-    BigDecimal AvgPace;
+    BigDecimal avgPace;
+
+    @Column(columnDefinition = "TEXT")
+    String polyline;
+
+    BigDecimal startLat;
+
+    BigDecimal startLng;
+
+    @Column(name = "startDatetime")
+    public Date startDatetime;
+
+    /**
+     * The end datetime of the activity.
+     */
+    @Column(name = "endDatetime")
+    public Date endDatetime;
+
 }

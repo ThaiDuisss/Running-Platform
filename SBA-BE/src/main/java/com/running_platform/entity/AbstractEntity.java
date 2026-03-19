@@ -1,5 +1,7 @@
 package com.running_platform.entity;
 
+import com.running_platform.entity.UserAuth.Users;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,9 +19,11 @@ public abstract class AbstractEntity<T extends Serializable> implements Serializ
     @Column(name = "id", updatable = false, nullable = false)
     T id;
 
+    @Nullable
+    @ManyToOne
     @CreatedBy
-    @Column(name = "createdBy", updatable = false)
-    Long createdBy;
+    @JoinColumn(name = "created_by_id")
+    Users createdBy;
 
 
     @Column(name = "createdAt")

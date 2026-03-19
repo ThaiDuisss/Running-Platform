@@ -1,4 +1,4 @@
-package canape.benjamin.runflutterrun.services;
+package com.running_platform.service;
 
 public interface ICrudService<T> {
 
@@ -24,7 +24,7 @@ public interface ICrudService<T> {
      * @param id the ID of the entity
      * @return the entity with the specified ID
      */
-    T getById(String token, long id);
+    T getById(long id);
 
     /**
      * Update an entity.
@@ -33,7 +33,7 @@ public interface ICrudService<T> {
      * @param t the entity to update
      * @return the updated entity
      */
-    T update(String token, T t);
+    T update(T t);
 
     /**
      * Delete an entity by its ID.
@@ -41,5 +41,5 @@ public interface ICrudService<T> {
      * @param token The authorization token.
      * @param id the ID of the entity to delete
      */
-    void delete(String token, long id);
+    void delete(long id);
 }

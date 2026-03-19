@@ -1,4 +1,8 @@
 package com.running_platform.enums;
 
-public class WorkoutType {
+public enum WorkoutType {
+    EASY_RUN,
+    LONG_RUN,
+            INTERVAL,
+    REST
 }

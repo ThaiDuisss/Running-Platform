@@ -14,7 +14,7 @@ import java.util.Map;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class    CustomUserDetails implements UserDetails, OAuth2User {
+public class  CustomUserDetails implements UserDetails, OAuth2User {
     String email;
     String password;
 

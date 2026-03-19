@@ -3,6 +3,7 @@ package com.running_platform.entity.RunActivities;
 import com.running_platform.entity.AbstractEntity;
 import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.VisibilityEnum;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,6 +27,7 @@ public class UserPlans extends AbstractEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_template_id", nullable = true)
+    @Nullable
     PlanTemplates planTemplate;
 
     @Column(length = 500)
