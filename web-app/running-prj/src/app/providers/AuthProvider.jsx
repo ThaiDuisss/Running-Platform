@@ -65,7 +65,7 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem("access_token");
         localStorage.removeItem("userInfo");
         authService.logout();
-        setUser("");
+        setUser(null);
     };
 
     // 👤 CHANGE USER

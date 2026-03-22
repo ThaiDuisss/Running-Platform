@@ -51,7 +51,8 @@ public class AuthConfig {
             "error",
             "success",
             "/get-info/**",
-            "/oauth2/**"
+            "/oauth2/**",
+            "/api/articles"
     };
 
     @Bean

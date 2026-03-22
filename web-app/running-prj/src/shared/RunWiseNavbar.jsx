@@ -1,6 +1,6 @@
 import { AuthActionContext, AuthDataContext } from '@/app/providers/AuthProvider';
 import React, { useState, useEffect, useContext } from 'react';
-import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
+import { Nav, NavDropdown } from 'react-bootstrap';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const RunWiseNavbar = () => {
@@ -13,7 +13,6 @@ const RunWiseNavbar = () => {
             ? "border-bottom border-black text-info"
             : "text-gray");
 
-    console.log("Navbar render - user:", user, "theme:", theme);
     return (
 
         <div className=' border-bottom '>
@@ -65,8 +64,12 @@ const RunWiseNavbar = () => {
                             <NavLink className="btn btn-outline-primary me-2" to="/login">Đăng nhập</NavLink>
                             <NavLink className="btn btn-outline-primary" to="/register">Đăng ký</NavLink>
                         </div>) :
-                        (<Nav variant="pills" activeKey="1" onSelect={(selectedKey) => console.log(`selected ${selectedKey}`)}>
-                            <NavDropdown title={user?.username || "Profile"} id="nav-dropdown">
+                        (<Nav className="rw-user-nav flex-shrink-0" variant="pills" activeKey="1">
+                            <NavDropdown
+                                title={<span className="rw-user-name">{user?.username || "Profile"}</span>}
+                                id="nav-dropdown"
+                                align="end"
+                            >
                                 <NavDropdown.Item eventKey="4.1" onClick={logout}>Log Out</NavDropdown.Item>
                                 <NavDropdown.Item eventKey="4.2" onClick={() => navigator("/profile")}>Profile</NavDropdown.Item>
                             </NavDropdown>
