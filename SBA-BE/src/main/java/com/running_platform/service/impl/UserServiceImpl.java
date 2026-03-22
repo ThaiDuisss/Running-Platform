@@ -5,6 +5,8 @@ import com.running_platform.config.AuthConfig;
 import com.running_platform.constant.ErrorEnum;
 import com.running_platform.constant.RoleEnum;
 import com.running_platform.dto.request.ResetPasswordRequest;
+import com.running_platform.dto.request.UpdateAvatarRequest;
+import com.running_platform.dto.request.UpdateProfileRequest;
 import com.running_platform.dto.request.UserRequest;
 import com.running_platform.dto.response.UserResponse;
 import com.running_platform.entity.UserAuth.PasswordResetTokens;
@@ -209,6 +211,41 @@ public class UserServiceImpl implements UserService {
                 .findByUsernameContainingIgnoreCase(keyword, pageable);
 
         return page.map(mapper::toUserResponse);
+    }
+
+    @Override
+    public UserResponse updateMyProfile(String username, UpdateProfileRequest request) {
+        Users userEntity = repository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+
+        userEntity.setFullName(request.getFullName());
+        userEntity.setPhoneNumber(request.getPhoneNumber());
+        userEntity.setLocation(request.getLocation());
+        userEntity.setLatitude(request.getLatitude());
+        userEntity.setLongitude(request.getLongitude());
+
+        if (request.getImageUrl() != null) {
+            userEntity.setImageUrl(request.getImageUrl());
+        }
+
+        repository.save(userEntity);
+
+        UserResponse userResponse = mapper.toUserResponse(userEntity);
+        userResponse.setRoles(roleMapper.toResponse(userEntity.getRoles()));
+        return userResponse;
+    }
+
+    @Override
+    public UserResponse updateAvatar(String username, UpdateAvatarRequest request) {
+        Users userEntity = repository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+
+        userEntity.setImageUrl(request.getImageUrl());
+        repository.save(userEntity);
+
+        UserResponse userResponse = mapper.toUserResponse(userEntity);
+        userResponse.setRoles(roleMapper.toResponse(userEntity.getRoles()));
+        return userResponse;
     }
 
     @Override

@@ -55,6 +55,16 @@ const getUserInfo = () => {
     })
 }
 
+const updateMyProfile = (data) => {
+    return axiosClient.put(ApiEndpoints.USERS_API_ENDPOINTS.ME, data);
+}
+
+const updateMyAvatar = (imageUrl) => {
+    return axiosClient.put(`${ApiEndpoints.USERS_API_ENDPOINTS.ME}/avatar`, {
+        imageUrl
+    });
+}
+
 const search = async (keyword) => {
     return await axiosClient.get(
         `${ApiEndpoints.USERS_API_ENDPOINTS.SEARCH}/${keyword}`
@@ -66,6 +76,8 @@ export {
     updateUserAPI,
     deleteUserAPI,
     getUserInfo,
+    updateMyProfile,
+    updateMyAvatar,
     search,
     getPostsWithPaginateAPI,
     changeApproveStatusPostAPI,

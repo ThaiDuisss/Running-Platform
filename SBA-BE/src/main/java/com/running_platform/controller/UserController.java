@@ -1,6 +1,8 @@
 package com.running_platform.controller;
 
 
+import com.running_platform.dto.request.UpdateProfileRequest;
+import com.running_platform.dto.request.UpdateAvatarRequest;
 import com.running_platform.dto.response.ApiResponse;
 import com.running_platform.dto.response.UserResponse;
 import com.running_platform.service.impl.UserServiceImpl;
@@ -13,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserServiceImpl service;
@@ -35,6 +37,32 @@ public class UserController {
                 .data(service.getUserByUsername(username))
                 .code(200)
                 .status("Get Information Successful")
+                .build();
+    }
+
+    @PutMapping("/my-info")
+    ApiResponse<UserResponse> updateMyInfo(@RequestBody UpdateProfileRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        return ApiResponse.<UserResponse>builder()
+                .data(service.updateMyProfile(username, request))
+                .code(200)
+                .status("Update Information Successful")
+                .message("Profile updated successfully")
+                .build();
+    }
+
+    @PutMapping("/my-info/avatar")
+    ApiResponse<UserResponse> updateMyAvatar(@RequestBody UpdateAvatarRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        return ApiResponse.<UserResponse>builder()
+                .data(service.updateAvatar(username, request))
+                .code(200)
+                .status("Update Avatar Successful")
+                .message("Avatar updated successfully")
                 .build();
     }
 
