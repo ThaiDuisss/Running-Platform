@@ -5,6 +5,7 @@ import UserLogin from '../guards/UserLogin'
 import Routes from '@/features/user/components/Routes'
 import Community from '@/features/user/components/Post/Community'
 import Blog from '@/features/user/components/Blog'
+import BlogDetail from '@/features/user/components/BlogDetail'
 import FeedPage from '@/features/user/components/Post/FeedPage'
 import PlanPage from '@/features/user/components/Plans/PlanPage'
 import { redirect } from 'react-router-dom'
@@ -48,6 +49,10 @@ const publicRoutes = [
       {
         path: "/blog",
         element: <Blog />
+      },
+      {
+        path: "/blog/:id",
+        element: <BlogDetail />
       },
 
       {
