@@ -1,12 +1,12 @@
 import { AuthActionContext, AuthDataContext } from '@/app/providers/AuthProvider';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Nav, NavDropdown } from 'react-bootstrap';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const RunWiseNavbar = () => {
     const { user, theme } = useContext(AuthDataContext);
     const navigator = useNavigate();
-    const { changeTheme, logout } = useContext(AuthActionContext);
+    const { logout } = useContext(AuthActionContext);
     const navLinkCustom = ({ isActive }) =>
         "nav-link " +
         (isActive
@@ -52,12 +52,6 @@ const RunWiseNavbar = () => {
                         <li className="nav-item">
                             <NavLink className={navLinkCustom} to="/blog">Tin tức</NavLink>
                         </li>
-
-                        {user && Object.keys(user).length > 0 && (
-                            <li className="nav-item">
-                                <NavLink className={navLinkCustom} to="/friends">Bạn bè</NavLink>
-                            </li>
-                        )}
                     </ul>
                     {user === null || user === undefined || Object.keys(user).length === 0 ?
                         (<div className="d-flex gap-2 ms-5">

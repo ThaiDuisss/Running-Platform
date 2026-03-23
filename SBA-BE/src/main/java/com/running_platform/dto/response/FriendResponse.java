@@ -13,5 +13,12 @@ public class FriendResponse {
     Long id;
     String username;
     String fullName;
+    String phoneNumber;
     String imageUrl;
+    String location;
+    String headline;
+    Double distanceKm;
+    String relation;
+    boolean following;
+    boolean follower;
 }
