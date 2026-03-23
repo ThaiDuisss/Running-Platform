@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function SidebarLeft() {
 
@@ -11,7 +12,7 @@ export default function SidebarLeft() {
             </div>
 
             <div className="menu-item">🏃‍♂️ Running Feed</div>
-            <div className="menu-item">👥 Friends</div>
+            <Link className="menu-item" to="/follow">👥 Following</Link>
             <div className="menu-item">📊 Activities</div>
 
         </div>

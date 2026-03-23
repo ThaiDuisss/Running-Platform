@@ -20,6 +20,21 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             Pageable pageable
     );
 
+    @Query("""
+        SELECT u FROM Users u
+        WHERE u.id <> :currentUserId
+        AND (
+            :keyword IS NULL OR :keyword = '' OR
+            LOWER(COALESCE(u.fullName, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+            LOWER(COALESCE(u.phoneNumber, '')) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        )
+        """)
+    Page<Users> searchFollowCandidates(
+            @Param("currentUserId") Long currentUserId,
+            @Param("keyword") String keyword,
+            Pageable pageable
+    );
+
     @Query("SELECT u.id FROM Users u WHERE u.username = :username")
     Optional<Long> findIdByUsername(@Param("username") String username);
 }

@@ -14,12 +14,16 @@ import java.util.Optional;
 public interface FriendRepository
         extends JpaRepository<FriendShips ,Long> {
     boolean existsByRequester_IdAndAddressee_Id(Long requesterId, Long addresseeId);
+    boolean existsByRequester_IdAndAddressee_IdAndStatus(Long requesterId, Long addresseeId, FriendStatus status);
 
     Optional<FriendShips> findByRequester_IdAndAddressee_Id(Long requesterId, Long addresseeId);
+    Optional<FriendShips> findByRequester_IdAndAddressee_IdAndStatus(Long requesterId, Long addresseeId, FriendStatus status);
 
     Page<FriendShips> findByStatusAndRequester_Id(FriendStatus status, Long requesterId, Pageable pageable);
 
     Page<FriendShips> findByStatusAndAddressee_Id(FriendStatus status, Long addresseeId, Pageable pageable);
+    List<FriendShips> findByRequester_IdAndStatus(Long requesterId, FriendStatus status);
+    List<FriendShips> findByAddressee_IdAndStatus(Long addresseeId, FriendStatus status);
 
     @Query("""
     SELECT f
