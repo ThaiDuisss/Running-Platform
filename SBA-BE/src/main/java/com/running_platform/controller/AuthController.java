@@ -29,6 +29,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
 
 @RestController
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -49,14 +51,21 @@ public class AuthController {
 
         VerificationTokens verificationToken =
                 tokenRepository.findByToken(token);
-
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
         if (verificationToken == null) {
-            response.sendRedirect("http://localhost:5173/login");
+            out.println("<h1>Lỗi xảy ra khi xác thực</h1>");
+            return;
+        }
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            out.println("<h1>Link xác thực đã hết thời hạn</h1>");
+            return;
         }
         Users user = verificationToken.getUser();
         user.setEmailVerified(true);
 
         userRepository.save(user);
+        tokenRepository.delete(verificationToken);
 
         response.sendRedirect("http://localhost:5173/login");
 
@@ -88,7 +97,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> signIn(@RequestHeader("Device-Type") DeviceType deviceType, @RequestBody SignInRequest signInRequest) {
         TokenResponse tokenResponse = authenticationService.getAccessToken(signInRequest);
-        if(DeviceType.APP.equals(deviceType)) {
+        if (DeviceType.APP.equals(deviceType)) {
             return ResponseEntity.ok()
                     .body(ApiResponse.<Object>builder()
                             .code(200)
