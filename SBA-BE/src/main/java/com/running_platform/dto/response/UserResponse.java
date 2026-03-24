@@ -27,9 +27,7 @@ public class UserResponse {
 
     String imageUrl;
 
-    String latitude;
-
-    String longitude;
+    String address;
 
     LocalDateTime createAt;
 

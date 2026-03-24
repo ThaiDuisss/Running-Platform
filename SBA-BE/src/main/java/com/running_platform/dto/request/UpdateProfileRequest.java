@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 public class UpdateProfileRequest {
     String fullName;
     String phoneNumber;
-    String location;
+    String address;
     String latitude;
     String longitude;
     String imageUrl;

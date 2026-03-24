@@ -45,15 +45,13 @@ public class Users extends AbstractEntity<Long> {
     )
     Set<Roles> roles;
 
-    String location;
+    String address;
 
     @Column( columnDefinition = "VARCHAR(50)")
     String fullName;
 
-    String latitude;
-
-    String longitude;
-
+    @Column(columnDefinition = "POINT")
+    private String location;
 
 //    @Column(name = "registered_provider_name")
     @Enumerated(EnumType.STRING)

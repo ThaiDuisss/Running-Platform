@@ -20,11 +20,12 @@ public interface FriendRepository
     Optional<FriendShips> findByRequester_IdAndAddressee_IdAndStatus(Long requesterId, Long addresseeId, FriendStatus status);
 
     Page<FriendShips> findByStatusAndRequester_Id(FriendStatus status, Long requesterId, Pageable pageable);
-
     Page<FriendShips> findByStatusAndAddressee_Id(FriendStatus status, Long addresseeId, Pageable pageable);
     List<FriendShips> findByRequester_IdAndStatus(Long requesterId, FriendStatus status);
     List<FriendShips> findByAddressee_IdAndStatus(Long addresseeId, FriendStatus status);
+    long countByRequester_IdAndStatus(Long requesterId, FriendStatus status);
 
+    long countByAddressee_IdAndStatus(Long addresseeId, FriendStatus status);
     @Query("""
     SELECT f
     FROM FriendShips f

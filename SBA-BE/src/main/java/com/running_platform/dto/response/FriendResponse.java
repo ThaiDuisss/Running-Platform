@@ -15,7 +15,7 @@ public class FriendResponse {
     String fullName;
     String phoneNumber;
     String imageUrl;
-    String location;
+    String address;
     String headline;
     Double distanceKm;
     String relation;

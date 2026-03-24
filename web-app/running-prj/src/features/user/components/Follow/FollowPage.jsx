@@ -1,6 +1,6 @@
 import React, { startTransition, useEffect, useMemo, useState } from "react";
-import { Alert, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Alert, Button, Container } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import { MapPinned, Sparkles, Users } from "lucide-react";
 import FollowSearchBar from "./components/FollowSearchBar";
 import FollowRadiusFilter from "./components/FollowRadiusFilter";
@@ -107,6 +107,15 @@ const FollowPage = () => {
     return (
         <section className="follow-page">
             <Container className="follow-shell">
+
+                <Button
+                    as={Link}
+                    to="/feed"
+                    variant="light"
+                    className="d-inline-flex align-items-center gap-2 mb-3"
+                >
+                    ← Quay lại cộng đồng
+                </Button>
                 <div className="follow-hero">
                     <div className="follow-hero__panel">
                         <div className="follow-hero__eyebrow">Follow Network</div>

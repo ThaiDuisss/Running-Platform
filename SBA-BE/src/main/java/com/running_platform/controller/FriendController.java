@@ -2,6 +2,7 @@ package com.running_platform.controller;
 
 import com.running_platform.dto.response.ApiResponse;
 import com.running_platform.dto.response.FollowNetworkResponse;
+import com.running_platform.enums.TabEnum;
 import com.running_platform.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class FriendController {
 
     @GetMapping("/network")
     public ApiResponse<FollowNetworkResponse> getFollowNetwork(
-            @RequestParam(defaultValue = "discover") String tab,
+            @RequestParam(defaultValue = "discover") TabEnum tab,
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(required = false) Double radiusKm,
             @RequestParam(defaultValue = "0") int page,

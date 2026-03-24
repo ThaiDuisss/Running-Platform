@@ -220,10 +220,11 @@ public class UserServiceImpl implements UserService {
 
         userEntity.setFullName(request.getFullName());
         userEntity.setPhoneNumber(request.getPhoneNumber());
-        userEntity.setLocation(request.getLocation());
-        userEntity.setLatitude(request.getLatitude());
-        userEntity.setLongitude(request.getLongitude());
-
+        userEntity.setAddress(request.getAddress());
+        if (request.getLatitude() != null && request.getLongitude() != null) {
+            String point = String.format("POINT(%s %s)", request.getLongitude(), request.getLatitude());
+            userEntity.setLocation(point);
+        }
         if (request.getImageUrl() != null) {
             userEntity.setImageUrl(request.getImageUrl());
         }
