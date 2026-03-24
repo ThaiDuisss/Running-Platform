@@ -5,6 +5,6 @@ public interface FollowUserProjection {
     String getUsername();
     String getFullName();
     String getImageUrl();
-    String getAddress();
+    String getLocation();
     Double getDistanceKm();
 }

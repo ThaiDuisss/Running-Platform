@@ -21,7 +21,7 @@ const RADIUS_OPTIONS = [
     { label: "50 km", value: 50 },
 ];
 
-const TAB_EMPTY_STATE = { discover: "discover", following: "following", followers: "followers" };
+const TAB_EMPTY_STATE = { discover: "discover", following: "following", followers: "followers", friend: "friend" };
 
 const FollowPage = () => {
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ const FollowPage = () => {
     const [keyword, setKeyword] = useState("");
     const [radiusKm, setRadiusKm] = useState(null);
     const [items, setItems] = useState([]);
-    const [counts, setCounts] = useState({ discover: 0, following: 0, followers: 0 });
+    const [counts, setCounts] = useState({ discover: 0, following: 0, followers: 0 , friend: 0});
     const [currentPage, setCurrentPage] = useState(0);
     const [pageSize] = useState(8);
     const [totalPages, setTotalPages] = useState(0);
@@ -120,7 +120,7 @@ const FollowPage = () => {
                     <div className="follow-hero__panel">
                         <div className="follow-hero__eyebrow">Follow Network</div>
                         <h1>Khám phá runner gần bạn, follow ngay như một social app thật.</h1>
-                        <p>Theo dõi những người chạy gần khu vực của bạn, quản lý follower rõ ràng, tìm kiếm theo tên hoặc số điện thoại, và chuyển từ màn “Friends” thô cứng sang một trải nghiệm hiện đại, production-ready.</p>
+                        <p>Theo dõi những người chạy gần khu vực của bạn, quản lý followers rõ ràng, tìm kiếm theo tên hoặc số điện thoại, và chuyển từ màn “Friends” thô cứng sang một trải nghiệm hiện đại, production-ready.</p>
                     </div>
 
                     <div className="follow-hero__stats">

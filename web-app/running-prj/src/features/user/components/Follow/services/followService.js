@@ -21,13 +21,15 @@ export const followService = {
             items: (pageData?.content || []).map((user) => ({
                 ...user,
                 avatarUrl: user.imageUrl,
-                isFollowing: user.following,
-                isFollower: user.follower,
+                relation: (user.relation || "DISCOVER").toLowerCase(),
+                isFollowing: user.relation === "FOLLOWING" || user.relation === "FRIEND",
+                isFollower: user.relation === "FOLLOWERS" || user.relation === "FRIEND",
             })),
             counts: {
                 discover: data?.discoverCount || 0,
                 following: data?.followingCount || 0,
                 followers: data?.followersCount || 0,
+                friend: data?.friendCount || 0,
             },
             page: pageData,
         };
@@ -42,3 +44,4 @@ export const followService = {
         await axiosClient.post(`${BASE}/follow/${userId}`);
     },
 };
+

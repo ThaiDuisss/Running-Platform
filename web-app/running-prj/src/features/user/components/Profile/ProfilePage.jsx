@@ -14,7 +14,7 @@ const ProfilePage = () => {
         username: "",
         fullName: "",
         phoneNumber: "",
-        address: "",
+        location: "",
         latitude: "",
         longitude: "",
         avatar: "",
@@ -36,7 +36,7 @@ const ProfilePage = () => {
             username: user.username ?? "",
             fullName: user.fullName ?? "",
             phoneNumber: user.phoneNumber ?? "",
-            address: user.address ?? "",
+            location: user.location ?? "",
             latitude: user.latitude ?? "",
             longitude: user.longitude ?? "",
             avatar: user.imageUrl ?? "",
@@ -84,7 +84,7 @@ const ProfilePage = () => {
             username: user?.username ?? "",
             fullName: user?.fullName ?? "",
             phoneNumber: user?.phoneNumber ?? "",
-            address: user?.address ?? "",
+            location: user?.location ?? "",
             latitude: user?.latitude ?? "",
             longitude: user?.longitude ?? "",
             avatar: user?.imageUrl ?? "",
@@ -103,7 +103,7 @@ const ProfilePage = () => {
             const payload = {
                 fullName: form.fullName.trim(),
                 phoneNumber: form.phoneNumber.trim(),
-                address: form.address.trim(),
+                location: form.location.trim(),
                 latitude: form.latitude,
                 longitude: form.longitude,
                 imageUrl: form.avatar,
@@ -210,7 +210,7 @@ const ProfilePage = () => {
                             </div>
 
                             <div className="text-muted mb-2">
-                                📍 {user?.address || "Chưa có address"}
+                                📍 {user?.location || "Chưa có location"}
                             </div>
 
                             <div className="text-muted mb-3">
@@ -306,10 +306,10 @@ const ProfilePage = () => {
 
                                     <Col md={6}>
                                         <Form.Group>
-                                            <Form.Label>Address</Form.Label>
+                                            <Form.Label>Location</Form.Label>
                                             <Form.Control
-                                                name="address"
-                                                value={form.address}
+                                                name="location"
+                                                value={form.location}
                                                 onChange={onChange}
                                                 disabled={!isEditing}
                                             />

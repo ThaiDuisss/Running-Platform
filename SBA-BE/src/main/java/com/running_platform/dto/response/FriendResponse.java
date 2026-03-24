@@ -1,5 +1,6 @@
 package com.running_platform.dto.response;
 
+import com.running_platform.enums.TabEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,10 +16,8 @@ public class FriendResponse {
     String fullName;
     String phoneNumber;
     String imageUrl;
-    String address;
+    String location;
     String headline;
     Double distanceKm;
-    String relation;
-    boolean following;
-    boolean follower;
+    TabEnum relation;
 }

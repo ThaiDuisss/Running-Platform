@@ -16,6 +16,8 @@ import org.mapstruct.MappingTarget;
 public interface UserMapper {
     Users toUserProfile(UserRequest users);
     @Mapping(source = "id", target = "id")
+    @Mapping(target = "latitude", expression = "java(user.getLocationDetail() != null ? user.getLocationDetail().getY() : null)")
+    @Mapping(target = "longitude", expression = "java(user.getLocationDetail() != null ? user.getLocationDetail().getX() : null)")
     UserResponse toUserResponse(Users user);
     Users toUser(AdminCreateUserRequest req);
     Users responseToUserProfile(UserResponse users);

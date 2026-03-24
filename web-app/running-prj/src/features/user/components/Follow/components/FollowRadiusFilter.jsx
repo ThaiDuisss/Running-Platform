@@ -1,20 +1,21 @@
 import React from "react";
+import { Button, ButtonGroup } from "react-bootstrap";
 
 const FollowRadiusFilter = ({ value, onChange, options }) => (
     <div className="follow-filter">
         <span className="follow-filter__label">Bán kính</span>
-        <div className="follow-filter__chips">
+        <ButtonGroup className="follow-filter__chips flex-wrap">
             {options.map((option) => (
-                <button
+                <Button
                     key={option.value ?? "all"}
-                    type="button"
+                    variant={value === option.value ? "dark" : "outline-secondary"}
                     className={`follow-chip ${value === option.value ? "follow-chip--active" : ""}`}
                     onClick={() => onChange(option.value)}
                 >
                     {option.label}
-                </button>
+                </Button>
             ))}
-        </div>
+        </ButtonGroup>
     </div>
 );
 

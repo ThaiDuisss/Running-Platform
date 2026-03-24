@@ -89,37 +89,43 @@ public class FriendServiceImpl implements FriendService {
 
         Page<FollowUserProjection> usersPage = switch (tab) {
             case FRIEND -> userRepository.findFriends(currentUserId, normalizedKeyword, radiusKm, pageable);
-            case FOLLOWING -> userRepository.findFollowing(currentUserId, normalizedKeyword, radiusKm, pageable);
-            case FOLLOWER -> userRepository.findFollowers(currentUserId, normalizedKeyword, radiusKm, pageable);
+            case FOLLOWING -> userRepository.findFollowingOnly(currentUserId, normalizedKeyword, radiusKm, pageable);
+            case FOLLOWERS -> userRepository.findFollowersOnly(currentUserId, normalizedKeyword, radiusKm, pageable);
             case DISCOVER -> userRepository.findDiscoverUsers(currentUserId, normalizedKeyword, radiusKm, pageable);
         };
 
         List<FriendResponse> content = usersPage.getContent().stream()
-                .map(this::toFriendResponse)
+                .map(user -> toFriendResponse(user, tab))
                 .toList();
 
         Page<FriendResponse> responsePage = new PageImpl<>(content, pageable, usersPage.getTotalElements());
 
-        long followingCount = friendRepository.countByRequester_IdAndStatus(currentUserId, FriendStatus.ACCEPTED);
-        long followersCount = friendRepository.countByAddressee_IdAndStatus(currentUserId, FriendStatus.ACCEPTED);
-        long discoverCount = Math.max(userRepository.count() - 1 - followingCount - followersCount, 0);
+        long followingCount = friendRepository.countOnlyFollowing(currentUserId);
+        long followersCount = friendRepository.countOnlyFollower(currentUserId);
+        long friendCount = friendRepository.countFriends(currentUserId);
+        long discoverCount = Math.max(
+                userRepository.count() - 1 - followingCount - followersCount - friendCount,
+                0
+        );
 
         return FollowNetworkResponse.builder()
                 .page(PageResponse.from(responsePage))
                 .discoverCount(discoverCount)
                 .followingCount(followingCount)
                 .followersCount(followersCount)
+                .friendCount(friendCount)
                 .build();
     }
 
-    private FriendResponse toFriendResponse(FollowUserProjection user) {
+    private FriendResponse toFriendResponse(FollowUserProjection user, TabEnum relation) {
         return FriendResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .fullName(user.getFullName())
                 .imageUrl(user.getImageUrl())
-                .address(user.getAddress())
+                .location(user.getLocation())
                 .distanceKm(user.getDistanceKm())
+                .relation(relation)
                 .build();
     }
 }

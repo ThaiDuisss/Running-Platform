@@ -7,6 +7,7 @@ const EMPTY_CONFIG = {
     following: { icon: UsersRound, title: "Bạn chưa follow ai", description: "Khám phá runner gần bạn và bắt đầu follow để xây dựng network." },
     followers: { icon: UsersRound, title: "Chưa có follower nào", description: "Hoàn thiện hồ sơ và hoạt động nhiều hơn để thu hút follower." },
     discover: { icon: Compass, title: "Hiện chưa có gợi ý phù hợp", description: "Hãy đổi khoảng cách hoặc thử lại với bộ lọc khác." },
+    friend: { icon: Compass, title: "Bạn chưa có bạn bè", description: "Hãy đổi khoảng cách hoặc thử lại với bộ lọc khác." },
 };
 
 const FollowEmptyState = ({ type, onRetry }) => {

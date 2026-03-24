@@ -2,9 +2,11 @@ package com.running_platform.repository;
 
 import com.running_platform.dto.FollowUserProjection;
 import com.running_platform.entity.UserAuth.Users;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -47,20 +49,21 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                 u.username AS username,
                 u.full_name AS fullName,
                 u.image_url AS imageUrl,
-                u.address AS address,
-                ROUND(ST_Distance_Sphere(u.location, cu.location) / 1000, 1) AS distanceKm            FROM users u
+                u.location AS location,
+                ROUND(ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000, 1) AS distanceKm
+            FROM users u
              JOIN users cu ON cu.id = :currentUserId
              WHERE u.id <> :currentUserId
                AND EXISTS (
                    SELECT 1
-                   FROM friendships f1
+                   FROM friend_ships f1
                    WHERE f1.requester_id = :currentUserId
                      AND f1.addressee_id = u.id
                      AND f1.status = 'ACCEPTED'
                )
                AND EXISTS (
                    SELECT 1
-                   FROM friendships f2
+                   FROM friend_ships f2
                    WHERE f2.requester_id = u.id
                      AND f2.addressee_id = :currentUserId
                      AND f2.status = 'ACCEPTED'
@@ -69,11 +72,11 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                    :keyword IS NULL OR :keyword = ''
                    OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
                    OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                   OR LOWER(u.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                   OR LOWER(u.phone_number) LIKE LOWER(CONCAT('%', :keyword, '%'))
                )
                AND (
                    :radiusKm IS NULL
-                   OR ST_Distance_Sphere(u.location, cu.location) / 1000 <= :radiusKm
+                   OR ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000 <= :radiusKm
                )
              ORDER BY u.created_at DESC
             """,
@@ -84,14 +87,14 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                     WHERE u.id <> :currentUserId
                       AND EXISTS (
                           SELECT 1
-                          FROM friendships f1
+                          FROM friend_ships f1
                           WHERE f1.requester_id = :currentUserId
                             AND f1.addressee_id = u.id
                             AND f1.status = 'ACCEPTED'
                       )
                       AND EXISTS (
                           SELECT 1
-                          FROM friendships f2
+                          FROM friend_ships f2
                           WHERE f2.requester_id = u.id
                             AND f2.addressee_id = :currentUserId
                             AND f2.status = 'ACCEPTED'
@@ -100,11 +103,11 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                           :keyword IS NULL OR :keyword = ''
                           OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
                           OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                          OR LOWER(u.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                          OR LOWER(u.phone_number) LIKE LOWER(CONCAT('%', :keyword, '%'))
                       )
                       AND (
                           :radiusKm IS NULL
-                          OR ST_Distance_Sphere(u.location, cu.location) / 1000 <= :radiusKm
+                          OR ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000 <= :radiusKm
                       )
                     """,
             nativeQuery = true)
@@ -121,123 +124,16 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                 u.username AS username,
                 u.full_name AS fullName,
                 u.image_url AS imageUrl,
-                u.address AS address,
-                ROUND(ST_Distance_Sphere(u.location, cu.location) / 1000, 1) AS distanceKm  
+                u.location AS location,
+                ROUND(ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000, 1) AS distanceKm  
             FROM users u
-            JOIN friendships f ON f.addressee_id = u.id
+            JOIN friend_ships f ON f.addressee_id = u.id
             JOIN users cu ON cu.id = :currentUserId
             WHERE f.requester_id = :currentUserId
               AND f.status = 'ACCEPTED'
-              AND (
-                  :keyword IS NULL OR :keyword = ''
-                  OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                  OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                  OR LOWER(u.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
-              )
-              AND (
-                  :radiusKm IS NULL
-                  OR ST_Distance_Sphere(u.location, cu.location) / 1000 <= :radiusKm
-              )
-            ORDER BY u.created_at DESC
-            """,
-            countQuery = """
-                    SELECT COUNT(*)
-                    FROM users u
-                    JOIN friendships f ON f.addressee_id = u.id
-                    JOIN users cu ON cu.id = :currentUserId
-                    WHERE f.requester_id = :currentUserId
-                      AND f.status = 'ACCEPTED'
-                      AND (
-                          :keyword IS NULL OR :keyword = ''
-                          OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                          OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                          OR LOWER(u.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                      )
-                      AND (
-                          :radiusKm IS NULL
-                          OR ST_Distance_Sphere(u.location, cu.location) / 1000 <= :radiusKm
-                      )
-                    """,
-            nativeQuery = true)
-    Page<FollowUserProjection> findFollowing(
-            @Param("currentUserId") Long currentUserId,
-            @Param("keyword") String keyword,
-            @Param("radiusKm") Double radiusKm,
-            Pageable pageable
-    );
-
-    @Query(value = """
-            SELECT 
-                u.id AS id,
-                u.username AS username,
-                u.full_name AS fullName,
-                u.image_url AS imageUrl,
-                u.address AS address,
-                ROUND(ST_Distance_Sphere(u.location, cu.location) / 1000, 1) AS distanceKm  
-            FROM users u
-            JOIN friendships f ON f.requester_id = u.id
-            JOIN users cu ON cu.id = :currentUserId
-            WHERE f.addressee_id = :currentUserId
-              AND f.status = 'ACCEPTED'
-              AND (
-                  :keyword IS NULL OR :keyword = ''
-                  OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                  OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                  OR LOWER(u.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
-              )
-              AND (
-                  :radiusKm IS NULL
-                  OR ST_Distance_Sphere(u.location, cu.location) / 1000 <= :radiusKm
-              )
-            ORDER BY u.created_at DESC
-            """,
-            countQuery = """
-                    SELECT COUNT(*)
-                    FROM users u
-                    JOIN friendships f ON f.requester_id = u.id
-                    JOIN users cu ON cu.id = :currentUserId
-                    WHERE f.addressee_id = :currentUserId
-                      AND f.status = 'ACCEPTED'
-                      AND (
-                          :keyword IS NULL OR :keyword = ''
-                          OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                          OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                          OR LOWER(u.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                      )
-                      AND (
-                          :radiusKm IS NULL
-                          OR ST_Distance_Sphere(u.location, cu.location) / 1000 <= :radiusKm
-                      )
-                    """,
-            nativeQuery = true)
-    Page<FollowUserProjection> findFollowers(
-            @Param("currentUserId") Long currentUserId,
-            @Param("keyword") String keyword,
-            @Param("radiusKm") Double radiusKm,
-            Pageable pageable
-    );
-
-    @Query(value = """
-            SELECT 
-                u.id AS id,
-                u.username AS username,
-                u.full_name AS fullName,
-                u.image_url AS imageUrl,
-                u.address AS address,
-                ROUND(ST_Distance_Sphere(u.location, cu.location) / 1000, 1) AS distanceKm  
-            FROM users u
-            JOIN users cu ON cu.id = :currentUserId
-            WHERE u.id <> :currentUserId
               AND NOT EXISTS (
                   SELECT 1
-                  FROM friendships f1
-                  WHERE f1.requester_id = :currentUserId
-                    AND f1.addressee_id = u.id
-                    AND f1.status = 'ACCEPTED'
-              )
-              AND NOT EXISTS (
-                  SELECT 1
-                  FROM friendships f2
+                  FROM friend_ships f2
                   WHERE f2.requester_id = u.id
                     AND f2.addressee_id = :currentUserId
                     AND f2.status = 'ACCEPTED'
@@ -246,11 +142,146 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                   :keyword IS NULL OR :keyword = ''
                   OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
                   OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                  OR LOWER(u.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  OR LOWER(u.phone_number) LIKE LOWER(CONCAT('%', :keyword, '%'))
               )
               AND (
                   :radiusKm IS NULL
-                  OR ST_Distance_Sphere(u.location, cu.location) / 1000 <= :radiusKm
+                  OR ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000 <= :radiusKm
+              )
+            ORDER BY u.created_at DESC
+            """,
+            countQuery = """
+                    SELECT COUNT(*)
+                    FROM users u
+                    JOIN friend_ships f ON f.addressee_id = u.id
+                    JOIN users cu ON cu.id = :currentUserId
+                    WHERE f.requester_id = :currentUserId
+                      AND f.status = 'ACCEPTED'
+                      AND NOT EXISTS (
+                          SELECT 1
+                          FROM friend_ships f2
+                          WHERE f2.requester_id = u.id
+                            AND f2.addressee_id = :currentUserId
+                            AND f2.status = 'ACCEPTED'
+                      )
+                      AND (
+                          :keyword IS NULL OR :keyword = ''
+                          OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                          OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                          OR LOWER(u.phone_number) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                      )
+                      AND (
+                          :radiusKm IS NULL
+                          OR ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000 <= :radiusKm
+                      )
+                    """,
+            nativeQuery = true)
+    Page<FollowUserProjection> findFollowingOnly(
+            @Param("currentUserId") Long currentUserId,
+            @Param("keyword") String keyword,
+            @Param("radiusKm") Double radiusKm,
+            Pageable pageable
+    );
+
+    @Query(value = """
+            SELECT 
+                u.id AS id,
+                u.username AS username,
+                u.full_name AS fullName,
+                u.image_url AS imageUrl,
+                u.location AS location,
+                ROUND(ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000, 1) AS distanceKm  
+            FROM users u
+            JOIN friend_ships f ON f.requester_id = u.id
+            JOIN users cu ON cu.id = :currentUserId
+            WHERE f.addressee_id = :currentUserId
+              AND f.status = 'ACCEPTED'
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM friend_ships f2
+                  WHERE f2.requester_id = :currentUserId
+                    AND f2.addressee_id = u.id
+                    AND f2.status = 'ACCEPTED'
+              )
+              AND (
+                  :keyword IS NULL OR :keyword = ''
+                  OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  OR LOWER(u.phone_number) LIKE LOWER(CONCAT('%', :keyword, '%'))
+              )
+              AND (
+                  :radiusKm IS NULL
+                  OR ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000 <= :radiusKm
+              )
+            ORDER BY u.created_at DESC
+            """,
+            countQuery = """
+                    SELECT COUNT(*)
+                    FROM users u
+                    JOIN friend_ships f ON f.requester_id = u.id
+                    JOIN users cu ON cu.id = :currentUserId
+                    WHERE f.addressee_id = :currentUserId
+                      AND f.status = 'ACCEPTED'
+                      AND NOT EXISTS (
+                          SELECT 1
+                          FROM friend_ships f2
+                          WHERE f2.requester_id = :currentUserId
+                            AND f2.addressee_id = u.id
+                            AND f2.status = 'ACCEPTED'
+                      )
+                      AND (
+                          :keyword IS NULL OR :keyword = ''
+                          OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                          OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                          OR LOWER(u.phone_number) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                      )
+                      AND (
+                          :radiusKm IS NULL
+                          OR ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000 <= :radiusKm
+                      )
+                    """,
+            nativeQuery = true)
+    Page<FollowUserProjection> findFollowersOnly(
+            @Param("currentUserId") Long currentUserId,
+            @Param("keyword") String keyword,
+            @Param("radiusKm") Double radiusKm,
+            Pageable pageable
+    );
+
+    @Query(value = """
+            SELECT 
+                u.id AS id,
+                u.username AS username,
+                u.full_name AS fullName,
+                u.image_url AS imageUrl,
+                u.location AS location,
+                ROUND(ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000, 1) AS distanceKm  
+            FROM users u
+            JOIN users cu ON cu.id = :currentUserId
+            WHERE u.id <> :currentUserId
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM friend_ships f1
+                  WHERE f1.requester_id = :currentUserId
+                    AND f1.addressee_id = u.id
+                    AND f1.status = 'ACCEPTED'
+              )
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM friend_ships f2
+                  WHERE f2.requester_id = u.id
+                    AND f2.addressee_id = :currentUserId
+                    AND f2.status = 'ACCEPTED'
+              )
+              AND (
+                  :keyword IS NULL OR :keyword = ''
+                  OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  OR LOWER(u.phone_number) LIKE LOWER(CONCAT('%', :keyword, '%'))
+              )
+              AND (
+                  :radiusKm IS NULL
+                  OR ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000 <= :radiusKm
               )
             ORDER BY u.created_at DESC
             """,
@@ -261,14 +292,14 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                     WHERE u.id <> :currentUserId
                       AND NOT EXISTS (
                           SELECT 1
-                          FROM friendships f1
+                          FROM friend_ships f1
                           WHERE f1.requester_id = :currentUserId
                             AND f1.addressee_id = u.id
                             AND f1.status = 'ACCEPTED'
                       )
                       AND NOT EXISTS (
                           SELECT 1
-                          FROM friendships f2
+                          FROM friend_ships f2
                           WHERE f2.requester_id = u.id
                             AND f2.addressee_id = :currentUserId
                             AND f2.status = 'ACCEPTED'
@@ -277,11 +308,11 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                           :keyword IS NULL OR :keyword = ''
                           OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
                           OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                          OR LOWER(u.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                          OR LOWER(u.phone_number) LIKE LOWER(CONCAT('%', :keyword, '%'))
                       )
                       AND (
                           :radiusKm IS NULL
-                          OR ST_Distance_Sphere(u.location, cu.location) / 1000 <= :radiusKm
+                          OR ST_Distance_Sphere(u.location_detail, cu.location_detail) / 1000 <= :radiusKm
                       )
                     """,
             nativeQuery = true)
@@ -290,5 +321,17 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             @Param("keyword") String keyword,
             @Param("radiusKm") Double radiusKm,
             Pageable pageable
+    );
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+    UPDATE users
+    SET location_detail = ST_GeomFromText(:point)
+    WHERE id = :userId
+    """, nativeQuery = true)
+    void updateLocationDetail(
+            @Param("userId") Long userId,
+            @Param("point") String point
     );
 }

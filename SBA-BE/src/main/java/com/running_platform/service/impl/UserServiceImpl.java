@@ -26,6 +26,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -220,10 +224,13 @@ public class UserServiceImpl implements UserService {
 
         userEntity.setFullName(request.getFullName());
         userEntity.setPhoneNumber(request.getPhoneNumber());
-        userEntity.setAddress(request.getAddress());
+        userEntity.setLocation(request.getLocation());
         if (request.getLatitude() != null && request.getLongitude() != null) {
-            String point = String.format("POINT(%s %s)", request.getLongitude(), request.getLatitude());
-            userEntity.setLocation(point);
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+            Point point = geometryFactory.createPoint(
+                    new Coordinate(request.getLongitude(), request.getLatitude())
+            );
+            userEntity.setLocationDetail(point);
         }
         if (request.getImageUrl() != null) {
             userEntity.setImageUrl(request.getImageUrl());
