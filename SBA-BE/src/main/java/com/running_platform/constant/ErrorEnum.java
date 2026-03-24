@@ -33,8 +33,17 @@ public enum ErrorEnum {
     EMAIL_NOT_FOUND(4007, "If the email exists, a reset link has been sent"),
     ARTICLE_NOT_FOUND(4008, "Article not found"),
     CATEGORY_NOT_FOUND(4009, "Category not found"),
-    FAILED_OAUTH2_REDIRECT(1111, "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
-
+    FAILED_OAUTH2_REDIRECT(1111, "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication"),
+    INVALID_TIME_RANGE(4010, "startTime must be before endTime"),
+    CHALLENGE_ALREADY_EXISTS(4011, "Challenge with the same title already exists for admin"),
+    CHALLENGE_NOT_FOUND(4012, "Challenge not found"),
+    INVALID_REQUEST(4013, "Invalid request"),
+    RULE_ALREADY_EXISTS(4014, "Challenge rule already exists for this challenge"),
+    RULE_REQUIRED(4015, "At one rule is required for publishing a challenge"),
+    REWARD_ALREADY_EXISTS(4016, "Challenge reward already exists for this challenge"),
+    CHALLENGE_ROUTE_ALREADY_EXISTS(4017, "Challenge route already exists for this challenge"),
+    CHALLENGE_ROUTE_NOT_FOUND(4018, "Challenge route not found for this challenge"),
+    INVALID_CHECKPOINT_ORDER(4019, "Checkpoint order must be continuous starting from 1");
 
     public static final String INVALID_STATUS_MS = "Status is invalid";
     public static final String INVALID_MEMBERSHIP_MS = "Membership level is invalid";

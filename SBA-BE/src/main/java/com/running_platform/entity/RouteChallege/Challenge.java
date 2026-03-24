@@ -3,16 +3,15 @@ package com.running_platform.entity.RouteChallege;
 import com.running_platform.entity.AbstractEntity;
 import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.ChallengeStatus;
-import com.running_platform.enums.ChallengeType;
 import com.running_platform.enums.VisibilityEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
+// chứa thông tin cơ bản của thử thách
 @Entity
 @Getter
 @Setter
@@ -21,7 +20,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
-public class RouteChallenge extends AbstractEntity<Long> {
+public class Challenge extends AbstractEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id", nullable = false)
     Users creator;
@@ -33,7 +32,6 @@ public class RouteChallenge extends AbstractEntity<Long> {
     String description;
 
     Instant startTime;
-
     Instant endTime;
 
     @Enumerated(EnumType.STRING)
@@ -42,8 +40,4 @@ public class RouteChallenge extends AbstractEntity<Long> {
     @Enumerated(EnumType.STRING)
     ChallengeStatus status;
 
-    BigDecimal targetValue;
-
-    @Enumerated(EnumType.STRING)
-    ChallengeType challengeType;
 }

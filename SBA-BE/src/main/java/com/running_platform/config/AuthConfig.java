@@ -52,7 +52,8 @@ public class AuthConfig {
             "success",
             "/get-info/**",
             "/oauth2/**",
-            "/api/articles"
+            "/api/articles",
+            "/api/highlight-routes/**"
     };
 
     @Bean

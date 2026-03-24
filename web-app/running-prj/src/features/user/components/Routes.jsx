@@ -1,34 +1,125 @@
-import React from 'react';
-import { Container, Row, Col, Card, Badge } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Card, Badge } from 'react-bootstrap';
 import { MapPin } from 'lucide-react';
+import axiosClient from '@/shared/services/axiosClient';
 
-const routeData = [
-    { id: 1, name: "Công viên Yên Sở", location: "Hà Nội", dist: "5km - 15km", img: "https://sinhtour.vn/wp-content/uploads/2024/09/cong-vien-yen-so-1.jpg" },
-    { id: 2, name: "Tà Năng - Phan Dũng", location: "Lâm Đồng", dist: "30km", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b" }
-];
+const Routes = () => {
+    const [routes, setRoutes] = useState([]);
 
-const Routes = () => (
-    <section id="routes" className="py-5 bg-light">
-        <Container className="py-5">
-            <h2 className="fw-bold mb-5 border-start border-4 border-dark ps-3">TUYẾN ĐƯỜNG NỔI BẬT</h2>
-            <Row>
-                {routeData.map(item => (
-                    <Col md={6} key={item.id} className="mb-4">
-                        <Card className="border-0 shadow-sm overflow-hidden hover-up">
-                            <Card.Img src={item.img} className="object-cover h-300" />
-                            <Card.Body className="p-4">
-                                <div className="d-flex justify-content-between">
-                                    <Badge bg="dark" className="px-3 mb-2">{item.dist}</Badge>
-                                    <span className="text-muted"><MapPin size={16} /> {item.location}</span>
+    useEffect(() => {
+        const fetchRoutes = async () => {
+            try {
+                const user = JSON.parse(localStorage.getItem("userInfo"));
+
+                let res;
+
+                if (user?.location) {
+                    res = await axiosClient.get('/api/highlight-routes/by-location', {
+                        params: {
+                            location: user.location,
+                            limit: 6
+                        }
+                    });
+                } else {
+                    res = await axiosClient.get('/api/highlight-routes');
+                }
+
+                setRoutes(res.data.data || []);
+
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchRoutes();
+    }, []);
+
+    return (
+        <section className="py-5 bg-light">
+            <Container>
+                <h2 className="fw-bold mb-4 border-start border-4 border-dark ps-3">
+                    TUYẾN ĐƯỜNG NỔI BẬT
+                </h2>
+
+                <div className="route-scroll">
+                    {routes.map((item, index) => (
+                        <Card key={index} className="route-card">
+                            <div className="image-wrapper">
+                                <Card.Img
+                                    src={item.thumbnail}
+                                    className="route-image"
+                                />
+                            </div>
+
+                            <Card.Body>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <Badge bg="dark">{item.distanceLabel}</Badge>
+
+                                    <span className="text-muted small">
+                                        <MapPin size={14} /> {item.location}
+                                    </span>
                                 </div>
-                                <h4 className="fw-bold">{item.name}</h4>
+
+                                <h5 className="fw-bold mt-2">{item.title}</h5>
                             </Card.Body>
                         </Card>
-                    </Col>
-                ))}
-            </Row>
-        </Container>
-    </section>
-);
+                    ))}
+                </div>
+
+            </Container>
+
+            {/* CSS */}
+            <style>{`
+                .route-scroll {
+                    display: flex;
+                    overflow-x: auto;
+                    gap: 20px;
+                    padding-bottom: 10px;
+                }
+
+                .route-card {
+                    min-width: 400px;
+                    border: none;
+                    border-radius: 16px;
+                    overflow: hidden;
+                    flex: 0 0 auto;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                }
+
+                .route-card:hover {
+                    transform: translateY(-8px) scale(1.03);
+                    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+                }
+
+                .image-wrapper {
+                    overflow: hidden;
+                    height: 250px;
+                }
+
+                .route-image {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                    transition: transform 0.4s ease;
+                }
+
+                .route-card:hover .route-image {
+                    transform: scale(1.1);
+                }
+
+                .route-scroll::-webkit-scrollbar {
+                    height: 6px;
+                }
+
+                .route-scroll::-webkit-scrollbar-thumb {
+                    background: #ccc;
+                    border-radius: 10px;
+                }
+            `}</style>
+        </section>
+    );
+};
 
 export default Routes;

@@ -46,6 +46,12 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
             icon: <Trophy />,
             path: "/admin/route-challenges",
             active: location.pathname.includes("route-challenges")
+        },
+        {
+            label: "Highlight Routes",
+            icon: <Newspaper />,
+            path: "/admin/highlight-routes",
+            active: location.pathname.includes("highlight-routes")
         }
     ];
 
@@ -79,7 +85,7 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
                         {!collapsed && item.label}
                     </Nav.Link>
                 ))}
-                 <Nav.Link
+                <Nav.Link
                     active={location.pathname.includes("articles")}
                     onClick={() => navigate("/admin/articles")}
                     className="d-flex align-items-center gap-2"

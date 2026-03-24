@@ -6,6 +6,7 @@ import ArticlePage from "@/features/admin/article/pages/ArticlePage";
 import RouteChallengePage from "@/features/admin/route-challenges/pages/RouteChallengePage";
 import { Navigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
+import HighlightRoutePage from "@/features/admin/HighlightRoute/HighlightRoutePage";
 
 const adminRoutes = [
     {
@@ -20,7 +21,9 @@ const adminRoutes = [
             { path: "dashboard", element: <AdminDashboard /> },
             { path: "user", element: <UserPage /> },
             { path: "posts", element: <PostPage /> },
-            { path: "articles", element: <ArticlePage /> }, { path: "route-challenges", element: <RouteChallengePage /> },
+            { path: "articles", element: <ArticlePage /> },
+            { path: "route-challenges", element: <RouteChallengePage /> },
+            { path: "highlight-routes", element: <HighlightRoutePage /> }
         ]
     }
 ]

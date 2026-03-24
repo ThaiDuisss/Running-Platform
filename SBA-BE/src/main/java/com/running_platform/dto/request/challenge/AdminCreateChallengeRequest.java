@@ -1,13 +1,12 @@
-package com.running_platform.dto.request;
+package com.running_platform.dto.request.challenge;
 
-import com.running_platform.enums.ChallengeType;
 import com.running_platform.enums.VisibilityEnum;
+import com.running_platform.validation.annotation.ValidTimeRange;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
@@ -16,17 +15,13 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AdminCreateRouteChallengeRequest {
-    @NotBlank
+@ValidTimeRange // custom validation annotation to check if startTime is before endTime
+public class AdminCreateChallengeRequest {
+    @NotNull
     String title;
 
+    @NotBlank
     String description;
-
-    @NotNull
-    ChallengeType type;
-
-    @NotNull
-    BigDecimal targetValue;
 
     @NotNull
     Instant startTime;
@@ -37,6 +32,4 @@ public class AdminCreateRouteChallengeRequest {
     @NotNull
     VisibilityEnum visibility;
 
-    @NotNull
-    ChallengeType challengeType;
 }
