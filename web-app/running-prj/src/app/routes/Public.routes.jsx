@@ -57,23 +57,6 @@ const publicRoutes = [
         element: <AIGeneratePlan />
       },
       {
-        path: "/plans/custom-plan", element: <AnimatedLayout />, children: [
-          {
-            index: true,
-            element: <CustomPlan />
-          },
-          {
-            path: "/plans/custom-plan/schedule",
-            element: <SchedulePage />
-          },
-          {
-            path: "/plans/custom-plan/review",
-            element: <ReviewPlan />
-          },
-        ]
-      },
-
-      {
         path: "/blog/:id",
         element: <BlogDetail />
       },
