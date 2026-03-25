@@ -58,6 +58,7 @@
   transform: translateY(10px);
   transition: all 0.1s ease;
   margin-top: 17px;
+  z-index: 999;
 }
 
 .avatar-wrapper:hover .dropdown {

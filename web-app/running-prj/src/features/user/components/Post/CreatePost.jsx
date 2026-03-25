@@ -56,14 +56,14 @@ export default function CreatePost({ onSuccess }) {
         <>
             <div className="modern-card">
                 <div className="create-post-top">
-                    <img src={user?.avatar} alt="avatar" />
+                    <img src={user?.imageUrl} alt="avatar" />
                     <input
                         placeholder="Bạn đang nghĩ gì thế?"
                         readOnly
                         onClick={() => setShow(true)}
                     />
                 </div>
-                
+
                 {/* <div className="create-post-actions">
                     <div className="create-post-btn" onClick={() => setShow(true)}>
                         🔴 Video trực tiếp
@@ -135,7 +135,7 @@ export default function CreatePost({ onSuccess }) {
                     </div>
 
                 </div>
-            </Modal>    
+            </Modal>
             <style>
                 {`
                 .create-post-trigger {
