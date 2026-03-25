@@ -54,7 +54,8 @@ public class AuthConfig {
             "/oauth2/**",
             "plans/**",
             "/api/articles",
-            "/api/highlight-routes/**"
+            "/api/highlight-routes/**",
+            "/ws/**"
     };
 
     @Bean
