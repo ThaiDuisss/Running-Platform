@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { userCreatePosts } from "@/features/admin/users/services/UserService";
+import "@/features/user/components/Post/Feed.css";
+import { AuthDataContext } from "@/app/providers/AuthProvider";
+
 
 export default function CreatePost({ onSuccess }) {
     const [show, setShow] = useState(false);
     const [content, setContent] = useState("");
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const { user } = useContext(AuthDataContext);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -50,15 +54,27 @@ export default function CreatePost({ onSuccess }) {
 
     return (
         <>
-            {/* Fake input (trigger modal) */}
-            <div className="create-post-trigger">
-                <img src="https://i.pravatar.cc/40" alt="avatar" />
-
-                <input
-                    placeholder="Bạn đang nghĩ gì thế?"
-                    readOnly
-                    onClick={() => setShow(true)}
-                />
+            <div className="modern-card">
+                <div className="create-post-top">
+                    <img src={user?.avatar} alt="avatar" />
+                    <input
+                        placeholder="Bạn đang nghĩ gì thế?"
+                        readOnly
+                        onClick={() => setShow(true)}
+                    />
+                </div>
+                
+                {/* <div className="create-post-actions">
+                    <div className="create-post-btn" onClick={() => setShow(true)}>
+                        🔴 Video trực tiếp
+                    </div>
+                    <div className="create-post-btn" onClick={() => setShow(true)}>
+                        🖼️ Ảnh/Video
+                    </div>
+                    <div className="create-post-btn" onClick={() => setShow(true)}>
+                        😀 Cảm xúc
+                    </div>
+                </div> */}
             </div>
 
             {/* Modal */}
@@ -119,7 +135,7 @@ export default function CreatePost({ onSuccess }) {
                     </div>
 
                 </div>
-            </Modal>
+            </Modal>    
             <style>
                 {`
                 .create-post-trigger {

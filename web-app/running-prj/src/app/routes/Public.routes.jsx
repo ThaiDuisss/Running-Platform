@@ -30,6 +30,8 @@ const communityLoader = () => {
   return null;
 }
 import Unauthorized from '@/features/user/components/Unauthorized'
+import UserPage from '@/features/admin/users/pages/UserPage'
+import PostPage from '@/features/admin/posts/PostPage'
 
 const publicRoutes = [
   { path: "/login", element: <UserLogin /> },
