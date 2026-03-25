@@ -35,7 +35,6 @@ const publicRoutes = [
       { path: "/profile", element: <ProfilePage /> },
       { path: "/follow", element: <FriendPage /> },
       { path: "/friends", element: <FriendPage /> },
-      { path: "/chat", element: <Chat /> },
       {
         path: "/blog",
         element: <Blog />

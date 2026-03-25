@@ -27,7 +27,7 @@ public class Conversations extends AbstractEntity<Long> {
 
     boolean isGroup;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY)
     List<ConversationParticipants> conversationParticipants;
 
 }
