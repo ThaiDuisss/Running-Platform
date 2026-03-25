@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 
-const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
+const AIGeneratePlan = ({ show, onHide, onSubmit }) => {
     const [formData, setFormData] = useState({
         primaryGoal: "Build Endurance",
         experienceLevel: "Intermediate",
@@ -23,7 +23,7 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
     };
 
     return (
-        <Modal show={show} onHide={onHide} size="lg" centered backdrop="static"
+        <Modal show={true} onHide={onHide} size="lg" centered backdrop="static"
             contentClassName="bg-dark text-white"
         >
             <Modal.Header closeButton className="border-bottom border-secondary">
@@ -38,9 +38,9 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
                         </Form.Label>
                         <Form.Select
                             value={formData.primaryGoal}
-                            onChange={(e) => setFormData(prev => ({ 
-                                ...prev, 
-                                primaryGoal: e.target.value 
+                            onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                primaryGoal: e.target.value
                             }))}
                             style={{
                                 backgroundColor: "#2a2a45",
@@ -62,9 +62,9 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
                         </Form.Label>
                         <Form.Select
                             value={formData.experienceLevel}
-                            onChange={(e) => setFormData(prev => ({ 
-                                ...prev, 
-                                experienceLevel: e.target.value 
+                            onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                experienceLevel: e.target.value
                             }))}
                             style={{
                                 backgroundColor: "#2a2a45",
@@ -89,9 +89,9 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
                             min="1"
                             max="7"
                             value={formData.frequency}
-                            onChange={(e) => setFormData(prev => ({ 
-                                ...prev, 
-                                frequency: parseInt(e.target.value) 
+                            onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                frequency: parseInt(e.target.value)
                             }))}
                             style={{
                                 backgroundColor: "#2a2a45",
@@ -109,9 +109,9 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
                         </Form.Label>
                         <Form.Select
                             value={formData.timePreference}
-                            onChange={(e) => setFormData(prev => ({ 
-                                ...prev, 
-                                timePreference: e.target.value 
+                            onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                timePreference: e.target.value
                             }))}
                             style={{
                                 backgroundColor: "#2a2a45",
@@ -132,8 +132,8 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
                             <Form.Label className="fw-bold" style={{ color: "#8b5cf6", marginBottom: 0 }}>
                                 Max Distance (km)
                             </Form.Label>
-                            <span style={{ 
-                                backgroundColor: "#667eea", 
+                            <span style={{
+                                backgroundColor: "#667eea",
                                 color: "#fff",
                                 padding: "4px 12px",
                                 borderRadius: "20px",
@@ -147,9 +147,9 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
                             min="1"
                             max="42"
                             value={formData.maxDistance}
-                            onChange={(e) => setFormData(prev => ({ 
-                                ...prev, 
-                                maxDistance: parseInt(e.target.value) 
+                            onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                maxDistance: parseInt(e.target.value)
                             }))}
                             className="form-range"
                             style={{
@@ -165,9 +165,9 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
                         </Form.Label>
                         <Form.Select
                             value={formData.injuriesLimitations}
-                            onChange={(e) => setFormData(prev => ({ 
-                                ...prev, 
-                                injuriesLimitations: e.target.value 
+                            onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                injuriesLimitations: e.target.value
                             }))}
                             style={{
                                 backgroundColor: "#2a2a45",
@@ -190,9 +190,9 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
                         <Form.Control
                             type="date"
                             value={formData.startDate}
-                            onChange={(e) => setFormData(prev => ({ 
-                                ...prev, 
-                                startDate: e.target.value 
+                            onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                startDate: e.target.value
                             }))}
                             style={{
                                 backgroundColor: "#2a2a45",
@@ -222,4 +222,4 @@ const AIGeneratePlanModal = ({ show, onHide, onSubmit }) => {
     );
 };
 
-export default AIGeneratePlanModal;
+export default AIGeneratePlan;

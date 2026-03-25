@@ -1,0 +1,21 @@
+.custom-form {
+    display: flex;
+    justify-items: center;
+    flex-direction: column;
+    padding: 200px;
+    padding-top: 50px;
+
+    gap: 10px;
+}
+
+.custom-form-header {
+    text-align: center;
+}
+.custom-form-header h1{
+    color: black;
+    font-weight: 600;
+}   
+.custom-form-header p{
+    color: rgb(110, 100, 100);
+    font-size: 18px;
+}

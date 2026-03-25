@@ -1,9 +1,17 @@
 // src/features/user/components/Chat/hooks/useWebSocket.js
-import { useEffect, useRef, useCallback, useState } from 'react';
+import {
+    useEffect,
+    useRef,
+    useCallback,
+    useState
+} from 'react';
 import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
+import {
+    Client
+} from '@stomp/stompjs';
 
-const WS_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const WS_URL =
+    import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 export function useWebSocket() {
     const clientRef = useRef(null);
@@ -17,14 +25,20 @@ export function useWebSocket() {
 
         const client = new Client({
             webSocketFactory: () => new SockJS(`${WS_URL}/ws`),
-            connectHeaders: { Authorization: `Bearer ${token}` },
+            connectHeaders: {
+                Authorization: `Bearer ${token}`
+            },
             reconnectDelay: 4000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
             onConnect: () => {
                 setConnected(true);
                 // Flush pending subscriptions
-                pendingSubsRef.current.forEach(({ destination, callback, resolve }) => {
+                pendingSubsRef.current.forEach(({
+                    destination,
+                    callback,
+                    resolve
+                }) => {
                     const sub = client.subscribe(destination, (msg) => callback(JSON.parse(msg.body)));
                     resolve(sub);
                 });
@@ -45,20 +59,24 @@ export function useWebSocket() {
 
     const subscribe = useCallback((destination, callback) => {
         return new Promise((resolve) => {
-            if (clientRef.current?.connected) {
+            if (clientRef.current.connected) {
                 const sub = clientRef.current.subscribe(destination, (msg) =>
                     callback(JSON.parse(msg.body))
                 );
                 resolve(sub);
             } else {
                 // Queue for when connection is ready
-                pendingSubsRef.current.push({ destination, callback, resolve });
+                pendingSubsRef.current.push({
+                    destination,
+                    callback,
+                    resolve
+                });
             }
         });
     }, []);
 
     const publish = useCallback((destination, body) => {
-        if (!clientRef.current?.connected) {
+        if (!clientRef.current.connected) {
             console.warn('[WS] Not connected, cannot publish');
             return;
         }
@@ -68,5 +86,9 @@ export function useWebSocket() {
         });
     }, []);
 
-    return { connected, subscribe, publish };
+    return {
+        connected,
+        subscribe,
+        publish
+    };
 }

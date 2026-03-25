@@ -1,0 +1,289 @@
+.custom-form {
+    display: flex;
+    justify-items: center;
+    flex-direction: column;
+    padding: 100px;
+    padding-top: 50px;
+    gap: 20px;
+}
+.form-custom-body {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.custom-form-header {
+    text-align: center;
+}
+.custom-form-header h1{
+    color: black;
+    font-weight: 600;
+}   
+.custom-form-header p{
+    color: rgb(110, 100, 100);
+    font-size: 18px;
+}
+
+.custom-form-title {
+    border-radius: 10px;
+  border: 1px solid #f1f5f9;
+    width: auto;
+    height: 150px;
+    padding: 10px;
+    box-shadow: 0px 2px 2px rgba(91, 64, 64, 0.2);
+}
+.custom-form-title label {
+    font-size: 20px;
+    color: rgb(88, 81, 81);
+}
+
+/* Goalcss */
+.section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1e293b;
+}
+
+.title-bar {
+  width: 6px;
+  height: 24px;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, #5084df, #182eaf);
+}
+
+.goal-card {
+  border-radius: 16px;
+  border: 2px solid #f1f5f9;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.goal-card:hover {
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.goal-card.selected {
+  border-color: #215bd0;
+  background: rgba(249, 115, 22, 0.05);
+}
+
+.icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.icon-box.selected {
+  background: #4c75e8;
+  color: white;
+}
+
+.text-orange {
+  color: #13359b;
+}
+
+.check-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #7e67e7;
+}
+
+/* training setup */
+.training-section {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 24px;
+}
+
+.form-group-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label-custom {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* SELECT */
+.select-custom {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.select-custom:focus {
+  border-color: #3c79e2;
+  box-shadow: 0 0 0 2px rgba(249,115,22,0.2);
+}
+
+/* DAY BUTTON */
+.day-btn {
+  flex: 1;
+  border-radius: 12px !important;
+  font-weight: bold;
+  border: none;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.day-btn.active {
+  background: #3e83e4 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(249,115,22,0.3);
+}
+
+/* WEEKDAY BUTTON */
+.weekday-btn {
+  border-radius: 999px !important;
+  border: 2px solid #f1f5f9 !important;
+  background: white !important;
+  color: #040b14 !important;
+}
+
+.weekday-btn:hover {
+  border-color: #cbd5f5 !important;
+}
+
+.weekday-btn.active {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
+  color: white !important;
+}
+
+/* TIP */
+.tip-text {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 8px;
+}
+
+/* level */
+
+.experience-section {
+  margin-top: 24px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 24px;
+}
+
+/* Ẩn radio default */
+.level-radio input {
+  display: none;
+}
+
+/* Card UI */
+.level-radio label {
+  display: block;
+  padding: 16px;
+  border-radius: 16px;
+  border: 2px solid #f1f5f9;
+  background: white;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* Hover */
+.level-radio label:hover {
+  border-color: #e2e8f0;
+}
+
+/* Selected */
+.level-radio input:checked + label {
+  border-color: #1a8adf;
+  background: rgba(249, 115, 22, 0.05);
+}
+
+/* Title */
+.level-title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #1e293b;
+}
+
+.level-title.active {
+  color: #3346d9;
+}
+
+/* Description */
+.level-desc {
+  font-size: 10px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+
+/* Button next step */
+
+.next-step-section {
+  padding-top: 24px;
+  padding-bottom: 80px;
+}
+
+/* BUTTON */
+.next-btn {
+  width: 100%;
+  padding: 20px;
+  border-radius: 16px !important;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none !important;
+  transition: all 0.2s ease;
+}
+
+/* ACTIVE */
+.next-btn.active {
+  background: linear-gradient(to right, #6d6fe4, #0d44b1);
+  color: white;
+  box-shadow: 0 10px 30px rgba(32, 98, 231, 0.25);
+}
+
+.next-btn.active:hover {
+  box-shadow: 0 12px 35px rgba(79, 106, 240, 0.4);
+}
+
+/* DISABLED */
+.next-btn.disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* TEXT */
+.next-tip {
+  text-align: center;
+  font-size: 14px;
+  color: #94a3b8;
+  margin-top: 16px;
+}
