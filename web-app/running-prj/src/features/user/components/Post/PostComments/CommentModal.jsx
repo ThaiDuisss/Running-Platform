@@ -30,7 +30,7 @@ export default function CommentModal({ show, onClose, post }) {
     const [countReply, setCountReply] = useState(0);
     const hideTimeout = useRef(null);
     const [countCommentReacts, setCountCommentReacts] = useState(0);
-    
+
     const commentInputRef = useRef(null);
 
     const fetchComments = async () => {
@@ -67,7 +67,7 @@ export default function CommentModal({ show, onClose, post }) {
             fetchComments();
             fetchCountReply();
             fetchCountCommentReacts();
-            
+
             const userKey = user?.id || user?.userId || user?.username || "guest";
             const localStorageKey = `post-reaction-${post.id}-${userKey}`;
             const storedReaction = localStorage.getItem(localStorageKey);
@@ -85,7 +85,7 @@ export default function CommentModal({ show, onClose, post }) {
                 parentCommentId: null
             });
             setContent("");
-            await fetchComments(); 
+            await fetchComments();
             await fetchCountCommentReacts();
         } catch (err) {
             console.error(err);
@@ -99,7 +99,7 @@ export default function CommentModal({ show, onClose, post }) {
             const res = await reactPost(postId, reactionType);
             const data = res.data.data;
             const serverReaction = data?.reaction || data?.reactionType || null;
-            
+
             const userKey = user?.id || user?.userId || user?.username || "guest";
             const localStorageKey = `post-reaction-${postId}-${userKey}`;
 
@@ -110,7 +110,7 @@ export default function CommentModal({ show, onClose, post }) {
                 } else {
                     localStorage.removeItem(localStorageKey);
                 }
-            } catch (e) {}
+            } catch (e) { }
 
             await fetchCountReply();
             setShowOptions(false);
@@ -132,7 +132,7 @@ export default function CommentModal({ show, onClose, post }) {
 
     return (
         <Modal show={show} onHide={onClose} centered size="lg" scrollable>
-            
+
             {/* HEADER */}
             <div className="modal-header">
                 <h5 className="modal-title" style={{ width: "100%", textAlign: "center", fontWeight: 700, fontSize: 18 }}>
@@ -143,12 +143,12 @@ export default function CommentModal({ show, onClose, post }) {
 
             {/* BODY */}
             <div className="modal-body comment-modal-body">
-                
+
                 {/* ---BÀI VIẾT --- */}
                 {post && (
                     <div style={{ paddingBottom: 16, marginBottom: 16, borderBottom: "1px solid var(--border-color, #e4e6eb)" }}>
                         <div className="post-header" style={{ marginBottom: 12 }}>
-                            <img src={user?.avatar} alt="avatar" />
+                            <img src={user?.imageUrl} alt="avatar" />
                             <div>
                                 <div className="post-author">{post?.username || 'Người dùng ẩn danh'}</div>
                                 {/* <div className="post-time" style={{ fontSize: 13, color: "var(--text-secondary)" }}>
@@ -164,9 +164,9 @@ export default function CommentModal({ show, onClose, post }) {
                         )}
 
                         {post?.images && post.images.length > 0 && (
-                            <div 
-                                className="post-images" 
-                                style={{ 
+                            <div
+                                className="post-images"
+                                style={{
                                     display: "grid", gap: 4, gridTemplateColumns: post.images.length === 1 ? "1fr" : "1fr 1fr",
                                     margin: "0 0 16px 0", borderRadius: 8, overflow: "hidden"
                                 }}
@@ -188,7 +188,7 @@ export default function CommentModal({ show, onClose, post }) {
                         </div>
 
                         <div className="post-actions" style={{ marginTop: "4px" }}>
-                            
+
                             {/*Thích */}
                             <div
                                 className="action-btn"
@@ -196,8 +196,8 @@ export default function CommentModal({ show, onClose, post }) {
                                 onMouseLeave={handleMouseLeave}
                                 style={{ position: 'relative' }}
                             >
-                                <div 
-                                    style={{ 
+                                <div
+                                    style={{
                                         display: 'flex', alignItems: 'center', gap: '6px',
                                         color: currentReactionConfig ? currentReactionConfig.color : 'inherit',
                                         fontWeight: currentReactionConfig ? 'bold' : 'normal'
@@ -214,8 +214,8 @@ export default function CommentModal({ show, onClose, post }) {
                                 {showOptions && (
                                     <div className="reaction-picker" style={{ bottom: '100%', left: '0', marginBottom: '10px' }}>
                                         {REACTION_TYPES.map(r => (
-                                            <span 
-                                                key={r.type} 
+                                            <span
+                                                key={r.type}
                                                 className="reaction-icon"
                                                 title={r.label}
                                                 onClick={(e) => {
@@ -231,8 +231,8 @@ export default function CommentModal({ show, onClose, post }) {
                             </div>
 
                             {/* Nút Bình luận - Click vào sẽ focus xuống ô input */}
-                            <div 
-                                className="action-btn" 
+                            <div
+                                className="action-btn"
                                 onClick={() => {
                                     if (commentInputRef.current) {
                                         commentInputRef.current.focus();
@@ -276,7 +276,7 @@ export default function CommentModal({ show, onClose, post }) {
                         ref={commentInputRef} // Gắn ref vào đây để auto-focus
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && !loading && handleSubmit()} 
+                        onKeyDown={(e) => e.key === 'Enter' && !loading && handleSubmit()}
                         placeholder="Viết bình luận..."
                     />
                     <button onClick={handleSubmit} disabled={loading || !content.trim()}>
