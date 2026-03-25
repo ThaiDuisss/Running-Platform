@@ -22,6 +22,10 @@ const AuthProvider = ({ children }) => {
 
     }, []);
 
+    useEffect(() => {
+        document.body.classList.remove('theme-light', 'theme-dark');
+        document.body.classList.add(theme === 'Dark' ? 'theme-dark' : 'theme-light');
+    }, [theme]);
 
     const checkAuth = async () => {
         try {

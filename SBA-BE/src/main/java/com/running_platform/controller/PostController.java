@@ -3,6 +3,7 @@ package com.running_platform.controller;
 import com.running_platform.constant.ErrorEnum;
 import com.running_platform.dto.request.CreatePostRequest;
 import com.running_platform.dto.response.ApiResponse;
+import com.running_platform.dto.response.FeedResponse;
 import com.running_platform.dto.response.PostResponse;
 import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.repository.UserRepository;
@@ -57,9 +58,17 @@ public class PostController {
     }
 
     @GetMapping("/feed")
-    public ApiResponse<List<PostResponse>> getFeed(){
-        List<PostResponse> data = postService.findAllApprovePost();
-        return ApiResponse.<List<PostResponse>>builder()
+    public ApiResponse<FeedResponse> getFeed(
+            Authentication authentication,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size
+    ){
+        String username = authentication.getName();
+        Users user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        int pageIndex = page > 0 ? page - 1 : 0;
+        FeedResponse data = postService.findAllApprovePost( user.getId(),pageIndex, size);
+
+        return ApiResponse.<FeedResponse>builder()
                 .status("SUCCESS")
                 .code(ErrorEnum.SUCCESS.getCode())
                 .data(data)
