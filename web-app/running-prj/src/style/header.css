@@ -1,0 +1,105 @@
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+/* icon tròn */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(98, 11, 11);
+  cursor: pointer;
+  position: relative;
+}
+
+.icon-bell {
+  color: rgb(9, 80, 186);
+  text-shadow:
+    1px 0 orange,
+    -1px 0 orange,
+    0 1px orange,
+    0 -1px orange;
+}
+
+/* badge */
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  border-radius: 50%;
+  padding: 2px 5px;
+}
+
+/* avatar */
+.avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  width: 150px;
+  border: 1px solid rgb(233, 219, 219);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.1s ease;
+  margin-top: 17px;
+}
+
+.avatar-wrapper:hover .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  display: flex;
+  flex-direction: column;
+  gap: 20px
+}
+
+.sub-dropdown {
+    padding:5px;
+    border-bottom: 1px solid rgb(233, 219, 219);
+}
+.avatar-shield {
+  width: 50px;
+  height: 50px;
+
+  padding: 3px;
+  background: linear-gradient(135deg, #6881e1, #140458);
+
+  clip-path: polygon(
+  50% 0%,
+  95% 25%,
+  85% 80%,
+  50% 100%,
+  15% 80%,
+  5% 25%
+);
+}
+
+.avatar-shield img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  clip-path: inherit;
+}
+
+.sub-avatar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px
+}

@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, } from 'react'
-import { authService } from '../services/authService';
+import { authService } from '../services/AuthService';
 
 import { getUserInfo } from '@/features/admin/users/services/UserService';
 export const AuthDataContext = createContext();
@@ -14,11 +14,7 @@ const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem("userInfo");
         const storedTheme = localStorage.getItem("theme");
         const storedLang = localStorage.getItem("language");
-        console.log("AuthProvider - Stored User:", storedUser);
-        console.log("AuthProvider - Stored Theme:", storedTheme);
-        console.log("AuthProvider - Stored Language:", storedLang);
 
-        console.log("AuthProvider - Stored User:", JSON.parse(storedUser));
 
         if (storedUser) setUser(JSON.parse(storedUser));
         if (storedTheme) setTheme(storedTheme);
@@ -31,14 +27,12 @@ const AuthProvider = ({ children }) => {
         try {
             const res = await getUserInfo();
             localStorage.setItem("userInfo", JSON.stringify(res.data));
-            console.log("Authentication check successful:", res);
             const newUser = res.data.data;
             localStorage.setItem("userInfo", JSON.stringify(newUser));
 
             setUser(newUser);
         } catch (error) {
             setUser(null);
-            console.error("Authentication check failed:", error);
             throw error;
         }
     }
@@ -47,7 +41,6 @@ const AuthProvider = ({ children }) => {
     const login = async (payload) => {
         try {
             const data = await authService.login(payload);
-            console.log("Login successful:", data);
             const access_token = data.data;
 
 

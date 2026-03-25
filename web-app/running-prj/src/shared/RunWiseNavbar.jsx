@@ -1,8 +1,12 @@
 import { AuthActionContext, AuthDataContext } from '@/app/providers/AuthProvider';
 import React, { useState, useEffect, useContext } from 'react';
 import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
+import { FaBell, FaFacebookMessenger, FaTh, FaUserCircle } from 'react-icons/fa';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { FiBell } from "react-icons/fi";
 
+import "@/style/header.css";
+import { FaChevronDown } from 'react-icons/fa6';
 const RunWiseNavbar = () => {
     const { user, theme } = useContext(AuthDataContext);
     const navigator = useNavigate();
@@ -65,12 +69,32 @@ const RunWiseNavbar = () => {
                             <NavLink className="btn btn-outline-primary me-2" to="/login">Đăng nhập</NavLink>
                             <NavLink className="btn btn-outline-primary" to="/register">Đăng ký</NavLink>
                         </div>) :
-                        (<Nav variant="pills" activeKey="1" onSelect={(selectedKey) => console.log(`selected ${selectedKey}`)}>
-                            <NavDropdown title={user?.username || "Profile"} id="nav-dropdown">
-                                <NavDropdown.Item eventKey="4.1" onClick={logout}>Log Out</NavDropdown.Item>
-                                <NavDropdown.Item eventKey="4.2" onClick={() => navigator("/profile")}>Profile</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>)
+                        <div className="header-right">
+
+                            <div className="icon-btn notification">
+                                <FiBell size={25} className="icon-bell" />
+                                <span className="badge">3</span>
+                            </div>
+                            <div className="avatar-wrapper">
+                                <div className="sub-avatar-wrapper">
+                                    <div className="avatar-shield" onClick={() => setOpen(!open)}>
+                                        <img src={user.imageUrl} />
+                                    </div>
+                                    <FaChevronDown color='rgba(65, 19, 125, 0.33)' />
+                                </div>
+
+
+
+                                <div className="dropdown">
+                                    <div className='sub-dropdown'>
+                                        <div onClick={() => navigator("/profile")}>Profile</div>
+                                    </div>
+                                    <div className='sub-dropdown' >
+                                        <div onClick={logout}>Logout</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                 </div>
 

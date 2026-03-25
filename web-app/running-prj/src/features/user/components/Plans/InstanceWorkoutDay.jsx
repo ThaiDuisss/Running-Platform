@@ -10,18 +10,18 @@ const InstanceWorkoutDay = (props) => {
     };
 
     return (
-                    <div style={{
-                minWidth: "280px",
-                backgroundColor: "#1a1a2e",
-                borderRadius: "12px",
-                padding: "16px",
-                border: "1px solid #2a2a45",
-                color: "#fff"
-            }}>
+        <div style={{
+            minWidth: "280px",
+            backgroundColor: "#1a1a2e",
+            borderRadius: "12px",
+            padding: "16px",
+            border: "1px solid #2a2a45",
+            color: "#fff"
+        }}>
             <div style={{ marginBottom: "8px" }}>
-                <h6 style={{ 
-                    margin: "0 0 4px 0", 
-                    fontSize: "14px", 
+                <h6 style={{
+                    margin: "0 0 4px 0",
+                    fontSize: "14px",
                     fontWeight: "600",
                     color: "#fff"
                 }}>
@@ -69,7 +69,7 @@ const InstanceWorkoutDay = (props) => {
                 paddingTop: "8px",
                 marginTop: "8px"
             }}>
-                <button 
+                <button
                     onClick={onEdit}
                     style={{
                         background: "transparent",
@@ -86,7 +86,7 @@ const InstanceWorkoutDay = (props) => {
                 >
                     <FaEdit size={10} /> Edit
                 </button>
-                <button 
+                <button
                     onClick={onDelete}
                     style={{
                         background: "transparent",

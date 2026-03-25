@@ -16,6 +16,11 @@ import Oauth2Redirect from '../guards/Oauth2Redirect'
 import { oauthRedirectLoader } from './LoadFile/oauthRedirectLoader'
 import Chat from '@/features/user/components/Chat/components/Chat'
 import FriendPage from '@/features/user/components/Friends/FriendPage'
+import AIGeneratePlan from '@/features/user/components/Plans/AIGeneratePlan'
+import CustomPlan from '@/features/user/components/Plans/CustomPlan'
+import SchedulePage from '@/features/user/components/Plans/SchedulePage'
+import AnimatedLayout from '../layouts/AnimatedLayout'
+import ReviewPlan from '@/features/user/components/Plans/ReviewPlan'
 
 // ✅ loader đúng
 const communityLoader = () => {
@@ -54,6 +59,27 @@ const publicRoutes = [
         path: "/plans",
         element: <PlanPage />
       },
+      {
+        path: "/plans/ai-generate",
+        element: <AIGeneratePlan />
+      },
+      {
+        path: "/plans/custom-plan", element: <AnimatedLayout />, children: [
+          {
+            index: true,
+            element: <CustomPlan />
+          },
+          {
+            path: "/plans/custom-plan/schedule",
+            element: <SchedulePage />
+          },
+          {
+            path: "/plans/custom-plan/review",
+            element: <ReviewPlan />
+          },
+        ]
+      },
+
       {
         path: "/profile",
         element: <ProfilePage />

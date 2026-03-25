@@ -51,3 +51,12 @@ transition: background-color 0.3s ease, color 0.3s ease;
 .transition-all {
   transition: all 0.3s ease;
 }
+
+.hover-shadow {
+    transition: all 0.2s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
