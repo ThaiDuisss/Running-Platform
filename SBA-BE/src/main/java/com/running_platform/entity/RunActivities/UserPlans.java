@@ -2,6 +2,7 @@ package com.running_platform.entity.RunActivities;
 
 import com.running_platform.entity.AbstractEntity;
 import com.running_platform.entity.UserAuth.Users;
+import com.running_platform.enums.DayOfWeekEnum;
 import com.running_platform.enums.VisibilityEnum;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -9,7 +10,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,10 +25,6 @@ import java.time.LocalDate;
 public class UserPlans extends AbstractEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    Users user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_template_id", nullable = true)
     @Nullable
     PlanTemplates planTemplate;
@@ -33,13 +32,16 @@ public class UserPlans extends AbstractEntity<Long> {
     @Column(length = 500)
     String title;
 
-    @Lob
-    String description;
+
+//    @Enumerated(EnumType.STRING)
+//    DayOfWeekEnum dayOfWeek;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
 
-    @Enumerated(EnumType.STRING)
-    VisibilityEnum visibility;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_plan_workout_id", nullable = true)
+    List<UserPlanWorkout> userPlanWorkout;
 }

@@ -6,17 +6,20 @@ import com.running_platform.exception.AppException;
 import com.running_platform.repository.UserRepository;
 import com.running_platform.security.AppSecurityUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component("auditorAwareUserImpl")
 @RequiredArgsConstructor
+@Slf4j(topic = "audiAWARE")
 public class AuditorAwareUserImpl implements AuditorAware<Users> {
     private final UserRepository userRepository;
 
     @Override
     public Optional<Users> getCurrentAuditor() {
+    log.info("vaof ra thay");
         Optional<Long> optionalUserId = Optional.ofNullable(AppSecurityUtils.getCurrentUserPrinciple())
                 .map(customUserDetails -> customUserDetails.getUserEntity())
                 .map(userEntity -> userEntity.getId());

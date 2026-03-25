@@ -1,6 +1,7 @@
 package com.running_platform.security;
 
 import com.running_platform.entity.UserAuth.Roles;
+import com.running_platform.repository.UserRepository;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +15,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public class AppSecurityUtils {
-
     public static String ROLE_DEFAULT = "ROLE_DEFAULT";
     /**
      * Converts list of roles into Collection of GrantedAuthority

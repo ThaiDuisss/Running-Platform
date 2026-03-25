@@ -1,6 +1,7 @@
 package com.running_platform.service.impl.activityAndPlan;
 import com.running_platform.constant.ErrorEnum;
 import com.running_platform.entity.RunActivities.RunActivity;
+import com.running_platform.entity.RunActivities.UserPlanWorkout;
 import com.running_platform.exception.AppException;
 import com.running_platform.repository.ActivityRepository;
 import com.running_platform.security.AppSecurityUtils;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +45,8 @@ public class ActivityServiceImpl implements IActivityService {
     public Page<RunActivity> getByUser(Long userId, Pageable pageable) {
         return activityRepository.findByUser_Id(userId, pageable);
     }
+
+
 
 
     @Override
