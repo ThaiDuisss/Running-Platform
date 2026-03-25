@@ -143,12 +143,11 @@ export function ChatProvider({ children }) {
     const createGroup = useCallback(async (title, memberIds) => {
         const res = await chatService.createGroup(title, memberIds);
         const conv = res.data;
-        setConversations(prev => [conv, ...prev]);
         setActiveConvId(conv.id);
         return conv;
     }, []);
 
- 
+
     const addMember = useCallback(async (convId, userId) => {
         await chatService.addMember(convId, userId);
         // Refresh conversation to get updated participants list
@@ -156,7 +155,7 @@ export function ChatProvider({ children }) {
         setConversations(res.data);
     }, []);
 
-    
+
     const leaveGroup = useCallback(async (convId) => {
         await chatService.leaveGroup(convId);
         setConversations(prev => prev.filter(c => c.id !== convId));
