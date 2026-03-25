@@ -15,7 +15,7 @@ const FollowUserCard = ({ user, onToggleFollow, onMessage, isPending }) => {
 
     return (
         <Card className={`follow-card border-0 ${user.isFollowing ? "follow-card--active" : ""}`}>
-            <img src={user.avatarUrl} alt={user.fullName} className="follow-card__avatar" />
+            <img src={user.avatarUrl || "/default-avatar.png"} alt={user.fullName} className="follow-card__avatar" />
             <div className="follow-card__content">
                 <div className="follow-card__topline">
                     <div>

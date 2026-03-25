@@ -100,13 +100,10 @@ public class FriendServiceImpl implements FriendService {
 
         Page<FriendResponse> responsePage = new PageImpl<>(content, pageable, usersPage.getTotalElements());
 
-        long followingCount = friendRepository.countOnlyFollowing(currentUserId);
-        long followersCount = friendRepository.countOnlyFollower(currentUserId);
-        long friendCount = friendRepository.countFriends(currentUserId);
-        long discoverCount = Math.max(
-                userRepository.count() - 1 - followingCount - followersCount - friendCount,
-                0
-        );
+        long followingCount = friendRepository.countOnlyFollowing(currentUserId, keyword, radiusKm);
+        long followersCount = friendRepository.countOnlyFollower(currentUserId, keyword, radiusKm);
+        long friendCount = friendRepository.countFriends(currentUserId,keyword, radiusKm);
+        long discoverCount = friendRepository.countDiscover(currentUserId,keyword, radiusKm);
 
         return FollowNetworkResponse.builder()
                 .page(PageResponse.from(responsePage))
