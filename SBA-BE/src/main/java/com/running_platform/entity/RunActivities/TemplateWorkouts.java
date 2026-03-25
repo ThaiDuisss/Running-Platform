@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,14 +23,21 @@ import java.math.BigDecimal;
 ))
 public class TemplateWorkouts extends AbstractEntity<Long> {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_template_id", nullable = false)
-    PlanTemplates planTemplate;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "template_workout_plan",
+            joinColumns = @JoinColumn(name = "template_workout_id"),
+            inverseJoinColumns = @JoinColumn(name = "plan_template_id")
+    )
+    List<PlanTemplates> planTemplate;
 
-    Integer weekNumber;
+//    @Enumerated(EnumType.STRING)
+//    DayOfWeekEnum dayOfWeek;
 
-    @Enumerated(EnumType.STRING)
-    DayOfWeekEnum dayOfWeek;
 
     BigDecimal targetDistance;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_plan_workout_id", nullable = true)
+    List<UserPlanWorkout> userPlanWorkout;
 }

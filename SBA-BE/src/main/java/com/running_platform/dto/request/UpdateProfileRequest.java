@@ -12,7 +12,7 @@ public class UpdateProfileRequest {
     String fullName;
     String phoneNumber;
     String location;
-    String latitude;
-    String longitude;
+    Double latitude;
+    Double longitude;
     String imageUrl;
 }

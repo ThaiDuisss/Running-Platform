@@ -26,6 +26,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +65,10 @@ public class UserServiceImpl implements UserService {
         Set<Roles> roles = new HashSet<>();
         Roles roleUser = roleRepository.findByRoleName(RoleEnum.USER);
         roles.add(roleUser);
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+        Point point = geometryFactory.createPoint(
+                new Coordinate(0, 0)
+        );
         Users user = Users.builder()
                 .username(userRegister.getUsername())
                 .password(passwordEncoder.encode(userRegister.getPassword()))
@@ -71,6 +79,7 @@ public class UserServiceImpl implements UserService {
                 .fullName(userRegister.getFullName())
                 .emailVerified(userRegister.isEmailVerified())
                 .phoneNumber(userRegister.getPhoneNumber())
+                .locationDetail(point)
                 .build();
 
         user = repository.save(user);
@@ -221,9 +230,13 @@ public class UserServiceImpl implements UserService {
         userEntity.setFullName(request.getFullName());
         userEntity.setPhoneNumber(request.getPhoneNumber());
         userEntity.setLocation(request.getLocation());
-        userEntity.setLatitude(request.getLatitude());
-        userEntity.setLongitude(request.getLongitude());
-
+        if (request.getLatitude() != null && request.getLongitude() != null) {
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+            Point point = geometryFactory.createPoint(
+                    new Coordinate(request.getLongitude(), request.getLatitude())
+            );
+            userEntity.setLocationDetail(point);
+        }
         if (request.getImageUrl() != null) {
             userEntity.setImageUrl(request.getImageUrl());
         }

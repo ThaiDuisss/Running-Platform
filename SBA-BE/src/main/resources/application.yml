@@ -36,12 +36,12 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-#  data:
-#    redis:
-#      host: localhost
-#      port: 6379
-#      #        password: Thai@11052004
-#      timeout: 60000
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      #        password: Thai@11052004
+      timeout: 60000
 #  kafka:
 #    bootstrap-servers: localhost:9092
 #    producer:
@@ -70,7 +70,7 @@ myapp:
     secretAccessKey: bXlTdXBlclNlY3JldEtleUZvckpXVEF1dGhlbnRpY2F0aW9uMTIzNDU2
     secretRefreshKey: RpHz5z6LHjsAjGfX1txgCO9D/PmNlZJMRRKbM925joU=
     mailSecret: RpHz5z6LHjsAjGfX1txgCO9D/1105ZJMRRKbM925joU=
-    expirationAccessMillis: 3600000
+    expirationAccessMillis: 360000000
     expirationRefreshMillis: 3600000
     shortLivedMillis: 120000
     mailExpiration: 300000

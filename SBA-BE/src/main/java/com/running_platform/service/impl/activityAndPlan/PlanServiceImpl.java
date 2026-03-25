@@ -15,6 +15,7 @@ import com.running_platform.service.PlanService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.AccessLevel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +25,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j(topic = "PLANSERVICE")
 public class PlanServiceImpl implements PlanService {
 
     PlanRepository planRepository;
     PlanMapper planMapper;
-    UserRepository userRepository;
 
     @Override
     public ApiResponse<PlanResponse> create(PlanRequest request) {
@@ -36,12 +37,7 @@ public class PlanServiceImpl implements PlanService {
         Long userId = AppSecurityUtils.getCurrentUserId()
                 .orElseThrow(() -> new AppException(ErrorEnum.UNAUTHORIZED));
 
-        Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorEnum.NOT_FOUND));
-
         UserPlanWorkout plan = planMapper.toEntity(request);
-
-        plan.setCreatedBy(user);
 
         try {
             UserPlanWorkout saved = planRepository.save(plan);
@@ -58,10 +54,9 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public ApiResponse<PlanResponse> update(PlanRequest request, Long id) {
-
         Long userId = AppSecurityUtils.getCurrentUserId()
                 .orElseThrow(() -> new AppException(ErrorEnum.UNAUTHORIZED));
-
+        log.info(id.toString());
         UserPlanWorkout plan = planRepository
                 .findByIdAndCreatedBy_Id(id, userId)
                 .orElseThrow(() -> new AppException(ErrorEnum.NOT_FOUND));
@@ -69,9 +64,11 @@ public class PlanServiceImpl implements PlanService {
         planMapper.updateEntity(plan, request);
 
         UserPlanWorkout updated = planRepository.save(plan);
+        PlanResponse r = planMapper.EntityToRespond(updated);
+        r.setSetTime(updated.isSetTime());
 
         return ApiResponse.<PlanResponse>builder()
-                .data(planMapper.EntityToRespond(updated))
+                .data(r)
                 .message("Update plan successfully")
                 .build();
     }
@@ -85,9 +82,10 @@ public class PlanServiceImpl implements PlanService {
         UserPlanWorkout plan = planRepository
                 .findByIdAndCreatedBy_Id(id, userId)
                 .orElseThrow(() -> new AppException(ErrorEnum.NOT_FOUND));
-
+        PlanResponse r = planMapper.EntityToRespond(plan);
+        r.setSetTime(plan.isSetTime());
         return ApiResponse.<PlanResponse>builder()
-                .data(planMapper.EntityToRespond(plan))
+                .data(r)
                 .message("Get plan successfully")
                 .build();
     }
@@ -121,9 +119,23 @@ public class PlanServiceImpl implements PlanService {
 
         List<UserPlanWorkout> plans =
                 planRepository.findByScheduledDateBetweenAndCreatedBy_Id(start, end, userId);
-
+        List<PlanResponse> planResponses = plans.stream().map((plan) ->{
+            PlanResponse response = planMapper.EntityToRespond(plan);
+            response.setSetTime(plan.isSetTime());
+            return response;
+        }).toList();
         return ApiResponse.<List<PlanResponse>>builder()
-                .data(planMapper.toListRes(plans))
+                .data(planResponses)
                 .build();
+    }
+    @Override
+    public boolean saveAll(List<UserPlanWorkout> userPlanWorkoutList) {
+        try {
+            planRepository.saveAll(userPlanWorkoutList);
+
+        }catch (RuntimeException e) {
+            return false;
+        }
+        return true;
     }
 }

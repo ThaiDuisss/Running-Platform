@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/plans")
 @RequiredArgsConstructor
+@Slf4j(topic = "PLANCONTROLLER")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PlanController {
 
@@ -40,6 +42,7 @@ public class PlanController {
             @PathVariable Long id,
             @RequestBody @Valid PlanRequest request
     ) {
+        log.info("Athai {}",request.toString());
         return planService.update(request, id);
     }
 

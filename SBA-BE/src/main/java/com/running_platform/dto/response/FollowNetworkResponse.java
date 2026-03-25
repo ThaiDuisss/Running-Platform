@@ -14,4 +14,5 @@ public class FollowNetworkResponse {
     long discoverCount;
     long followingCount;
     long followersCount;
+    long friendCount;
 }

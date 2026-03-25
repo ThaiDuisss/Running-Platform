@@ -4,6 +4,7 @@ import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-b
 import { useNavigate } from "react-router-dom";
 import { updateMyAvatar, updateMyProfile } from "@/features/admin/users/services/UserService";
 import uploadFile from "@/shared/services/UploadService";
+import axios from "axios";
 
 const ProfilePage = () => {
     const { user } = useContext(AuthDataContext);
@@ -63,14 +64,32 @@ const ProfilePage = () => {
         setMessage("");
 
         navigator.geolocation.getCurrentPosition(
-            (position) => {
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                const res = await axios.get(
+                    "https://nominatim.openstreetmap.org/reverse",
+                    {
+                        params: {
+                            lat: lat,
+                            lon: lng,
+                            format: "json",
+                        },
+                    }
+                );
+
+                const address = res.data.display_name;
+
                 setForm((prev) => ({
                     ...prev,
-                    latitude: String(position.coords.latitude),
-                    longitude: String(position.coords.longitude),
+                    latitude: String(lat),
+                    longitude: String(lng),
+                    location: address,
                 }));
                 setMessage("Đã cập nhật tọa độ hiện tại vào form.");
                 setIsGettingLocation(false);
+                console.log("position", position)
             },
             () => {
                 setError("Không thể lấy tọa độ hiện tại. Vui lòng kiểm tra quyền truy cập vị trí.");

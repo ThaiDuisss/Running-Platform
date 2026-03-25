@@ -23,6 +23,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static com.running_platform.config.AuthConfig.PUBLIC_ENDPOINTS;
+
 @Slf4j(topic = "CustomizeRequestFilter")
 @Component
 @RequiredArgsConstructor
@@ -35,6 +37,8 @@ public class CustomizeRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
+        log.info(path);
+
         String method = request.getMethod();
         log.info("Processing request: {} {}", method, path);
 
