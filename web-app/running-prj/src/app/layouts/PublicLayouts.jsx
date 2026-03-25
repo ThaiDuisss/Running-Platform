@@ -4,13 +4,15 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 
 const PublicLayouts = () => {
+  const hideFooter = location.pathname.startsWith("/chat");
+
   return (
     <div className='d-flex flex-column min-vh-100'>
       <RunWiseNavbar />
       <main className='flex-fill'>
         <Outlet />
       </main>
-      <Footer />
+      {!hideFooter && <Footer />}
     </div>
   )
 }

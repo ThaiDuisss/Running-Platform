@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+.chat-layout {
+    display: flex;
+    height: calc(100vh - 60px);
+    /* trừ navbar */
+    background: #f0f2f5;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}

@@ -97,8 +97,7 @@ const FollowPage = () => {
     };
 
     const handleMessage = (user) => {
-        setNotice(`Đang mở chat với ${user.fullName}.`);
-        navigate("/chat");
+        navigate("/chat", { state: { targetUserId: user.id } });
     };
 
     const handleTabChange = (tabKey) => startTransition(() => setActiveTab(tabKey));
