@@ -1,20 +1,28 @@
-import React from "react";
+import { AuthDataContext } from "@/app/providers/AuthProvider";
+import { getUserInfo } from "@/features/admin/users/services/UserService";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 export default function SidebarLeft() {
+    const { user } = useContext(AuthDataContext); 
+
+    React.useEffect(() => {
+    }, []);
 
     return (
         <div className="sidebar-left">
-
             <div className="profile">
-                <img src="https://i.pravatar.cc/40" />
-                <span>Do Xuan Thai</span>
+                <img src={user?.avatar} alt="avatar" style={{ borderRadius: "50%", width: 36, height: 36 }} />
+                <span>{user?.username}</span>
             </div>
 
-            <div className="menu-item">🏃‍♂️ Running Feed</div>
-            <Link className="menu-item" to="/follow">👥 Following</Link>
-            <div className="menu-item">📊 Activities</div>
+            <Link to="/feed" className="menu-item">
+                <span style={{ fontSize: "20px" }}>📰</span> Bảng tin (Feed)
+            </Link>
+            <Link className="menu-item" to="/follow">
+                <span style={{ fontSize: "20px" }}>👥</span> Đang theo dõi
+            </Link>
 
         </div>
-    )
+    );
 }

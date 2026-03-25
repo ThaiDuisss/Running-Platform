@@ -1,74 +1,255 @@
-/* ── Action Buttons (Same style as UserPage) ── */
-.action-btn {
+/* CONTAINER & GENERAL */
+.post-page {
+    padding: 30px;
+    background-color: #f9fafb; /* Light grey background for the page */
+    font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.page-header h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #1f2937;
+}
+
+/* FILTER */
+.filter-bar {
+    display: flex;
+    gap: 20px; 
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.filter-item {
+    flex: 1; 
+}
+.filter-item .form-control, 
+.filter-item .form-select {
+    width: 100%;
+    height: 42px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+}
+
+.filter-bar .form-control:focus,
+.filter-bar .form-select:focus {
+    border-color: #4f46e5; /* Indigo accent color */
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* TABLE */
+.table-wrapper {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+    border: 1px solid #e5e7eb;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table th {
+    background: #fdfdfd;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    padding: 18px 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.custom-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 15px;
+    color: #1f2937;
+}
+
+.custom-table tr:hover {
+    background-color: #fafafa; /* Subtle row hover */
+}
+
+/* CONTENT CELL */
+.content-cell {
+    max-width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* USER CELL - CĂN CHỈNH THẲNG HÀNG */
+.custom-table td.user-cell {
+    text-align: center; /* Căn giữa nội dung trong ô */
+}
+
+.user-info {
+    display: inline-flex; /* Sử dụng inline-flex để không bị chiếm 100% width */
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.avatar {
     width: 34px;
     height: 34px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.user-info span {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* STATUS */
+.status {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status.approve {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status.reject {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* ACTION & BUTTONS - THÊM MÀU ĐỂ ĐẸP HƠN */
+.action-group {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    width: 36px;
+    height: 36px;
     border-radius: 8px;
-    border: 1.5px solid #c2dff7;
-    background: #ffffff;
-    color: #3a87c4;
+    border: 1px solid #e5e7eb;
+    background: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.15s;
-    font-size: 0.9rem;
+    transition: 0.2s;
+    font-size: 16px;
 }
 
-/* Hover giống pagination */
 .action-btn:hover {
-    background: #eaf4fd;
-    border-color: #3a87c4;
     transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Active */
-.action-btn:active {
-    transform: scale(0.95);
-}
-
-/* ── Variants ── */
-
-/* Detail */
+/* Detail Button */
 .action-btn.detail {
-    color: #3a87c4;
+    color: #4f46e5;
+    border-color: #c7d2fe;
+}
+.action-btn.detail:hover {
+    background-color: #e0e7ff;
 }
 
-/* Approve */
+/* Approve Button */
 .action-btn.approve {
-    color: #2ea44f;
-    border-color: #b7e4c7;
+    color: #166534;
+    border-color: #a7f3d0;
 }
-
 .action-btn.approve:hover {
-    background: #eafaf0;
-    border-color: #2ea44f;
+    background-color: #dcfce7;
 }
 
-/* Reject (tone nhẹ, KHÔNG đỏ gắt) */
+/* Reject Button */
 .action-btn.reject {
-    color: #d46a6a;
-    border-color: #f1caca;
+    color: #991b1b;
+    border-color: #fecaca;
 }
-
 .action-btn.reject:hover {
-    background: #fdeeee;
-    border-color: #d46a6a;
+    background-color: #fee2e2;
 }
 
-/* Delete (giống btn-danger nhưng soft) */
+/* Delete Button */
 .action-btn.delete {
-    color: #e05a5a;
-    border-color: #f3c2c2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+.action-btn.delete:hover {
+    background-color: #fee2e2;
 }
 
-.action-btn.delete:hover {
-    background: #fdeaea;
-    border-color: #e05a5a;
+/* Thêm style cho nút trong Modal (vì file cũ chưa có) */
+.btn-close {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #e5e7eb;
+    color: #4b5563;
+    font-weight: 600;
 }
-/* ── Action Layout FIX ── */
-.action-group {
-    display: grid;
-    grid-template-columns: repeat(4, 34px);
-    gap: 6px;
-    justify-content: center
+.btn-close:hover {
+    background-color: #d1d5db;
+}
+
+/* MODAL - Simplified existing structure slightly */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-box {
+    width: 90%;
+    max-width: 600px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.content-box {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    margin-top: 16px;
 }

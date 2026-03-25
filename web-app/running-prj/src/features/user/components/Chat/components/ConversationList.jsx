@@ -5,7 +5,7 @@ import CreateGroupModal from './CreateGroupModal.jsx';
 import CreateDirectChatModal from './CreateDirectChatModal.jsx';
 import './ConversationList.css';
 
-function Avatar({ name, imageUrl, size = 42, online }) {
+function Avatar({ name, imageUrl, size = 42 }) {
   const COLORS = ['#e67e22', '#3498db', '#9b59b6', '#1abc9c', '#e74c3c', '#f39c12', '#16a085'];
   const color = COLORS[(name?.charCodeAt(0) || 0) % COLORS.length];
   const initials = (name || '?').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
@@ -16,9 +16,7 @@ function Avatar({ name, imageUrl, size = 42, online }) {
         ? <img src={imageUrl} alt={name} className="avatar-img" />
         : <div className="avatar-placeholder" style={{ background: color, fontSize: size * 0.37 }}>{initials}</div>
       }
-      {online !== undefined && (
-        <span className={`avatar-dot ${online ? 'online' : 'offline'}`} />
-      )}
+
     </div>
   );
 }
@@ -49,9 +47,8 @@ function ConvItem({ conv, active, onClick, currentUserId }) {
 
       <Avatar
         name={conv.title}
-        imageUrl={getAvatar(conv)}   
+        imageUrl={getAvatar(conv)}
         size={46}
-        online={!conv.isGroup}
       />
 
       <div className="conv-item__body">

@@ -1,7 +1,7 @@
 package com.running_platform.entity.Post;
 
 import com.running_platform.entity.AbstractEntity;
-import com.running_platform.entity.RouteChallege.RouteChallenge;
+import com.running_platform.entity.RouteChallege.Challenge;
 import com.running_platform.entity.RunActivities.RunActivity;
 import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.PostStatus;
@@ -37,7 +37,7 @@ public class Posts extends AbstractEntity<Long> {
     RunActivity run;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    RouteChallenge challenge;
+    Challenge challenge;
 
     @Enumerated(EnumType.STRING)
     PostStatus status;

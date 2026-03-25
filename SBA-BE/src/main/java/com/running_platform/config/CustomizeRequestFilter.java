@@ -23,8 +23,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.running_platform.config.AuthConfig.PUBLIC_ENDPOINTS;
-
 @Slf4j(topic = "CustomizeRequestFilter")
 @Component
 @RequiredArgsConstructor
