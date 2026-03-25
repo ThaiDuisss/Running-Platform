@@ -224,6 +224,26 @@
 
 .follow-tabs__count {
     min-width: 30px;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.follow-tabs__count--active {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+.follow-tabs__count--inactive {
+    background: #64748b;
+    color: #ffffff;
 }
 
 .follow-list {

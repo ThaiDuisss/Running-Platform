@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Nav } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 
 const FollowTabs = ({ activeTab, onChange, counts }) => {
     const tabs = [
@@ -27,9 +27,9 @@ const FollowTabs = ({ activeTab, onChange, counts }) => {
                     active={activeTab === tab.key}
                 >
                     <span>{tab.label}</span>
-                    <Badge pill bg={activeTab === tab.key ? "light" : "secondary"} text={activeTab === tab.key ? "dark" : "light"} className="follow-tabs__count">
+                    <span className={`follow-tabs__count ${activeTab === tab.key ? "follow-tabs__count--active" : "follow-tabs__count--inactive"}`}>
                         {tab.count}
-                    </Badge>
+                    </span>
                     </Nav.Link>
                 </Nav.Item>
             ))}
