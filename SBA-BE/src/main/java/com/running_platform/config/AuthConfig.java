@@ -52,7 +52,7 @@ public class AuthConfig {
             "success",
             "/get-info/**",
             "/oauth2/**",
-            "plans/**"
+            "plans/**",
             "/api/articles",
             "/ws/**",
 
