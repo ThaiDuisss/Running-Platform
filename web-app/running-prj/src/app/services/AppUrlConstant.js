@@ -31,8 +31,8 @@ export class ApiEndpoints {
 
     static USERS_API_ENDPOINTS = {
         MAIN: '/users',
-        ME: '/my-info',
-        SEARCH: '/users/search'
+        ME: 'users/my-info',
+        SEARCH: '/users/search',
     };
 
     static PLANS_API_ENDPOINTS = {

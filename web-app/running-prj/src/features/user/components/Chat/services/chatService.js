@@ -1,34 +1,27 @@
+// src/features/user/components/Chat/services/chatService.js
 import axiosClient from "@/shared/services/axiosClient";
-const API = {
-    MY_CONVERSATIONS: "/chat/my-conversations",
-    CREATE_CONVERSATION: "/chat/create",
-    CREATE_MESSAGE: "/chat/messages/create",
-    GET_CONVERSATION_MESSAGES: "/chat/messages/getMessage",
-}
 
-export const getMyConversations = async () => {
-    return await axiosClient.get(API.MY_CONVERSATIONS);
-};
+export const chatService = {
+    getConversations: () =>
+        axiosClient.get('/api/conversations'),
 
-export const createConversation = async (data) => {
-    return await axiosClient.post(
-        API.CREATE_CONVERSATION, {
-            type: data.type,
-            participantIds: data.participantIds,
-        }
-    );
-};
+    getMessages: (conversationId, page = 0, size = 30) =>
+        axiosClient.get(`/api/conversations/${conversationId}/messages`, {
+            params: { page, size },
+        }),
 
+    createOrGetDirectChat: (targetUserId) =>
+        axiosClient.post('/api/conversations/direct', { targetUserId }),
 
-export const createMessage = async (data) => {
-    return await axiosClient.post(
-        API.CREATE_MESSAGE, {
-            conversationId: data.conversationId,
-            message: data.message,
-        }
-    );
-};
+    createGroup: (title, memberIds) =>
+        axiosClient.post('/api/conversations/group', { title, memberIds }),
 
-export const getMessages = async (conversationId) => {
-    return await axiosClient.get(`${API.GET_CONVERSATION_MESSAGES}/${conversationId}`);
+    addMember: (conversationId, userId) =>
+        axiosClient.post(`/api/conversations/${conversationId}/members`, { userId }),
+
+    leaveGroup: (conversationId) =>
+        axiosClient.delete(`/api/conversations/${conversationId}/leave`),
+
+    searchUsers: (query) =>
+        axiosClient.get('/users/search', { params: { keyword: query } }),
 };

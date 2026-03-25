@@ -60,3 +60,28 @@ transition: background-color 0.3s ease, color 0.3s ease;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
+
+.rw-user-nav .dropdown-toggle {
+  max-width: 180px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rw-user-name {
+  display: inline-block;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+@media (max-width: 991.98px) {
+  .rw-user-nav .dropdown-toggle {
+    max-width: 100%;
+  }
+
+  .rw-user-name {
+    max-width: 180px;
+  }
+}

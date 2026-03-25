@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Where;
+import org.locationtech.jts.geom.Point;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -50,10 +51,8 @@ public class Users extends AbstractEntity<Long> {
     @Column( columnDefinition = "VARCHAR(50)")
     String fullName;
 
-    String latitude;
-
-    String longitude;
-
+    @Column(columnDefinition = "POINT", name = "location_detail", nullable = false)
+    private Point locationDetail;
 
 //    @Column(name = "registered_provider_name")
     @Enumerated(EnumType.STRING)

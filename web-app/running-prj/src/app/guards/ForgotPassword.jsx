@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Form, Button, InputGroup, Alert } from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Button, InputGroup, Alert } from "react-bootstrap";
 import { FaEnvelope } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { authService } from "../services/AuthService";
+import "@/style/signin.css";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -25,52 +26,47 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="rg-wrap">
-      <div className="rg-container">
+    <div className="lp-wrap">
+      <Container>
+        <Row className="justify-content-center">
+          <Col xs={12} sm={10} md={8} lg={6} xl={5}>
+            <Card>
+              <Card.Body className="lp-body border-0 shadow-sm">
+                <Card.Title>
+                  <h2 className="lp-title">Forgot Password</h2>
+                  {message && <Alert variant="success">{message}</Alert>}
+                  {error && <Alert variant="danger">{error}</Alert>}
+                </Card.Title>
 
-        {/* LEFT IMAGE */}
-        <div className="rg-left"></div>
+                <Form onSubmit={handleSubmit}>
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text>
+                      <FaEnvelope />
+                    </InputGroup.Text>
 
-        {/* RIGHT FORM */}
-        <div className="rg-right">
-          <div className="rg-form">
+                    <Form.Control
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </InputGroup>
 
-            <h2>Forgot Password</h2>
+                  <Button type="submit" className="w-100">
+                    Send Reset Link
+                  </Button>
+                </Form>
 
-            {message && <Alert variant="success">{message}</Alert>}
-            {error && <Alert variant="danger">{error}</Alert>}
-
-            <Form onSubmit={handleSubmit}>
-
-              <InputGroup className="mb-3">
-                <InputGroup.Text>
-                  <FaEnvelope />
-                </InputGroup.Text>
-
-                <Form.Control
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="rg-input"
-                  required
-                />
-              </InputGroup>
-
-              <Button type="submit" className="rg-button">
-                Send Reset Link
-              </Button>
-
-            </Form>
-
-            <NavLink to="/login" className="rg-link">
-              Remember your password? Login
-            </NavLink>
-
-          </div>
-        </div>
-
-      </div>
+                <div className="text-center mt-3">
+                  Remember your password?{" "}
+                  <NavLink to="/login">Login</NavLink>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }

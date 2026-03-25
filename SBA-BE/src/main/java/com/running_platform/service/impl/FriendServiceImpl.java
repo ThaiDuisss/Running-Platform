@@ -1,23 +1,32 @@
 package com.running_platform.service.impl;
 
 import com.running_platform.constant.ErrorEnum;
+import com.running_platform.dto.FollowUserProjection;
+import com.running_platform.dto.response.FollowNetworkResponse;
 import com.running_platform.dto.response.FriendResponse;
-import com.running_platform.dto.response.FriendRequestResponse;
 import com.running_platform.dto.response.PageResponse;
 import com.running_platform.entity.FriendShipAndChat.FriendShips;
 import com.running_platform.entity.UserAuth.Users;
 import com.running_platform.enums.FriendStatus;
+import com.running_platform.enums.TabEnum;
 import com.running_platform.exception.AppException;
 import com.running_platform.repository.FriendRepository;
 import com.running_platform.repository.UserRepository;
 import com.running_platform.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,159 +42,87 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public void sendRequest(Long userId) {
+    public void follow(Long userId) {
         Long currentUserId = getCurrentUserId();
 
         if (currentUserId.equals(userId)) {
-            throw new AppException(ErrorEnum.UNKNOWN_ERROR);
+            throw new AppException(ErrorEnum.SELF_FRIEND_REQUEST);
         }
 
-        if (friendRepository.existsByRequester_IdAndAddressee_Id(currentUserId, userId) ||
-            friendRepository.existsByRequester_IdAndAddressee_Id(userId, currentUserId)) {
-            throw new AppException(ErrorEnum.UNKNOWN_ERROR);
+        if (friendRepository.existsByRequester_IdAndAddressee_IdAndStatus(currentUserId, userId, FriendStatus.ACCEPTED)) {
+            throw new AppException(ErrorEnum.EXISTING_FRIEND_REQUEST);
         }
 
         Users requester = userRepository.findById(currentUserId)
-                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
-
+                .orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
         Users addressee = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+                .orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
 
-        FriendShips friend = FriendShips.builder()
+        FriendShips follow = FriendShips.builder()
                 .requester(requester)
                 .addressee(addressee)
-                .status(FriendStatus.PENDING)
+                .status(FriendStatus.ACCEPTED)
                 .build();
 
-        friendRepository.save(friend);
+        friendRepository.save(follow);
     }
 
     @Override
-    public void acceptRequest(Long requestId) {
+    public void unfollow(Long userId) {
         Long currentUserId = getCurrentUserId();
 
-        FriendShips friend = friendRepository.findById(requestId)
-                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        FriendShips follow = friendRepository.findByRequester_IdAndAddressee_IdAndStatus(currentUserId, userId, FriendStatus.ACCEPTED)
+                .orElseThrow(() -> new AppException(ErrorEnum.FRIEND_SHIP_NOT_FOUND));
 
-        if (!friend.getAddressee().getId().equals(currentUserId)) {
-            throw new AppException(ErrorEnum.UNKNOWN_ERROR);
-        }
-
-        if (friend.getStatus() != FriendStatus.PENDING) {
-            throw new AppException(ErrorEnum.UNKNOWN_ERROR);
-        }
-
-        friend.setStatus(FriendStatus.ACCEPTED);
-        friendRepository.save(friend);
+        friendRepository.delete(follow);
     }
 
     @Override
-    public void rejectRequest(Long requestId) {
+    public FollowNetworkResponse getFollowNetwork(TabEnum tab, String keyword, Double radiusKm, int page, int size) {
         Long currentUserId = getCurrentUserId();
 
-        FriendShips friend = friendRepository.findById(requestId)
-                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
+        userRepository.findById(currentUserId)
+                .orElseThrow(() -> new AppException(ErrorEnum.USER_NOT_FOUND));
 
-        if (!friend.getAddressee().getId().equals(currentUserId)) {
-            throw new AppException(ErrorEnum.UNKNOWN_ERROR);
-        }
+        Pageable pageable = PageRequest.of(page, size);
+        String normalizedKeyword = keyword != null ? keyword.trim() : null;
 
-        if (friend.getStatus() != FriendStatus.PENDING) {
-            throw new AppException(ErrorEnum.UNKNOWN_ERROR);
-        }
-        friend.setStatus(FriendStatus.REJECTED);
-        friendRepository.save(friend);
+        Page<FollowUserProjection> usersPage = switch (tab) {
+            case FRIEND -> userRepository.findFriends(currentUserId, normalizedKeyword, radiusKm, pageable);
+            case FOLLOWING -> userRepository.findFollowingOnly(currentUserId, normalizedKeyword, radiusKm, pageable);
+            case FOLLOWERS -> userRepository.findFollowersOnly(currentUserId, normalizedKeyword, radiusKm, pageable);
+            case DISCOVER -> userRepository.findDiscoverUsers(currentUserId, normalizedKeyword, radiusKm, pageable);
+        };
+
+        List<FriendResponse> content = usersPage.getContent().stream()
+                .map(user -> toFriendResponse(user, tab))
+                .toList();
+
+        Page<FriendResponse> responsePage = new PageImpl<>(content, pageable, usersPage.getTotalElements());
+
+        long followingCount = friendRepository.countOnlyFollowing(currentUserId, keyword, radiusKm);
+        long followersCount = friendRepository.countOnlyFollower(currentUserId, keyword, radiusKm);
+        long friendCount = friendRepository.countFriends(currentUserId,keyword, radiusKm);
+        long discoverCount = friendRepository.countDiscover(currentUserId,keyword, radiusKm);
+
+        return FollowNetworkResponse.builder()
+                .page(PageResponse.from(responsePage))
+                .discoverCount(discoverCount)
+                .followingCount(followingCount)
+                .followersCount(followersCount)
+                .friendCount(friendCount)
+                .build();
     }
 
-    @Override
-    public void cancelRequest(Long userId) {
-        Long currentUserId = getCurrentUserId();
-
-        FriendShips friend = friendRepository.findByRequester_IdAndAddressee_Id(currentUserId, userId)
-                .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR));
-
-        if (friend.getStatus() != FriendStatus.PENDING) {
-            throw new AppException(ErrorEnum.UNKNOWN_ERROR);
-        }
-        friend.setStatus(FriendStatus.CANCELLED);
-        friendRepository.save(friend);
-    }
-
-    @Override
-    public void unfriend(Long userId) {
-        Long currentUserId = getCurrentUserId();
-
-        FriendShips friend = friendRepository.findByRequester_IdAndAddressee_Id(currentUserId, userId)
-                .orElse(friendRepository.findByRequester_IdAndAddressee_Id(userId, currentUserId)
-                        .orElseThrow(() -> new AppException(ErrorEnum.UNKNOWN_ERROR)));
-
-        if (friend.getStatus() != FriendStatus.ACCEPTED) {
-            throw new AppException(ErrorEnum.UNKNOWN_ERROR);
-        }
-
-        friendRepository.delete(friend);
-    }
-
-    @Override
-    public PageResponse<FriendResponse> getFriends(int page, int size) {
-        Long currentUserId = getCurrentUserId();
-
-        Page<FriendShips> friends = friendRepository
-                .findFriends(FriendStatus.ACCEPTED, currentUserId,
-                        PageRequest.of(page, size));
-
-        Page<FriendResponse> responsePage = friends.map(f -> {
-            var otherUser = f.getRequester().getId().equals(currentUserId) ? f.getAddressee() : f.getRequester();
-            return FriendResponse.builder()
-                    .id(otherUser.getId())
-                    .username(otherUser.getUsername())
-                    .fullName(otherUser.getFullName())
-                    .imageUrl(otherUser.getImageUrl())
-                    .build();
-        });
-
-        return PageResponse.from(responsePage);
-    }
-
-    @Override
-    public PageResponse<FriendRequestResponse> getSentRequests(int page, int size) {
-        Long currentUserId = getCurrentUserId();
-
-        Page<FriendShips> requests = friendRepository.findByStatusAndRequester_Id(
-                FriendStatus.PENDING,
-                currentUserId,
-                PageRequest.of(page, size)
-        );
-
-        Page<FriendRequestResponse> responsePage = requests.map(f -> FriendRequestResponse.builder()
-                .id(f.getId())
-                .userId(f.getAddressee().getId())
-                .username(f.getAddressee().getUsername())
-                .fullName(f.getAddressee().getFullName())
-                .imageUrl(f.getAddressee().getImageUrl())
-                .build());
-
-        return PageResponse.from(responsePage);
-    }
-
-    @Override
-    public PageResponse<FriendRequestResponse> getReceivedRequests(int page, int size) {
-        Long currentUserId = getCurrentUserId();
-
-        Page<FriendShips> requests = friendRepository.findByStatusAndAddressee_Id(
-                FriendStatus.PENDING,
-                currentUserId,
-                PageRequest.of(page, size)
-        );
-
-        Page<FriendRequestResponse> responsePage = requests.map(f -> FriendRequestResponse.builder()
-                .id(f.getId())
-                .userId(f.getRequester().getId())
-                .username(f.getRequester().getUsername())
-                .fullName(f.getRequester().getFullName())
-                .imageUrl(f.getRequester().getImageUrl())
-                .build());
-
-        return PageResponse.from(responsePage);
+    private FriendResponse toFriendResponse(FollowUserProjection user, TabEnum relation) {
+        return FriendResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .imageUrl(user.getImageUrl())
+                .location(user.getLocation())
+                .distanceKm(user.getDistanceKm())
+                .relation(relation)
+                .build();
     }
 }

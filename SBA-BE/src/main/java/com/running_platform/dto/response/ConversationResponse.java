@@ -1,26 +1,24 @@
 package com.running_platform.dto.response;
 
-
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
-import java.time.Instant;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Data;
+import java.time.LocalDateTime;
 import java.util.List;
 
-
-@Getter
-@Setter
-@FieldDefaults(level =  AccessLevel.PRIVATE)
+@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ConversationResponse {
-    Long id;
-//    ConversationType type;
-    String participantHash;
-    String conversationAvatar;
-    String conversationName;
-//    List<ParticipantInfo> participants;
-    Instant createDate;
-    Instant modifiedDate;
+    private Long id;
+    private String title;
+    @JsonProperty("isGroup")
+    private boolean isGroup;
+    private String conversationHash;
+    private List<ParticipantResponse> participants;
+    private ChatMessageResponse lastMessage;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+
+    private LocalDateTime updatedAt;
+    private int unreadCount;
 }

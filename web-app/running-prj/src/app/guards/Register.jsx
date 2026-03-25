@@ -3,6 +3,7 @@ import { authService } from "../services/AuthService";
 import { Container, Row, Col, Card, Form, Button, InputGroup, Alert } from "react-bootstrap";
 import { FaUser, FaLock, FaPhone, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import "@/style/signin.css";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({

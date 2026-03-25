@@ -5,9 +5,9 @@ import UserLogin from '../guards/UserLogin'
 import Routes from '@/features/user/components/Routes'
 import Community from '@/features/user/components/Post/Community'
 import Blog from '@/features/user/components/Blog'
+import BlogDetail from '@/features/user/components/BlogDetail'
 import FeedPage from '@/features/user/components/Post/FeedPage'
 import PlanPage from '@/features/user/components/Plans/PlanPage'
-import { redirect } from 'react-router-dom'
 import Register from '../guards/Register'
 import ProfilePage from '@/features/user/components/Profile/ProfilePage'
 import ForgotPassword from '../guards/ForgotPassword'
@@ -29,27 +29,20 @@ const communityLoader = () => {
   }
   return null;
 }
+import Unauthorized from '@/features/user/components/Unauthorized'
 
 const publicRoutes = [
   { path: "/login", element: <UserLogin /> },
   { path: "/register", element: <Register /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
   { path: "/reset-password", element: <ResetPassword /> },
+  { path: "/unauthorized", element: <Unauthorized /> },
   { path: "/oauth2/redirect", element: <Oauth2Redirect />, loader: oauthRedirectLoader },
   {
     path: "/", element: <PublicLayouts />,
     children: [
       { index: true, element: <HomePage /> },
       { path: "/routes", element: <Routes /> },
-
-      {
-        path: "/community",
-        element: <Community />,
-        loader: communityLoader
-      },
-
-      { path: "/feed", element: <FeedPage /> },
-
       {
         path: "/blog",
         element: <Blog />
@@ -81,12 +74,9 @@ const publicRoutes = [
       },
 
       {
-        path: "/profile",
-        element: <ProfilePage />
+        path: "/blog/:id",
+        element: <BlogDetail />
       },
-      { path: "/friends", element: <FriendPage /> },
-      { path: "/chat", element: <Chat /> },
-
     ]
   }
 ]

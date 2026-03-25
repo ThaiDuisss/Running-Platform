@@ -137,6 +137,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(500).body(response);
     }
     public void returnError(Exception e) {
-        log.error("AppException: {}", e.getMessage());
+        log.error("ERROR-EXCEPTION", e);
     }
 }

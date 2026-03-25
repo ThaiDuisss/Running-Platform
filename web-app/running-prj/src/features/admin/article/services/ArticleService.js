@@ -61,6 +61,16 @@ const getArticleWithPaginateAPI = async (page, size) => {
     }
 }
 
+const getArticleByIdAPI = async (articleId) => {
+    try {
+        const response = await axiosClient.get(`/api/articles/${articleId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching article detail:", error);
+        throw new Error("Failed to fetch article detail");
+    }
+}
+
 const updateArticleAPI = async (articleId, data) => {
     console.log("data before update:", data);
     try {
@@ -99,6 +109,7 @@ const deleteArticleAPI = async (articleId) => {
 export {
     createArticleAPI,
     getArticleWithPaginateAPI,
+    getArticleByIdAPI,
     updateArticleAPI,
     deleteArticleAPI
 }

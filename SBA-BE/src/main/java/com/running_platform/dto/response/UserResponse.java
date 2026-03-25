@@ -21,15 +21,14 @@ public class UserResponse {
 
     Set<RoleResponse> roles;
 
-    String location;
+    private Double latitude;
+    private Double longitude;
 
     String fullName;
 
     String imageUrl;
 
-    String latitude;
-
-    String longitude;
+    String location;
 
     LocalDateTime createAt;
 

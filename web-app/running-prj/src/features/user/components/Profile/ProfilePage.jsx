@@ -1,7 +1,10 @@
 import { AuthActionContext, AuthDataContext } from "@/app/providers/AuthProvider";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Alert, Button, Card, Col, Container, Form, Row, Spinner } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { updateMyAvatar, updateMyProfile } from "@/features/admin/users/services/UserService";
+import uploadFile from "@/shared/services/UploadService";
+import axios from "axios";
 
 const ProfilePage = () => {
     const { user } = useContext(AuthDataContext);
@@ -10,6 +13,7 @@ const ProfilePage = () => {
 
     const [form, setForm] = useState({
         username: "",
+        fullName: "",
         phoneNumber: "",
         location: "",
         latitude: "",
@@ -18,74 +22,150 @@ const ProfilePage = () => {
     });
 
     const [isEditing, setIsEditing] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isGettingLocation, setIsGettingLocation] = useState(false);
+    const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
 
-    // Sync form khi user thay đổi
     useEffect(() => {
-        console.log("User data changed, updating form:", user.data);
-        if (!user.data) return;
+        if (!user) return;
+
+        console.log("user ", user)
+
         setForm({
-            username: user.data.username ?? "",
-            phoneNumber: user.data.phoneNumber ?? "",
-            location: user.data.location ?? "",
-            latitude: user.data.latitude ?? "",
-            longitude: user.data.longitude ?? "",
-            avatar: user.data.avatar ?? "",
+            username: user.username ?? "",
+            fullName: user.fullName ?? "",
+            phoneNumber: user.phoneNumber ?? "",
+            location: user.location ?? "",
+            latitude: user.latitude ?? "",
+            longitude: user.longitude ?? "",
+            avatar: user.imageUrl ?? "",
         });
 
         setIsEditing(false);
+        setMessage("");
+        setError("");
     }, [user]);
-
-    // const getCurrentPossition = () => {
-    //     if (!navigator.geolocation) {
-    //         alert("Geolocation is not supported by your browser");
-    //         return;
-    //     }
-
-    //     navigator.geolocation.getCurrentPosition(
-    //         (position) => {
-    //             setForm((prev) => ({
-    //                 ...prev,
-    //                 latitude: position.coords.latitude,
-    //                 longitude: position.coords.longitude,
-    //             }));
-    //         },
-    //         (error) => {
-    //             console.error("Error getting location:", error);
-    //             alert("Unable to retrieve your location");
-    //         }
-    //     );
-    // };
 
     const onChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    const getCurrentPosition = () => {
+        if (!navigator.geolocation) {
+            setError("Trình duyệt không hỗ trợ lấy vị trí hiện tại.");
+            return;
+        }
+
+        setIsGettingLocation(true);
+        setError("");
+        setMessage("");
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                const res = await axios.get(
+                    "https://nominatim.openstreetmap.org/reverse",
+                    {
+                        params: {
+                            lat: lat,
+                            lon: lng,
+                            format: "json",
+                        },
+                    }
+                );
+
+                const address = res.data.display_name;
+
+                setForm((prev) => ({
+                    ...prev,
+                    latitude: String(lat),
+                    longitude: String(lng),
+                    location: address,
+                }));
+                setMessage("Đã cập nhật tọa độ hiện tại vào form.");
+                setIsGettingLocation(false);
+                console.log("position", position)
+            },
+            () => {
+                setError("Không thể lấy tọa độ hiện tại. Vui lòng kiểm tra quyền truy cập vị trí.");
+                setIsGettingLocation(false);
+            }
+        );
+    };
+
     const onCancel = () => {
         setForm({
             username: user?.username ?? "",
+            fullName: user?.fullName ?? "",
             phoneNumber: user?.phoneNumber ?? "",
             location: user?.location ?? "",
             latitude: user?.latitude ?? "",
             longitude: user?.longitude ?? "",
-            avatar: user?.avatar ?? "",
+            avatar: user?.imageUrl ?? "",
         });
         setIsEditing(false);
+        setMessage("");
+        setError("");
     };
 
-    const onSave = () => {
-        const nextUser = {
-            ...user,
-            username: form.username.trim(),
-            phoneNumber: form.phoneNumber.trim(),
-            location: form.location.trim(),
-            latitude: form.latitude,
-            longitude: form.longitude,
-            avatar: form.avatar,
-        };
+    const onSave = async () => {
+        try {
+            setIsSaving(true);
+            setMessage("");
+            setError("");
 
-        changeUser(nextUser);
-        setIsEditing(false);
+            const payload = {
+                fullName: form.fullName.trim(),
+                phoneNumber: form.phoneNumber.trim(),
+                location: form.location.trim(),
+                latitude: form.latitude,
+                longitude: form.longitude,
+                imageUrl: form.avatar,
+            };
+
+            const response = await updateMyProfile(payload);
+            const updatedUser = response?.data?.data;
+
+            changeUser(updatedUser);
+            setIsEditing(false);
+            setMessage("Cập nhật hồ sơ thành công.");
+        } catch (err) {
+            setError(err?.response?.data?.message || "Cập nhật hồ sơ thất bại.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const onAvatarChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setIsUploadingAvatar(true);
+            setError("");
+            setMessage("");
+
+            const imageUrl = await uploadFile(file, "AVATAR_USER");
+            const response = await updateMyAvatar(imageUrl);
+            const updatedUser = response?.data?.data;
+
+            changeUser(updatedUser);
+            setForm((prev) => ({
+                ...prev,
+                avatar: updatedUser?.imageUrl || imageUrl,
+            }));
+            setMessage("Cập nhật ảnh đại diện thành công.");
+        } catch (err) {
+            setError(err?.response?.data?.message || err?.message || "Cập nhật ảnh đại diện thất bại.");
+        } finally {
+            setIsUploadingAvatar(false);
+            e.target.value = "";
+        }
     };
 
     const onLogout = () => {
@@ -100,30 +180,53 @@ const ProfilePage = () => {
                 <Col lg={4}>
                     <Card className="shadow-sm">
                         <Card.Body className="p-4 text-center">
-                            {user?.imageUrl ? (
-                                <img
-                                    src={user.imageUrl}
-                                    alt="avatar"
-                                    className="rounded-circle mb-3"
-                                    style={{ width: 80, height: 80, objectFit: "cover" }}
-                                />
-                            ) : (
-                                <div
-                                    className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                                    style={{
-                                        width: 80,
-                                        height: 80,
-                                        background: "#6f4ef6",
-                                        color: "white",
-                                        fontSize: 26,
-                                        fontWeight: 700,
-                                    }}
+                            <Form.Group controlId="profileAvatarUpload" className="mb-3">
+                                <Form.Label
+                                    className="d-inline-block position-relative"
+                                    style={{ cursor: isUploadingAvatar ? "wait" : "pointer" }}
                                 >
-                                    {(user?.username || "U").slice(0, 1).toUpperCase()}
-                                </div>
-                            )}
+                                    {form.avatar ? (
+                                        <img
+                                            src={form.avatar}
+                                            alt="avatar"
+                                            className="rounded-circle"
+                                            style={{ width: 96, height: 96, objectFit: "cover" }}
+                                        />
+                                    ) : (
+                                        <div
+                                            className="rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                                            style={{
+                                                width: 96,
+                                                height: 96,
+                                                background: "#6f4ef6",
+                                                color: "white",
+                                                fontSize: 30,
+                                                fontWeight: 700,
+                                            }}
+                                        >
+                                            {(user?.username || "U").slice(0, 1).toUpperCase()}
+                                        </div>
+                                    )}
 
-                            <h5>{user?.username}</h5>
+                                    <div className="small text-muted mt-2">
+                                        {isUploadingAvatar ? "Đang tải ảnh..." : "Bấm vào ảnh để cập nhật"}
+                                    </div>
+                                </Form.Label>
+
+                                <Form.Control
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={onAvatarChange}
+                                    disabled={isUploadingAvatar}
+                                    style={{ display: "none" }}
+                                />
+                            </Form.Group>
+
+                            <h5>{user?.fullName || user?.username}</h5>
+
+                            <div className="text-muted mb-2">
+                                {user?.username || "Chưa có email"}
+                            </div>
 
                             <div className="text-muted mb-2">
                                 📍 {user?.location || "Chưa có location"}
@@ -157,7 +260,9 @@ const ProfilePage = () => {
                                     </Button>
                                 ) : (
                                     <>
-                                        <Button onClick={onSave}>Lưu</Button>
+                                        <Button onClick={onSave} disabled={isSaving}>
+                                            {isSaving ? "Đang lưu..." : "Lưu"}
+                                        </Button>
                                         <Button variant="outline-secondary" onClick={onCancel}>
                                             Hủy
                                         </Button>
@@ -178,14 +283,28 @@ const ProfilePage = () => {
                         <Card.Body className="p-4">
                             <h4 className="mb-3">Thông tin cá nhân</h4>
 
+                            {message && <Alert variant="success">{message}</Alert>}
+                            {error && <Alert variant="danger">{error}</Alert>}
+
                             <Form>
                                 <Row className="g-3">
                                     <Col md={6}>
                                         <Form.Group>
-                                            <Form.Label>Username</Form.Label>
+                                            <Form.Label>Email</Form.Label>
                                             <Form.Control
                                                 name="username"
                                                 value={form.username}
+                                                disabled
+                                            />
+                                        </Form.Group>
+                                    </Col>
+
+                                    <Col md={6}>
+                                        <Form.Group>
+                                            <Form.Label>Họ và tên</Form.Label>
+                                            <Form.Control
+                                                name="fullName"
+                                                value={form.fullName}
                                                 onChange={onChange}
                                                 disabled={!isEditing}
                                             />
@@ -222,8 +341,8 @@ const ProfilePage = () => {
                                             <Form.Control
                                                 name="latitude"
                                                 value={form.latitude}
-                                                onChange={onChange}
-                                                disabled={!isEditing}
+                                                readOnly
+                                                disabled
                                             />
                                         </Form.Group>
                                     </Col>
@@ -234,11 +353,36 @@ const ProfilePage = () => {
                                             <Form.Control
                                                 name="longitude"
                                                 value={form.longitude}
-                                                onChange={onChange}
-                                                disabled={!isEditing}
+                                                readOnly
+                                                disabled
                                             />
                                         </Form.Group>
                                     </Col>
+
+                                    {isEditing && (
+                                        <Col md={12}>
+                                            <Button
+                                                type="button"
+                                                variant="outline-primary"
+                                                onClick={getCurrentPosition}
+                                                disabled={isGettingLocation}
+                                            >
+                                                {isGettingLocation ? (
+                                                    <>
+                                                        <Spinner
+                                                            as="span"
+                                                            animation="border"
+                                                            size="sm"
+                                                            className="me-2"
+                                                        />
+                                                        Đang lấy tọa độ...
+                                                    </>
+                                                ) : (
+                                                    "Lấy tọa độ của bạn"
+                                                )}
+                                            </Button>
+                                        </Col>
+                                    )}
 
                                     {/* <Col md={12}>
                       <Form.Group>

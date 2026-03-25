@@ -53,6 +53,9 @@ public class AuthConfig {
             "/get-info/**",
             "/oauth2/**",
             "plans/**"
+            "/api/articles",
+            "/ws/**",
+
     };
 
     @Bean
