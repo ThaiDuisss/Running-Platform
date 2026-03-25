@@ -36,6 +36,7 @@ public interface FriendRepository
                      FROM users u
                      JOIN users cu ON cu.id = :currentUserId
                      WHERE u.id <> :currentUserId
+                       AND u.email_verified = true
                        AND EXISTS (
                            SELECT 1
                            FROM friend_ships f1
@@ -71,6 +72,7 @@ public interface FriendRepository
                     JOIN friend_ships f ON f.addressee_id = u.id
                     JOIN users cu ON cu.id = :currentUserId
                     WHERE f.requester_id = :currentUserId
+                      AND u.email_verified = true
                       AND f.status = 'ACCEPTED'
                       AND NOT EXISTS (
                           SELECT 1
@@ -100,6 +102,7 @@ public interface FriendRepository
                     JOIN friend_ships f ON f.requester_id = u.id
                     JOIN users cu ON cu.id = :currentUserId
                     WHERE f.addressee_id = :currentUserId
+                      AND u.email_verified = true
                       AND f.status = 'ACCEPTED'
                       AND NOT EXISTS (
                           SELECT 1
@@ -128,6 +131,7 @@ public interface FriendRepository
                                 FROM users u
                                 JOIN users cu ON cu.id = :currentUserId
                                 WHERE u.id <> :currentUserId
+                                  AND u.email_verified = true
                                   AND NOT EXISTS (
                                       SELECT 1
                                       FROM friend_ships f1

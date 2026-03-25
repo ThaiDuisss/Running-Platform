@@ -54,6 +54,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             FROM users u
              JOIN users cu ON cu.id = :currentUserId
              WHERE u.id <> :currentUserId
+               AND u.email_verified = true
                AND EXISTS (
                    SELECT 1
                    FROM friend_ships f1
@@ -85,6 +86,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                     FROM users u
                     JOIN users cu ON cu.id = :currentUserId
                     WHERE u.id <> :currentUserId
+                      AND u.email_verified = true
                       AND EXISTS (
                           SELECT 1
                           FROM friend_ships f1
@@ -130,6 +132,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             JOIN friend_ships f ON f.addressee_id = u.id
             JOIN users cu ON cu.id = :currentUserId
             WHERE f.requester_id = :currentUserId
+              AND u.email_verified = true
               AND f.status = 'ACCEPTED'
               AND NOT EXISTS (
                   SELECT 1
@@ -156,6 +159,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                     JOIN friend_ships f ON f.addressee_id = u.id
                     JOIN users cu ON cu.id = :currentUserId
                     WHERE f.requester_id = :currentUserId
+                      AND u.email_verified = true
                       AND f.status = 'ACCEPTED'
                       AND NOT EXISTS (
                           SELECT 1
@@ -195,6 +199,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             JOIN friend_ships f ON f.requester_id = u.id
             JOIN users cu ON cu.id = :currentUserId
             WHERE f.addressee_id = :currentUserId
+              AND u.email_verified = true
               AND f.status = 'ACCEPTED'
               AND NOT EXISTS (
                   SELECT 1
@@ -221,6 +226,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                     JOIN friend_ships f ON f.requester_id = u.id
                     JOIN users cu ON cu.id = :currentUserId
                     WHERE f.addressee_id = :currentUserId
+                      AND u.email_verified = true
                       AND f.status = 'ACCEPTED'
                       AND NOT EXISTS (
                           SELECT 1
@@ -259,6 +265,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             FROM users u
             JOIN users cu ON cu.id = :currentUserId
             WHERE u.id <> :currentUserId
+              AND u.email_verified = true
               AND NOT EXISTS (
                   SELECT 1
                   FROM friend_ships f1
@@ -290,6 +297,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
                     FROM users u
                     JOIN users cu ON cu.id = :currentUserId
                     WHERE u.id <> :currentUserId
+                      AND u.email_verified = true
                       AND NOT EXISTS (
                           SELECT 1
                           FROM friend_ships f1
@@ -321,17 +329,5 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             @Param("keyword") String keyword,
             @Param("radiusKm") Double radiusKm,
             Pageable pageable
-    );
-
-    @Modifying
-    @Transactional
-    @Query(value = """
-    UPDATE users
-    SET location_detail = ST_GeomFromText(:point)
-    WHERE id = :userId
-    """, nativeQuery = true)
-    void updateLocationDetail(
-            @Param("userId") Long userId,
-            @Param("point") String point
     );
 }

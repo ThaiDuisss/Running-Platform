@@ -3,11 +3,13 @@ import { Navigate } from "react-router-dom";
 import { AuthDataContext } from "../providers/AuthProvider";
 
 const ProtectedRoute = ({ children, roles = [] }) => {
+    const isEmptyObject = (obj) =>
+        obj && Object.keys(obj).length === 0;
     const { user } = useContext(AuthDataContext);
     const storedUser = localStorage.getItem("userInfo");
     const currentUser = user || (storedUser ? JSON.parse(storedUser) : null);
     console.log("currentUser", currentUser)
-    if (!currentUser) {
+    if (!currentUser || isEmptyObject(currentUser)) {
         return <Navigate to="/login" replace />;
     }
 
