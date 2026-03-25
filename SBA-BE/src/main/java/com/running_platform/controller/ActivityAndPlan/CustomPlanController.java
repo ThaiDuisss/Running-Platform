@@ -18,6 +18,7 @@ public class CustomPlanController {
     private  final PlanTemplateService planTemplateService;
     @PostMapping
     public ApiResponse<Boolean> createPlan(@RequestBody PlanCustomRequest request){
+        log.info("heloo {}", request.toString());
         return planTemplateService.createPlanCustom(request);
     }
 }

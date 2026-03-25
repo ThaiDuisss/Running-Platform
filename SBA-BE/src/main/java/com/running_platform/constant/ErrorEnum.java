@@ -38,8 +38,17 @@ public enum ErrorEnum {
     EXISTING_FRIEND_REQUEST(7002, "Existing Friend request"),
     FOLLOW_REQUEST_NOT_PENDING_EXCEPTION(7003, "Follow request not pending exception"),
     FRIEND_SHIP_NOT_FOUND(7004, "Friendship not found"),
-    ;
-
+    INVALID_TIME_RANGE(4010, "startTime must be before endTime"),
+    CHALLENGE_ALREADY_EXISTS(4011, "Challenge with the same title already exists for admin"),
+    CHALLENGE_NOT_FOUND(4012, "Challenge not found"),
+    INVALID_REQUEST(4013, "Invalid request"),
+    RULE_ALREADY_EXISTS(4014, "Challenge rule already exists for this challenge"),
+    RULE_REQUIRED(4015, "At one rule is required for publishing a challenge"),
+    REWARD_ALREADY_EXISTS(4016, "Challenge reward already exists for this challenge"),
+    CHALLENGE_ROUTE_ALREADY_EXISTS(4017, "Challenge route already exists for this challenge"),
+    CHALLENGE_ROUTE_NOT_FOUND(4018, "Challenge route not found for this challenge"),
+    INVALID_CHECKPOINT_ORDER(4019, "Checkpoint order must be continuous starting from 1"),
+    ROUTE_NOT_FOUND(4020, "Route not found");
     public static final String INVALID_STATUS_MS = "Status is invalid";
     public static final String INVALID_MEMBERSHIP_MS = "Membership level is invalid";
     public static final String INVALID_EMAIL_MS = "Email is invalid";

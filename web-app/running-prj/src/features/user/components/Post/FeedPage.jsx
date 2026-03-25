@@ -1,94 +1,112 @@
-import React from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import SidebarLeft from "./SlidebarLeft";
 import CreatePost from "./CreatePost";
 import PostCard from "./PostCard";
-import SidebarRight from "./SlidebarRight";
+import SidebarRight from "./SlidebarRight"; 
 import "@/style/feed.css";
 import { getFeed } from "@/features/admin/users/services/UserService";
+import "@/features/user/components/Post/Feed.css";
 
 export default function FeedPage() {
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(false); 
+    
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
 
-    // const posts = [
-    //     {
-    //         id: 1,
-    //         user: "Beat Ninh Bình",
-    //         time: "25 phút",
-    //         content: "Một runner vừa hoàn thành buổi chạy sáng tại Ninh Bình 🏃‍♂️",
-    //         distance: "5.2 km",
-    //         pace: "5:20/km",
-    //         duration: "28 min"
-    //     },
-    //     {
-    //         id: 2,
-    //         user: "Beat Hà Nội",
-    //         time: "30 phút",
-    //         content: "Một runner vừa hoàn thành buổi chạy sáng tại Hà Nội 🏃‍♂️",
-    //         distance: "6.5 km",
-    //         pace: "5:20/km",
-    //         duration: "28 min"
-    //     },
-    //     {
-    //         id: 3,
-    //         user: "Beat Đà Nẵng",
-    //         time: "45 phút",
-    //         content: "Một runner vừa hoàn thành buổi chạy sáng tại Đà Nẵng 🏃‍♂️",
-    //         distance: "7.0 km",
-    //         pace: "6:20/km",
-    //         duration: "28 min"
-    //     },
-    //     {
-    //         id: 4,
-    //         user: "Beat Huế",
-    //         time: "50 phút",
-    //         content: "Một runner vừa hoàn thành buổi chạy sáng tại Huế 🏃‍♂️",
-    //         distance: "8.0 km",
-    //         pace: "6:10/km",
-    //         duration: "28 min"
-    //     },
-    //     {
-    //         id: 5,
-    //         user: "Beat Hải Phòng",
-    //         time: "50 phút",
-    //         content: "Một runner vừa hoàn thành buổi chạy sáng tại Hải Phòng 🏃‍♂️",
-    //         distance: "8.0 km",
-    //         pace: "6:10/km",
-    //         duration: "28 min"
-    //     }
-    // ];
-    const [posts, setPosts] = React.useState([]);
+    const observer = useRef();
+    const lastPostElementRef = useCallback(
+        (node) => {
+            if (loading) return;
+            if (observer.current) observer.current.disconnect();
+            
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    setPage((prevPage) => prevPage + 1); 
+                }
+            });
+            
+            if (node) observer.current.observe(node);
+        },
+        [loading, hasMore]
+    );
 
-    React.useEffect(() => {
-        fetchFeed();
-    }, []);
+    useEffect(() => {
+        fetchFeed(page);
+    }, [page]);
 
-    const fetchFeed = async () => {
+    const fetchFeed = async (pageNumber) => {
+    try {
+        setLoading(true);
+        
+        const res = await getFeed({ page: pageNumber, size: 5 }); 
+        
+        const feedData = res.data.data; 
+        console.log("Feed data:", feedData); 
 
-        try {
-            const res = await getFeed();
-            const data = res.data.data;
-            setPosts(data);
-        } catch (error) {
-            console.error("Fail to load feed:", error);
-            alert("Cannot load feed from server");
-        }
+        if (!feedData) return;
+
+        const newPosts = feedData.data || [];
+        const hasNextPage = feedData.hasNext;
+
+        setHasMore(hasNextPage); 
+
+        setPosts((prevPosts) => {
+            return pageNumber === 1 ? newPosts : [...prevPosts, ...newPosts];
+        });
+
+    } catch (error) {
+        console.error("Fail to load feed:", error);
+    } finally {
+        setLoading(false);
+    }
+};
+
+    const handlePostCreated = () => {
+        setPage(1); 
+        setHasMore(true); 
     };
 
     return (
         <div className="layout">
-
             <SidebarLeft />
 
             <div className="feed">
+                <CreatePost onSuccess={handlePostCreated} />
 
-                <CreatePost />
+                {posts.length > 0 ? (
+                    posts.map((post, index) => {
+                        if (posts.length === index + 1) {
+                            return (
+                                <div ref={lastPostElementRef} key={post.id || index}>
+                                    <PostCard post={post} />
+                                </div>
+                            );
+                        } else {
+                            return <PostCard key={post.id || index} post={post} />;
+                        }
+                    })
+                ) : (
+                    !loading && (
+                        <div className="modern-card" style={{ textAlign: "center", color: "var(--text-secondary)", padding: "20px" }}>
+                            Chưa có bài viết nào. Hãy là người đầu tiên đăng bài!
+                        </div>
+                    )
+                )}
 
-                {posts.map(post => (
-                    <PostCard key={post.id} post={post} />
-                ))}
+                {loading && (
+                    <div style={{ textAlign: "center", padding: "16px", color: "var(--text-secondary)" }}>
+                        <div className="spinner-border text-primary" role="status" style={{ width: "1.5rem", height: "1.5rem", borderWidth: "0.15em" }}></div>
+                        <div style={{ marginTop: "8px", fontSize: "14px" }}>Đang tải thêm...</div>
+                    </div>
+                )}
 
+                {!hasMore && posts.length > 0 && (
+                    <div style={{ textAlign: "center", padding: "24px", color: "var(--text-secondary)", fontWeight: 500, fontSize: "15px" }}>
+                        Bạn đã xem hết bảng tin ngày hôm nay! 🎉
+                    </div>
+                )}
             </div>
-
-            <SidebarRight />
 
         </div>
     );

@@ -10,6 +10,6 @@ public class CORSConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .allowedOrigins("http://localhost:5173")
-                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE");
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE", "PATCH");
     }
 }

@@ -88,4 +88,27 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             throw new RuntimeException("Error uploading file", e);
         }
     }
+
+    public String uploadHighlightRouteImage(MultipartFile file, Long routeId) {
+        try {
+            String publicId = "highlight_route_" + routeId + "_" + UUID.randomUUID();
+
+            Map<String, Object> options = Map.of(
+                    "folder", UploadFolder.HIGHLIGHT_ROUTE.getPath(),
+                    "public_id", publicId,
+                    "resource_type", "auto"
+            );
+
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), options);
+
+            String url = uploadResult.get("secure_url").toString();
+            log.info("Upload highlight route success: {}", url);
+
+            return url;
+
+        } catch (Exception e) {
+            log.error("Upload highlight route failed", e);
+            throw new RuntimeException("Upload failed", e);
+        }
+    }
 }

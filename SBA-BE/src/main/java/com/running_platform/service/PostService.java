@@ -1,6 +1,7 @@
 package com.running_platform.service;
 
 import com.running_platform.dto.request.CreatePostRequest;
+import com.running_platform.dto.response.FeedResponse;
 import com.running_platform.dto.response.PostResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,5 +15,5 @@ public interface PostService {
 
     Page<PostResponse> getPostsByUser(Long userId, Pageable pageable);
 
-    List<PostResponse> findAllApprovePost();
+    FeedResponse findAllApprovePost(Long userId, int page, int size);
 }

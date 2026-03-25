@@ -6,6 +6,10 @@ import ProfilePage from "@/features/user/components/Profile/ProfilePage"
 import FriendPage from "@/features/user/components/Friends/FriendPage"
 import Chat from "@/features/user/components/Chat/components/Chat"
 import ProtectedRoute from "./ProtectedRoute"
+import AnimatedLayout from "../layouts/AnimatedLayout"
+import CustomPlan from "@/features/user/components/Plans/CustomPlan"
+import SchedulePage from "@/features/user/components/Plans/SchedulePage"
+import ReviewPlan from "@/features/user/components/Plans/ReviewPlan"
 
 const userRoutes = [
     {
@@ -34,6 +38,22 @@ const userRoutes = [
             { path: "/follow", element: <FriendPage /> },
             { path: "/friends", element: <FriendPage /> },
             { path: "/chat", element: <Chat /> },
+            {
+                path: "/plans/custom-plan", element: <AnimatedLayout />, children: [
+                    {
+                        index: true,
+                        element: <CustomPlan />
+                    },
+                    {
+                        path: "/plans/custom-plan/schedule",
+                        element: <SchedulePage />
+                    },
+                    {
+                        path: "/plans/custom-plan/review",
+                        element: <ReviewPlan />
+                    },
+                ]
+            },
 
         ]
     }
