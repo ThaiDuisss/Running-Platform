@@ -55,8 +55,8 @@ const Footer = () => {
                 <hr className="my-5 opacity-10" />
 
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center opacity-50 small">
-                    <p>© 2024 VELOUITY VIETNAM. All rights reserved.</p>
-                    <p>Thiết kế bởi Senior Frontend Team</p>
+                    <p>© 2024 FPT VIETNAM. All rights reserved.</p>
+                    <p>Thiết kế bởi Senior FPT Lớp SE1941</p>
                 </div>
             </Container>
         </footer>

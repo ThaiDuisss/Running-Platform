@@ -22,10 +22,10 @@ const REACTION_TYPES = [
 export default function PostCard({ post }) {
     const { user } = useContext(AuthDataContext);
     const [showComment, setShowComment] = useState(false);
-    
+
     const [isExpanded, setIsExpanded] = useState(false);
-    const MAX_LENGTH = 150; 
-    
+    const MAX_LENGTH = 150;
+
     const [showOptions, setShowOptions] = useState(false);
     const [countReply, setCountReply] = useState(0);
     const [showReactionModal, setShowReactionModal] = useState(false);
@@ -49,7 +49,7 @@ export default function PostCard({ post }) {
 
     useEffect(() => {
         fetchCountReply();
-        fetchCountCommentReacts();  
+        fetchCountCommentReacts();
     }, [post?.id, userKey]);
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function PostCard({ post }) {
         try {
             if (serverReaction) localStorage.setItem(localStorageKey, serverReaction);
             else localStorage.removeItem(localStorageKey);
-        } catch (e) {}
+        } catch (e) { }
     }, [post, userKey]);
 
     const fetchCountReply = async () => {
@@ -87,10 +87,10 @@ export default function PostCard({ post }) {
 
             if (serverReaction) {
                 setReaction(serverReaction);
-                try { localStorage.setItem(localStorageKey, serverReaction); } catch (e) {}
+                try { localStorage.setItem(localStorageKey, serverReaction); } catch (e) { }
             } else {
                 setReaction(null);
-                try { localStorage.removeItem(localStorageKey); } catch (e) {}
+                try { localStorage.removeItem(localStorageKey); } catch (e) { }
             }
 
             if (!wasReactionBefore && serverReaction) setCountReply(prev => prev + 1);
@@ -122,13 +122,13 @@ export default function PostCard({ post }) {
     return (
         <>
             <div className="modern-card" style={{ marginBottom: "16px" }}>
-                
+
                 {/* HEADER */}
                 <div className="post-header">
-                    <img src={post.avatar} alt="avatar" />
+                    <img src={user.imageUrl} alt="avatar" />
                     <div>
                         <div className="post-author">{post.username}</div>
-                        {/* <div className="post-time">Vừa xong · 🌍</div> */}  
+                        {/* <div className="post-time">Vừa xong · 🌍</div> */}
                     </div>
                 </div>
 
@@ -136,18 +136,18 @@ export default function PostCard({ post }) {
                 <div className="post-content">
                     {post.content && (
                         <div className="post-content-text">
-                            {isExpanded || !shouldTruncate 
-                                ? contentText 
+                            {isExpanded || !shouldTruncate
+                                ? contentText
                                 : `${contentText.slice(0, MAX_LENGTH)}...`}
-                            
+
                             {shouldTruncate && (
-                                <span 
+                                <span
                                     onClick={() => setIsExpanded(!isExpanded)}
-                                    style={{ 
-                                        fontWeight: "600", 
-                                        cursor: "pointer", 
+                                    style={{
+                                        fontWeight: "600",
+                                        cursor: "pointer",
                                         color: "var(--text-secondary, #65676B)",
-                                        marginLeft: "5px" 
+                                        marginLeft: "5px"
                                     }}
                                 >
                                     {isExpanded ? "Ẩn bớt" : "Xem thêm"}
@@ -157,9 +157,9 @@ export default function PostCard({ post }) {
                     )}
 
                     {post.images && post.images.length > 0 && (
-                        <div 
-                            className="post-images" 
-                            style={{ 
+                        <div
+                            className="post-images"
+                            style={{
                                 gridTemplateColumns: post.images.length === 1 ? "1fr" : "1fr 1fr",
                                 marginTop: "12px"
                             }}
@@ -172,8 +172,8 @@ export default function PostCard({ post }) {
                 </div>
 
                 <div className="post-stats">
-                    <div 
-                        onClick={() => setShowReactionModal(true)} 
+                    <div
+                        onClick={() => setShowReactionModal(true)}
                         style={{ cursor: 'pointer', hover: { textDecoration: 'underline' } }}
                         className="reaction-count-text"
                     >
@@ -182,7 +182,7 @@ export default function PostCard({ post }) {
                         </span>
                         {countReply} người đã bày tỏ cảm xúc
                     </div>
-                    <div>{countComment} Bình luận</div> 
+                    <div>{countComment} Bình luận</div>
                 </div>
 
                 {/* ACTION BAR */}
@@ -191,12 +191,12 @@ export default function PostCard({ post }) {
                         className="action-btn"
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
-                        style={{ position: 'relative' }} 
+                        style={{ position: 'relative' }}
                     >
-                        <div 
-                            style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
                                 gap: '6px',
                                 color: currentReactionConfig ? currentReactionConfig.color : 'inherit',
                                 fontWeight: currentReactionConfig ? 'bold' : 'normal'
@@ -212,12 +212,12 @@ export default function PostCard({ post }) {
                         {showOptions && (
                             <div className="reaction-picker" style={{ bottom: '100%', left: '0', marginBottom: '10px' }}>
                                 {REACTION_TYPES.map(r => (
-                                    <span 
-                                        key={r.type} 
+                                    <span
+                                        key={r.type}
                                         className="reaction-icon"
                                         title={r.label}
                                         onClick={(e) => {
-                                            e.stopPropagation(); 
+                                            e.stopPropagation();
                                             reactPosts(post.id, r.type);
                                         }}
                                     >
@@ -238,10 +238,10 @@ export default function PostCard({ post }) {
                 </div>
             </div>
 
-            <ReactionModal 
-                show={showReactionModal} 
-                onClose={() => setShowReactionModal(false)} 
-                postId={post.id} 
+            <ReactionModal
+                show={showReactionModal}
+                onClose={() => setShowReactionModal(false)}
+                postId={post.id}
             />
 
             <CommentModal
