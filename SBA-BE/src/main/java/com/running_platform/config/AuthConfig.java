@@ -37,7 +37,7 @@ public class AuthConfig {
     Oauth2AuthenticationFailureHandler authenticationFailureHandler;
     HttpCookieOauth2AuthorizationRequestRepository httpCookieOauth2AuthorizationRequestRepository;
     PasswordEncoder passwordEncoder;
-    static String[] PUBLIC_ENDPOINTS = {
+    String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/auth/login",
             "/swagger-ui/**",
@@ -52,10 +52,8 @@ public class AuthConfig {
             "success",
             "/get-info/**",
             "/oauth2/**",
-            "plans/**"
             "/api/articles",
-            "/ws/**",
-
+            "/api/highlight-routes/**"
     };
 
     @Bean

@@ -1,8 +1,8 @@
 /* ===== CONTAINER ===== */
 .plan-container {
-  background: white;
+  background: #0f0f0f;
   min-height: 100vh;
-  color: black;
+  color: white;
   padding: 30px;
   font-family: "Inter", sans-serif;
 }
@@ -87,7 +87,7 @@
 .calendar-date-now {
   width: 60px;
   height: 60px;              /* phải bằng width */
-  
+
   display: flex;
   flex-direction: column;
   justify-content: center;   /* căn giữa dọc */
@@ -400,7 +400,7 @@
   border-radius: 40;
   margin-bottom: 20px;
   width: auto;
-} 
+}
 .day-header{
   font-size: 15px;
   font-weight: 200;

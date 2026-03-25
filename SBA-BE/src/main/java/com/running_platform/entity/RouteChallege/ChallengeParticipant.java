@@ -10,6 +10,7 @@ import org.hibernate.annotations.Where;
 
 import java.time.Instant;
 
+// bảng trung gian giữa User và Challenge, lưu thông tin về tiến độ của người tham gia trong thử thách
 @Entity
 @Getter
 @Setter
@@ -19,16 +20,25 @@ import java.time.Instant;
 @AllArgsConstructor
 @Where(clause = "is_deleted=false")
 public class ChallengeParticipant extends AbstractEntity<Long> {
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "participant_id", nullable = false)
-    Users participant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RouteChallenge_id", nullable = false)
-    RouteChallenge RouteChallenge;
+    @JoinColumn(name = "user_id", nullable = false)
+    Users user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "challenge_id", nullable = false)
+    Challenge challenge;
 
     @Enumerated(EnumType.STRING)
     ParticipantStatus status;
 
-    Instant completeAt;
+    Double currentValue;     // km / count
+
+    Double progress;         // %
+
+    Integer checkpointIndex; // dùng cho route/checkpoint
+
+    Instant joinedAt;
+
+    Instant completedAt;
 }
