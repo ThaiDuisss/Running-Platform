@@ -73,7 +73,7 @@ export default function CreateGroupModal({ onClose }) {
         setCreating(true);
         try {
             const conv = await createGroup(title.trim(), selected.map(u => u.id));
-            selectConversation(conv);
+            selectConversation(conv.id);
             onClose();
         } catch (e) {
             const msg =
@@ -89,7 +89,7 @@ export default function CreateGroupModal({ onClose }) {
     };
 
     return (
-        <div className="ugm-backdrop" onClick={e => e.target === e.currentTarget && onClose()}>
+        <div className="ugm-backdrop" >
             <div className="ugm-modal">
                 <div className="ugm-header">
                     <h3>Tạo nhóm chat</h3>
