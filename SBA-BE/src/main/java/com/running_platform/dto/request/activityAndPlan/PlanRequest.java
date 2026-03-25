@@ -1,6 +1,7 @@
 package com.running_platform.dto.request.activityAndPlan;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,7 +24,7 @@ public class PlanRequest {
     LocalDate scheduledDate;
 
     @Positive(message = "Target distance must be positive")
-    BigDecimal targetDistance;
+    int targetDistance;
 
     @NotBlank(message = "Title is required")
     String title;
@@ -34,10 +35,11 @@ public class PlanRequest {
     @JsonFormat(pattern = "HH:mm:ss")
     LocalTime endTime;
 
+    @JsonProperty("isSetTime")
     boolean isSetTime;
 
     @Positive(message = "Duration must be positive")
-    Double duration;
+    int duration;
 
 //    boolean isCompleted;
 }

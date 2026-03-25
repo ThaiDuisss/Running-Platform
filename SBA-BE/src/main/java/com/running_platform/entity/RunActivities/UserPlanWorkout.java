@@ -16,19 +16,17 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_plan_workout",
-        uniqueConstraints = @UniqueConstraint(
-                columnNames = {"created_by", "scheduled_date"}
-        ))
+//@Table(name = "user_plan_workout",
+//        uniqueConstraints = @UniqueConstraint(
+//                columnNames = {"created_by", "scheduled_date"}
+//        ))
 public class UserPlanWorkout extends AbstractEntity<Long> {
 
     @Column(nullable = false)
     LocalDate scheduledDate;
 
-    BigDecimal targetDistance;
+    int targetDistance;
     @Column(nullable = true)
-
-    @Column(length = 255)
     String title;
 
     LocalTime startTime;
@@ -36,10 +34,14 @@ public class UserPlanWorkout extends AbstractEntity<Long> {
 
     LocalTime endTime;
 
-    boolean isSetTime;
+     boolean isSetTime;;
 
-    Double duration;
+    int duration;
 
     @Column(nullable = true)
     boolean isCompleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_plan_id", nullable = true)
+    UserPlans userPlan;
 }

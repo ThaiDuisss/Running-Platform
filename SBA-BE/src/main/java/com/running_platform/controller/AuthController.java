@@ -16,6 +16,9 @@ import com.running_platform.repository.VerificationTokenRepository;
 import com.running_platform.service.AuthenticationService;
 import com.running_platform.service.impl.JwtServiceImp;
 import com.running_platform.service.impl.UserServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -86,6 +89,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Login",
+            parameters = {
+                    @Parameter(
+                            name = "Device-Type",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            example = "WEB"
+                    )
+            }
+    )
     public ResponseEntity<ApiResponse<?>> signIn(@RequestHeader("Device-Type") DeviceType deviceType, @RequestBody SignInRequest signInRequest) {
         TokenResponse tokenResponse = authenticationService.getAccessToken(signInRequest);
         if(DeviceType.APP.equals(deviceType)) {

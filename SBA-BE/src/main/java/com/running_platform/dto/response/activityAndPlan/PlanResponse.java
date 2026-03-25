@@ -1,5 +1,7 @@
 package com.running_platform.dto.response.activityAndPlan;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,20 +18,25 @@ import java.time.LocalTime;
 public class PlanResponse {
 
     Long id;
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate scheduledDate;
 
-    BigDecimal targetDistance;
+    int targetDistance;
 
     String title;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     LocalTime startTime;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     LocalTime endTime;
 
+    @JsonProperty("isSetTime")
     boolean isSetTime;
 
-    Double duration;
+    int duration;
 
     boolean isCompleted;
+
+
 }
