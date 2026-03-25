@@ -65,16 +65,7 @@ const RunWiseNavbar = () => {
                         <NavLink className="btn btn-outline-primary me-2" to="/login">Đăng nhập</NavLink>
                         <NavLink className="btn btn-outline-primary" to="/register">Đăng ký</NavLink>
                     </div>) :
-                    // (<Nav className="rw-user-nav flex-shrink-0" variant="pills" activeKey="1">
-                    //     <NavDropdown
-                    //         title={<span className="rw-user-name">{user?.username || "Profile"}</span>}
-                    //         id="nav-dropdown"
-                    //         align="end"
-                    //     >
-                    //         <NavDropdown.Item eventKey="4.1" onClick={logout}>Log Out</NavDropdown.Item>
-                    //         <NavDropdown.Item eventKey="4.2" onClick={() => navigator("/profile")}>Profile</NavDropdown.Item>
-                    //     </NavDropdown>
-                    // </Nav>)
+
                     (< div className="header-right">
 
                         <div className="icon-btn notification">

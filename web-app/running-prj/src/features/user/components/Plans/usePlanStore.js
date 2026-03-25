@@ -64,7 +64,7 @@ export const usePlanStore = create(
                     .map(day => ({
                         date: day.date,
                         type: day.type,
-                        distance: day.targetDistance,
+                        targetDistance: day.targetDistance,
                         duration: day.duration
                     }));
             },
