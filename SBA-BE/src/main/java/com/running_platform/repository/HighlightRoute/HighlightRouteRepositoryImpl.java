@@ -3,7 +3,7 @@ package com.running_platform.repository.HighlightRoute;
 import com.querydsl.core.BooleanBuilder;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.running_platform.dto.request.HighlightRouteRequest;
+import com.running_platform.dto.request.highlightRoute.HighlightRouteRequest;
 import com.running_platform.entity.RunActivities.HighlightRoute;
 import com.running_platform.entity.RunActivities.QHighlightRoute;
 import lombok.RequiredArgsConstructor;

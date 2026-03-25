@@ -1,6 +1,7 @@
 package com.running_platform.entity.RunActivities;
 
 import com.running_platform.entity.AbstractEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -29,5 +30,8 @@ public class HighlightRoute extends AbstractEntity<Long> {
     Integer priority;
 
     Boolean isActive;
+
+    @Column(columnDefinition = "TEXT")
+    String polyline;
 
 }

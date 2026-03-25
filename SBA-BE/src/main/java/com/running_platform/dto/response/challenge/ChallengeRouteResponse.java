@@ -17,4 +17,6 @@ public class ChallengeRouteResponse {
 
     Integer requiredLoops;
 
+    ChallengeCheckpointResponse checkpoint;
+
 }

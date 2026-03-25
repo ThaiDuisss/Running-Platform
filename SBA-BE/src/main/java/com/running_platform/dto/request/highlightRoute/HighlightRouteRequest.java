@@ -1,4 +1,4 @@
-package com.running_platform.dto.request;
+package com.running_platform.dto.request.highlightRoute;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,4 +19,6 @@ public class HighlightRouteRequest {
     Integer priority;
 
     Boolean isActive;
+
+    String polyline;
 }

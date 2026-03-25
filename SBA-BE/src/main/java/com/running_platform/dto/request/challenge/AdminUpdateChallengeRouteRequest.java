@@ -1,8 +1,9 @@
 package com.running_platform.dto.request.challenge;
 
+import com.running_platform.dto.response.challenge.ChallengeCheckpointResponse;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.NonNull;
 
 import java.util.List;
 
@@ -12,13 +13,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AdminCreateChallengeRouteRequest {
+public class AdminUpdateChallengeRouteRequest {
 
+    @NonNull
     String polyline;
 
+    @PositiveOrZero
     Double totalDistance;
 
+    @NonNull
     Integer requiredLoops;
 
+    @NonNull
     List<AdminCreateChallengeCheckpointRequest> checkpoints;
 }

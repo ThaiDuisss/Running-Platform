@@ -1,11 +1,11 @@
-package com.running_platform.dto.request;
+package com.running_platform.dto.request.challenge;
 
-import com.running_platform.enums.ChallengeType;
+import com.running_platform.enums.ChallengeStatus;
 import com.running_platform.enums.VisibilityEnum;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
@@ -14,15 +14,11 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AdminUpdateRouteChallengeRequest {
+public class AdminUpdateChallengeRequest {
 
     String title;
 
     String description;
-
-    ChallengeType challengeType;
-
-    BigDecimal targetValue;
 
     Instant startTime;
 
@@ -30,4 +26,11 @@ public class AdminUpdateRouteChallengeRequest {
 
     VisibilityEnum visibility;
 
+    ChallengeStatus status;
+
+    @NotNull
+    ChallengeRewardRequest reward;
+
+    @NotNull
+    ChallengeRuleRequest rule;
 }

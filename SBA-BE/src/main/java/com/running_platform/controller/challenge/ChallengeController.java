@@ -1,6 +1,9 @@
 package com.running_platform.controller.challenge;
 
+import com.running_platform.dto.request.challenge.AdminUpdateChallengeRequest;
 import com.running_platform.dto.request.challenge.AdminCreateChallengeRequest;
+import com.running_platform.dto.request.challenge.FilterChallengeRequest;
+import com.running_platform.dto.response.PageResponse;
 import com.running_platform.dto.response.challenge.ChallengeResponse;
 import com.running_platform.dto.response.ApiResponse;
 import com.running_platform.service.Challenge.ChallengeService;
@@ -25,59 +28,60 @@ public class ChallengeController {
         );
     }
 
-    @PatchMapping("/{challengeId}")
-    public ApiResponse<ChallengeResponse> update(
+    @PatchMapping("/{challengeId}/publish")
+    public ApiResponse<ChallengeResponse> publish(
             @PathVariable Long challengeId
     ) {
         return ApiResponse.success(
-                "visibility updated successfully",
+                "Challenge published successfully",
                 challengeService.publish(challengeId)
         );
     }
 
+    @GetMapping("/filters")
+    public ApiResponse<PageResponse<ChallengeResponse>> filter(
+            @ModelAttribute FilterChallengeRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
 
-//    @GetMapping
-//    public ApiResponse<PageResponse<AdminRouteChallengeResponse>> getRouteChallenges(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size
-//    ) {
-//
-//        return ApiResponse.success(
-//                "Route challenges retrieved successfully",
-//                routeChallengeService.getRouteChallenges(page, size)
-//        );
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ApiResponse<AdminRouteChallengeResponse> getRouteChallengeById(
-//            @PathVariable Long id
-//    ) {
-//
-//        return ApiResponse.success(
-//                "Route challenge retrieved successfully",
-//                routeChallengeService.getRouteChallengeById(id)
-//        );
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ApiResponse<AdminRouteChallengeResponse> updateRouteChallenge(
-//            @PathVariable Long id,
-//            @Valid @RequestBody AdminUpdateRouteChallengeRequest request
-//    ) {
-//
-//        return ApiResponse.success(
-//                "Route challenge updated successfully",
-//                routeChallengeService.updateRouteChallenge(id, request)
-//        );
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ApiResponse<Void> deleteRouteChallenge(
-//            @PathVariable Long id
-//    ) {
-//        routeChallengeService.deleteRouteChallenge(id);
-//        return ApiResponse.success(
-//                "Deleted successfully",
-//                null);
-//    }
+        return ApiResponse.success(
+                "filter challenge successfully",
+                challengeService.filter(request, page, size)
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<ChallengeResponse> updateRouteChallenge(
+            @PathVariable Long id,
+            @Valid @RequestBody AdminUpdateChallengeRequest request
+    ) {
+
+        return ApiResponse.success(
+                "Challenge updated successfully",
+                challengeService.update(id, request)
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> delete(
+            @PathVariable Long id
+    ) {
+        challengeService.delete(id);
+        return ApiResponse.success(
+                "Deleted successfully",
+                null);
+    }
+
+
+    @GetMapping("/{id}")
+    public ApiResponse<ChallengeResponse> getChallengeById(
+            @PathVariable Long id
+    ) {
+
+        return ApiResponse.success(
+                "get detail challenge retrieved successfully",
+                challengeService.getById(id)
+        );
+    }
 }

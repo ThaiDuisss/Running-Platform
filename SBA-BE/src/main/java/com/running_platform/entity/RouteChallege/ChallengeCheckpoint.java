@@ -17,7 +17,7 @@ import lombok.experimental.FieldDefaults;
 public class ChallengeCheckpoint extends AbstractEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "challenge_route_id", nullable = false)
+    @JoinColumn(name = "route_id", nullable = false)
     ChallengeRoute route;
 
     Double latitude;

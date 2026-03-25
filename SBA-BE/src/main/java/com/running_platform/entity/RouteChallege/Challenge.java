@@ -28,7 +28,7 @@ public class Challenge extends AbstractEntity<Long> {
     @Column(length = 200, nullable = false)
     String title;
 
-    @Lob
+    @Column(length = 1000)
     String description;
 
     Instant startTime;
@@ -40,4 +40,12 @@ public class Challenge extends AbstractEntity<Long> {
     @Enumerated(EnumType.STRING)
     ChallengeStatus status;
 
+    @OneToOne(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    ChallengeRule rule;
+
+    @OneToOne(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    ChallengeReward reward;
+
+    @OneToOne(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    ChallengeRoute route;
 }

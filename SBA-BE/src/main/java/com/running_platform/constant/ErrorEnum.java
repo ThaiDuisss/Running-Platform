@@ -47,8 +47,8 @@ public enum ErrorEnum {
     REWARD_ALREADY_EXISTS(4016, "Challenge reward already exists for this challenge"),
     CHALLENGE_ROUTE_ALREADY_EXISTS(4017, "Challenge route already exists for this challenge"),
     CHALLENGE_ROUTE_NOT_FOUND(4018, "Challenge route not found for this challenge"),
-    INVALID_CHECKPOINT_ORDER(4019, "Checkpoint order must be continuous starting from 1");
-
+    INVALID_CHECKPOINT_ORDER(4019, "Checkpoint order must be continuous starting from 1"),
+    ROUTE_NOT_FOUND(4020, "Route not found");
     public static final String INVALID_STATUS_MS = "Status is invalid";
     public static final String INVALID_MEMBERSHIP_MS = "Membership level is invalid";
     public static final String INVALID_EMAIL_MS = "Email is invalid";

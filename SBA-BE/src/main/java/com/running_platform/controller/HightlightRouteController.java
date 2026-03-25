@@ -1,6 +1,6 @@
 package com.running_platform.controller;
 
-import com.running_platform.dto.request.HighlightRouteRequest;
+import com.running_platform.dto.request.highlightRoute.HighlightRouteRequest;
 import com.running_platform.dto.response.ApiResponse;
 import com.running_platform.dto.response.HighlightRouteResponse;
 import com.running_platform.dto.response.PageResponse;

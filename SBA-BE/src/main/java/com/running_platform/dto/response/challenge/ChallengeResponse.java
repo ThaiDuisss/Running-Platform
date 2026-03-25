@@ -31,4 +31,9 @@ public class ChallengeResponse {
 
     ChallengeStatus status;
 
+    ChallengeRuleResponse rule;
+
+    ChallengeRewardResponse reward;
+
+    ChallengeRouteResponse route;
 }

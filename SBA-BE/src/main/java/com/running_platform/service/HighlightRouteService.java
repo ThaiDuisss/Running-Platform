@@ -1,6 +1,6 @@
 package com.running_platform.service;
 
-import com.running_platform.dto.request.HighlightRouteRequest;
+import com.running_platform.dto.request.highlightRoute.HighlightRouteRequest;
 import com.running_platform.dto.response.HighlightRouteResponse;
 import com.running_platform.dto.response.PageResponse;
 import org.springframework.web.multipart.MultipartFile;

@@ -6,7 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "challenge_checkpoint")
+@Table(name = "challenge_reward")
 @Getter
 @Setter
 @Builder

@@ -1,11 +1,22 @@
 import { useEffect, useState, useCallback } from "react";
 import axiosClient from "@/shared/services/axiosClient";
+import { MapContainer, TileLayer, Marker, Polyline, useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { encode, decode } from "google-polyline";
+import simplify from "simplify-js";
+
+// Fix icon lỗi hiển thị của Leaflet trong React
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+    iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+});
 
 const HighlightRoutePage = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    // State cho Toast thông báo
     const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
     // Pagination state
@@ -26,23 +37,80 @@ const HighlightRoutePage = () => {
     const [modalMode, setModalMode] = useState("create");
     const [currentId, setCurrentId] = useState(null);
 
-    // State riêng cho Modal Xóa
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
     const initialFormState = {
         title: "",
         location: "",
-        distanceLabel: "",
         priority: "",
-        isActive: true
+        isActive: true,
+        polyline: ""
     };
 
     const [form, setForm] = useState(initialFormState);
     const [selectedFile, setSelectedFile] = useState(null);
     const [preview, setPreview] = useState(null);
+    const [mapPoints, setMapPoints] = useState([]);
 
-    // Hàm hiển thị thông báo đẹp
+    // --- LOGIC BẢN ĐỒ (VẼ ĐƯỜNG THẬT QUA OSRM) ---
+
+    // Hàm gọi API lấy đường đi thực tế giữa 2 điểm
+    const fetchRealRoute = async (start, end) => {
+        try {
+            // Sử dụng profile 'foot' để bám theo đường đi bộ/vỉa hè cho Runwise
+            const response = await fetch(
+                `https://router.project-osrm.org/route/v1/foot/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`
+            );
+            const result = await response.json();
+            if (result.code === "Ok") {
+                // OSRM trả về [lng, lat], cần đảo lại thành [lat, lng] cho Leaflet
+                return result.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+            }
+        } catch (error) {
+            console.error("Lỗi lấy đường đi thật:", error);
+        }
+        return [end]; // Fallback trả về điểm đích nếu lỗi
+    };
+
+    const MapEvents = () => {
+        useMapEvents({
+            async click(e) {
+                const newClickedPoint = [e.latlng.lat, e.latlng.lng];
+
+                if (mapPoints.length === 0) {
+                    setMapPoints([newClickedPoint]);
+                } else {
+                    const lastPoint = mapPoints[mapPoints.length - 1];
+                    // Lấy các điểm thực tế giữa điểm cũ và điểm mới
+                    const realSegment = await fetchRealRoute(lastPoint, newClickedPoint);
+
+                    setMapPoints(prev => {
+                        // Nối mảng cũ với segment mới (bỏ điểm đầu segment để không trùng với lastPoint)
+                        const updated = [...prev, ...realSegment.slice(1)];
+
+                        // Tối ưu hóa polyline trước khi lưu
+                        const pointsForSimplify = updated.map(p => ({ x: p[0], y: p[1] }));
+                        const simplified = simplify(pointsForSimplify, 0.00002); // Độ nhạy ~5m
+                        const finalCoords = simplified.map(p => [p.x, p.y]);
+
+                        // Encode và lưu vào form
+                        const encoded = encode(finalCoords, 4); // Dùng precision 5 cho chuẩn Google
+                        setForm(f => ({ ...f, polyline: encoded }));
+
+                        return finalCoords;
+                    });
+                }
+            },
+        });
+        return null;
+    };
+
+    const clearRoute = () => {
+        setMapPoints([]);
+        setForm(f => ({ ...f, polyline: "" }));
+    };
+
     const showMessage = (message, type = "success") => {
         setToast({ show: true, message, type });
         setTimeout(() => setToast({ show: false, message: "", type: "success" }), 3000);
@@ -82,6 +150,7 @@ const HighlightRoutePage = () => {
     const openCreateModal = () => {
         setModalMode("create");
         setForm(initialFormState);
+        setMapPoints([]);
         setSelectedFile(null);
         setPreview(null);
         setCurrentId(null);
@@ -93,10 +162,22 @@ const HighlightRoutePage = () => {
         setForm({
             title: item.title || "",
             location: item.location || "",
-            distanceLabel: item.distanceLabel || "",
             priority: item.priority || "",
-            isActive: item.isActive
+            isActive: item.isActive,
+            polyline: item.polyline || ""
         });
+
+        if (item.polyline) {
+            try {
+                const decoded = decode(item.polyline);
+                setMapPoints(decoded);
+            } catch (e) {
+                setMapPoints([]);
+            }
+        } else {
+            setMapPoints([]);
+        }
+
         setSelectedFile(null);
         setPreview(item.thumbnail || null);
         setCurrentId(item.id);
@@ -138,7 +219,6 @@ const HighlightRoutePage = () => {
         }
     };
 
-    // Logic Xóa mới (Dùng Modal thay alert)
     const openDeleteModal = (id) => {
         setDeleteId(id);
         setIsDeleteModalOpen(true);
@@ -161,7 +241,7 @@ const HighlightRoutePage = () => {
         }
     };
 
-    // ================= STYLES =================
+    // ================= STYLES (Giữ nguyên của Huy) =================
     const styles = {
         container: { padding: "24px", fontFamily: "'Inter', sans-serif", maxWidth: "1200px", margin: "0 auto", color: "#1f2937" },
         header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" },
@@ -175,7 +255,8 @@ const HighlightRoutePage = () => {
         tr: { transition: "background-color 0.2s" },
         td: { padding: "14px", borderBottom: "1px solid #e5e7eb", fontSize: "15px" },
         modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000, backdropFilter: "blur(4px)" },
-        modalContent: { backgroundColor: "#fff", padding: "30px", borderRadius: "16px", width: "100%", maxWidth: "550px", maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)" },
+        modalContent: { backgroundColor: "#fff", padding: "30px", borderRadius: "16px", width: "100%", maxWidth: "550px", maxHeight: "95vh", overflowY: "auto", boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)" },
+        mapWrapper: { height: "250px", width: "100%", borderRadius: "12px", overflow: "hidden", margin: "10px 0", border: "1px solid #e5e7eb" },
         toast: {
             position: "fixed", top: "20px", right: "20px", padding: "12px 24px", borderRadius: "8px", color: "#fff",
             zIndex: 2000, boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)", transform: toast.show ? "translateX(0)" : "translateX(150%)",
@@ -186,7 +267,6 @@ const HighlightRoutePage = () => {
 
     return (
         <div style={styles.container}>
-            {/* Toast Thông báo */}
             <div style={styles.toast}>
                 {toast.type === "success" ? "✓" : "✕"} {toast.message}
             </div>
@@ -196,7 +276,6 @@ const HighlightRoutePage = () => {
                 <button style={styles.btnPrimary} onClick={openCreateModal}>+ New Route</button>
             </div>
 
-            {/* BỘ LỌC */}
             <div style={styles.filterBox}>
                 <input style={styles.input} placeholder="Title..." value={filters.title} onChange={e => setFilters({ ...filters, title: e.target.value })} />
                 <input style={styles.input} placeholder="Location..." value={filters.location} onChange={e => setFilters({ ...filters, location: e.target.value })} />
@@ -212,7 +291,6 @@ const HighlightRoutePage = () => {
                 <button style={styles.btnPrimary} onClick={handleSearch}>Search</button>
             </div>
 
-            {/* BẢNG DỮ LIỆU */}
             <table style={styles.table}>
                 <thead>
                     <tr>
@@ -249,7 +327,6 @@ const HighlightRoutePage = () => {
                 </tbody>
             </table>
 
-            {/* PHÂN TRANG */}
             {!loading && totalPages > 1 && (
                 <div style={{ display: "flex", justifyContent: "center", marginTop: "24px", gap: "12px", alignItems: "center" }}>
                     <button style={{ ...styles.btnSecondary, padding: "6px 16px", cursor: currentPage === 0 ? "not-allowed" : "pointer", opacity: currentPage === 0 ? 0.5 : 1 }} disabled={currentPage === 0} onClick={() => setCurrentPage(p => p - 1)}>Prev</button>
@@ -258,43 +335,59 @@ const HighlightRoutePage = () => {
                 </div>
             )}
 
-            {/* MODAL: CREATE/UPDATE */}
             {isModalOpen && (
                 <div style={styles.modalOverlay}>
                     <div style={styles.modalContent}>
                         <h3 style={{ marginBottom: "20px", fontSize: "20px" }}>{modalMode === "create" ? "Tạo tuyến đường mới" : "Cập nhật tuyến đường"}</h3>
+
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <label style={{ fontWeight: "600" }}>Lộ trình (Click để chọn các điểm)</label>
+                            <button onClick={clearRoute} style={{ fontSize: "12px", color: "#ef4444", cursor: "pointer", background: "none", border: "1px solid #ef4444", borderRadius: "4px", padding: "2px 6px" }}>Xóa lộ trình</button>
+                        </div>
+                        <div style={styles.mapWrapper}>
+                            <MapContainer center={mapPoints.length > 0 ? mapPoints[0] : [21.0285, 105.8542]} zoom={13} style={{ height: "100%" }}>
+                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                <MapEvents />
+                                {mapPoints.length > 0 && (
+                                    <>
+                                        <Marker position={mapPoints[0]} />
+                                        <Marker position={mapPoints[mapPoints.length - 1]} />
+                                        <Polyline positions={mapPoints} color="#2563eb" weight={4} />
+                                    </>
+                                )}
+                            </MapContainer>
+                        </div>
+
                         <div style={{ marginBottom: "15px" }}>
                             <label style={{ display: "block", marginBottom: "6px", fontWeight: "600" }}>Title</label>
                             <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="VD: Hồ Tây sáng sớm..." value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
                         </div>
+
                         <div style={{ display: "flex", gap: "15px", marginBottom: "15px" }}>
                             <div style={{ flex: 1 }}>
                                 <label style={{ display: "block", marginBottom: "6px", fontWeight: "600" }}>Location</label>
                                 <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Hà Nội..." value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} />
                             </div>
                             <div style={{ flex: 1 }}>
-                                <label style={{ display: "block", marginBottom: "6px", fontWeight: "600" }}>Distance (Label)</label>
-                                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="5.2 km..." value={form.distanceLabel} onChange={e => setForm({ ...form, distanceLabel: e.target.value })} />
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", gap: "15px", marginBottom: "15px" }}>
-                            <div style={{ flex: 1 }}>
                                 <label style={{ display: "block", marginBottom: "6px", fontWeight: "600" }}>Priority (1-5)</label>
                                 <input type="number" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} value={form.priority} onChange={e => setForm({ ...form, priority: e.target.value })} />
                             </div>
-                            <div style={{ flex: 1 }}>
-                                <label style={{ display: "block", marginBottom: "6px", fontWeight: "600" }}>Status</label>
-                                <select style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} value={form.isActive} onChange={e => setForm({ ...form, isActive: e.target.value === "true" })}>
-                                    <option value="true">Active</option>
-                                    <option value="false">Inactive</option>
-                                </select>
-                            </div>
                         </div>
+
+                        <div style={{ marginBottom: "15px" }}>
+                            <label style={{ display: "block", marginBottom: "6px", fontWeight: "600" }}>Status</label>
+                            <select style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} value={form.isActive} onChange={e => setForm({ ...form, isActive: e.target.value === "true" })}>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+
                         <div style={{ marginBottom: "20px" }}>
                             <label style={{ display: "block", marginBottom: "6px", fontWeight: "600" }}>Thumbnail</label>
                             <input type="file" accept="image/*" onChange={e => handleFileChange(e.target.files[0])} />
                             {preview && <img src={preview} alt="preview" style={{ width: "100%", height: "160px", objectFit: "cover", marginTop: "12px", borderRadius: "8px", border: "1px solid #e5e7eb" }} />}
                         </div>
+
                         <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}>
                             <button style={styles.btnSecondary} onClick={closeModal}>Hủy</button>
                             <button style={styles.btnPrimary} onClick={handleSave}>Xác nhận</button>
@@ -303,13 +396,12 @@ const HighlightRoutePage = () => {
                 </div>
             )}
 
-            {/* MODAL: DELETE CONFIRMATION (Mới thêm) */}
             {isDeleteModalOpen && (
                 <div style={styles.modalOverlay}>
                     <div style={{ ...styles.modalContent, maxWidth: "400px", textAlign: "center" }}>
                         <div style={{ fontSize: "50px", color: "#ef4444", marginBottom: "10px" }}>⚠</div>
                         <h3 style={{ marginBottom: "10px", fontSize: "20px" }}>Xác nhận xóa</h3>
-                        <p style={{ color: "#6b7280", marginBottom: "25px" }}>Bạn có chắc chắn muốn xóa tuyến đường này không? Hành động này không thể hoàn tác.</p>
+                        <p style={{ color: "#6b7280", marginBottom: "25px" }}>Bạn có chắc chắn muốn xóa tuyến đường này không?</p>
                         <div style={{ display: "flex", justifyContent: "center", gap: "12px" }}>
                             <button style={styles.btnSecondary} onClick={closeDeleteModal}>Hủy</button>
                             <button style={styles.btnDelete} onClick={confirmDelete}>Xóa ngay</button>

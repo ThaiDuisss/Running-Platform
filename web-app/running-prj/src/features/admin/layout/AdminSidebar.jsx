@@ -44,7 +44,7 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
         {
             label: "Route Challenges",
             icon: <Trophy />,
-            path: "/admin/route-challenges",
+            path: "/admin/challenges",
             active: location.pathname.includes("route-challenges")
         },
         {

@@ -2,15 +2,14 @@ package com.running_platform.controller.challenge;
 
 
 import com.running_platform.dto.request.challenge.AdminCreateChallengeRouteRequest;
+import com.running_platform.dto.request.challenge.AdminUpdateChallengeRouteRequest;
 import com.running_platform.dto.response.ApiResponse;
 import com.running_platform.dto.response.challenge.ChallengeRouteResponse;
 import com.running_platform.service.Challenge.ChallengeRouteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,12 +22,28 @@ public class ChallengeRouteController {
     @PostMapping("/{challengeId}/routes")
     public ApiResponse<ChallengeRouteResponse> create(
              @PathVariable Long challengeId,
-             AdminCreateChallengeRouteRequest request
+             @RequestBody AdminCreateChallengeRouteRequest request
     ) {
         return ApiResponse.created(
                 "Challenge created successfully",
-                challengeRouteService.createChallengeRoute(
+                challengeRouteService.create(
                         challengeId,
+                        request
+                )
+        );
+    }
+
+    @PutMapping("/{challengeId}/routes/{routeId}")
+    public ApiResponse<ChallengeRouteResponse> update(
+            @PathVariable Long challengeId,
+            @PathVariable Long routeId,
+            @RequestBody @Valid AdminUpdateChallengeRouteRequest request
+    ) {
+        return ApiResponse.success(
+                "Challenge route updated successfully",
+                challengeRouteService.update(
+                        challengeId,
+                        routeId,
                         request
                 )
         );

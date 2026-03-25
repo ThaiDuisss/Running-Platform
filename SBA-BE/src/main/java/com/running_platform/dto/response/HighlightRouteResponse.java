@@ -23,4 +23,6 @@ public class HighlightRouteResponse {
     Boolean isActive;
 
     String thumbnail;
+
+    String polyline;
 }

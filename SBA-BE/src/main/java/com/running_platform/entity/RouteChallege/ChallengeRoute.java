@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // đường chạy của thử thách, có thể là một polyline mã hóa hoặc một tập hợp các điểm GPS
 @Entity
 @Table(name = "challenge_route")
@@ -26,4 +29,10 @@ public class ChallengeRoute extends AbstractEntity<Long> {
     Double totalDistance;
 
     Integer requiredLoops;
+
+    @OneToMany(mappedBy = "route",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    List<ChallengeCheckpoint> checkpoints = new ArrayList<>();
 }

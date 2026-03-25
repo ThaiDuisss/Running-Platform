@@ -1,7 +1,7 @@
 package com.running_platform.service.impl;
 
 import com.running_platform.constant.ErrorEnum;
-import com.running_platform.dto.request.HighlightRouteRequest;
+import com.running_platform.dto.request.highlightRoute.HighlightRouteRequest;
 import com.running_platform.dto.response.HighlightRouteResponse;
 import com.running_platform.dto.response.PageResponse;
 import com.running_platform.entity.RunActivities.HighlightRoute;
@@ -10,6 +10,7 @@ import com.running_platform.mapper.HighlightRouteMapper;
 import com.running_platform.repository.HighlightRoute.HighlightRouteRepository;
 import com.running_platform.service.CloudinaryService;
 import com.running_platform.service.HighlightRouteService;
+import com.running_platform.util.DistanceUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,10 @@ public class HighlightRouteServiceImpl implements HighlightRouteService {
         HighlightRoute route = highlightRouteMapper.toEntity(request);
 
         route.setThumbnail(null); // chưa có ảnh
+
+        String polyline = request.getPolyline();
+        Double totalDistance = DistanceUtils.calculateDistanceFromPolyline(polyline);
+        route.setDistanceLabel(String.valueOf(totalDistance));
 
         HighlightRoute saved = highlightRouteRepository.save(route);
 
