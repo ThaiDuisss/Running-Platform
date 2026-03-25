@@ -65,6 +65,10 @@ public class UserServiceImpl implements UserService {
         Set<Roles> roles = new HashSet<>();
         Roles roleUser = roleRepository.findByRoleName(RoleEnum.USER);
         roles.add(roleUser);
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+        Point point = geometryFactory.createPoint(
+                new Coordinate(0, 0)
+        );
         Users user = Users.builder()
                 .username(userRegister.getUsername())
                 .password(passwordEncoder.encode(userRegister.getPassword()))
@@ -75,6 +79,7 @@ public class UserServiceImpl implements UserService {
                 .fullName(userRegister.getFullName())
                 .emailVerified(userRegister.isEmailVerified())
                 .phoneNumber(userRegister.getPhoneNumber())
+                .locationDetail(point)
                 .build();
 
         user = repository.save(user);

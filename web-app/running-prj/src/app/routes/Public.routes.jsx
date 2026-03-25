@@ -30,11 +30,6 @@ const publicRoutes = [
     children: [
       { index: true, element: <HomePage /> },
       { path: "/routes", element: <Routes /> },
-      { path: "/feed", element: <FeedPage /> },
-      { path: "/plans", element: <PlanPage /> },
-      { path: "/profile", element: <ProfilePage /> },
-      { path: "/follow", element: <FriendPage /> },
-      { path: "/friends", element: <FriendPage /> },
       {
         path: "/blog",
         element: <Blog />

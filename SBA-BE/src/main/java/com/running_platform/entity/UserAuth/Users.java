@@ -51,7 +51,7 @@ public class Users extends AbstractEntity<Long> {
     @Column( columnDefinition = "VARCHAR(50)")
     String fullName;
 
-    @Column(columnDefinition = "POINT", name = "location_detail")
+    @Column(columnDefinition = "POINT", name = "location_detail", nullable = false)
     private Point locationDetail;
 
 //    @Column(name = "registered_provider_name")
