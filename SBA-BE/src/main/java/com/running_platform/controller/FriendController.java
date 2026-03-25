@@ -1,9 +1,8 @@
 package com.running_platform.controller;
 
 import com.running_platform.dto.response.ApiResponse;
-import com.running_platform.dto.response.FriendRequestResponse;
-import com.running_platform.dto.response.FriendResponse;
-import com.running_platform.dto.response.PageResponse;
+import com.running_platform.dto.response.FollowNetworkResponse;
+import com.running_platform.enums.TabEnum;
 import com.running_platform.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,111 +14,29 @@ public class FriendController {
 
     private final FriendService friendService;
 
-    @PostMapping("/request/{addresseeId}")
-    public ApiResponse<Void> sendFriendRequest(
-            @PathVariable("addresseeId") Long addresseeId
-    ) {
-
-        friendService.sendRequest(addresseeId);
-
-        return ApiResponse.success(
-                "Friend request sent",
-                null
-        );
-    }
-
-    @PutMapping("/request/{requestId}/accept")
-    public ApiResponse<Void> acceptFriendRequest(
-            @PathVariable("requestId") Long requestId
-    ) {
-
-        friendService.acceptRequest(requestId);
-
-        return ApiResponse.success(
-                "Friend request accepted",
-                null
-        );
-    }
-
-    @PutMapping("/request/{requestId}/reject")
-    public ApiResponse<Void> rejectFriendRequest(
-            @PathVariable("requestId") Long requestId
-    ) {
-
-        friendService.rejectRequest(requestId);
-
-        return ApiResponse.success(
-                "Friend request rejected",
-                null
-        );
-    }
-
-    @DeleteMapping("/request/{addresseeId}")
-    public ApiResponse<Void> cancelFriendRequest(
-            @PathVariable("addresseeId") Long addresseeId
-    ) {
-
-        friendService.cancelRequest(addresseeId);
-
-        return ApiResponse.success(
-                "Friend request cancelled",
-                null
-        );
-    }
-
-    @DeleteMapping("/unfriend/{friendUserId}")
-    public ApiResponse<Void> unfriend(
-            @PathVariable("friendUserId") Long friendUserId
-    ) {
-
-        friendService.unfriend(friendUserId);
-
-        return ApiResponse.success(
-                "Unfriended",
-                null
-        );
-    }
-
-    @GetMapping
-    public ApiResponse<PageResponse<FriendResponse>> getFriends(
+    @GetMapping("/network")
+    public ApiResponse<FollowNetworkResponse> getFollowNetwork(
+            @RequestParam(defaultValue = "discover") TabEnum tab,
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(required = false) Double radiusKm,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "20") int size
     ) {
-
-        PageResponse<FriendResponse> friends = friendService.getFriends(page, size);
-
         return ApiResponse.success(
-                "Friends retrieved",
-                friends
+                "Follow network retrieved",
+                friendService.getFollowNetwork(tab, keyword, radiusKm, page, size)
         );
     }
 
-    @GetMapping("/requests/sent")
-    public ApiResponse<PageResponse<FriendRequestResponse>> getSentRequests(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-
-        PageResponse<FriendRequestResponse> requests = friendService.getSentRequests(page, size);
-
-        return ApiResponse.success(
-                "Sent requests retrieved",
-                requests
-        );
+    @PostMapping("/follow/{userId}")
+    public ApiResponse<Void> follow(@PathVariable Long userId) {
+        friendService.follow(userId);
+        return ApiResponse.success("Followed user successfully", null);
     }
 
-    @GetMapping("/requests/received")
-    public ApiResponse<PageResponse<FriendRequestResponse>> getReceivedRequests(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-
-        PageResponse<FriendRequestResponse> requests = friendService.getReceivedRequests(page, size);
-
-        return ApiResponse.success(
-                "Received requests retrieved",
-                requests
-        );
+    @DeleteMapping("/follow/{userId}")
+    public ApiResponse<Void> unfollow(@PathVariable Long userId) {
+        friendService.unfollow(userId);
+        return ApiResponse.success("Unfollowed user successfully", null);
     }
-
 }

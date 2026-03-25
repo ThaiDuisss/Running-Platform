@@ -33,8 +33,12 @@ public enum ErrorEnum {
     EMAIL_NOT_FOUND(4007, "If the email exists, a reset link has been sent"),
     ARTICLE_NOT_FOUND(4008, "Article not found"),
     CATEGORY_NOT_FOUND(4009, "Category not found"),
-    FAILED_OAUTH2_REDIRECT(1111, "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
-
+    FAILED_OAUTH2_REDIRECT(1111, "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication"),
+    SELF_FRIEND_REQUEST(7001, "Self friend request"),
+    EXISTING_FRIEND_REQUEST(7002, "Existing Friend request"),
+    FOLLOW_REQUEST_NOT_PENDING_EXCEPTION(7003, "Follow request not pending exception"),
+    FRIEND_SHIP_NOT_FOUND(7004, "Friendship not found"),
+    ;
 
     public static final String INVALID_STATUS_MS = "Status is invalid";
     public static final String INVALID_MEMBERSHIP_MS = "Membership level is invalid";

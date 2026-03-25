@@ -106,4 +106,5 @@ public class AdminUserController {
                 .data(data)
                 .build();
     }
+
 }
