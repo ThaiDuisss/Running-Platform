@@ -126,7 +126,7 @@ export default function CreateGroupModal({ onClose }) {
                         <label>Thêm thành viên ({selected.length} đã chọn)</label>
                         <input
                             className="ugm-input"
-                            placeholder="Tìm theo tên hoặc username..."
+                            placeholder="Tìm theo username..."
                             value={search}
                             onChange={e => setSearch(e.target.value)}
                         />
