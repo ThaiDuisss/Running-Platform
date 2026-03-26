@@ -80,7 +80,7 @@ export default function CreateDirectChatModal({ onClose }) {
                         <label>Tìm người dùng</label>
                         <input
                             className="ugm-input"
-                            placeholder="Tìm theo tên hoặc username..."
+                            placeholder="Tìm theo username..."
                             value={search}
                             onChange={e => setSearch(e.target.value)}
                             autoFocus

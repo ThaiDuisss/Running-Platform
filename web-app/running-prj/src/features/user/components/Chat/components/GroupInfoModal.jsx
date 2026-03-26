@@ -27,11 +27,9 @@ function MemberAvatar({ name, imageUrl, size = 40 }) {
 export default function GroupInfoModal({ onClose }) {
     const { activeConversation, leaveGroup, addMember, currentUser } = useChatContext();
 
-    // Leave group
     const [leaving, setLeaving] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
-    // Add member 
     const [search, setSearch] = useState('');
     const [searchResult, setSearchResult] = useState(null);
     const [searching, setSearching] = useState(false);
@@ -49,8 +47,8 @@ export default function GroupInfoModal({ onClose }) {
 
         setSearching(true);
         chatService.searchUsers(debouncedSearch)
-            .then(res => setSearchResult(res.data?.data ?? null))
-            .catch(() => setSearchResult(null))
+            .then(res => setSearchResult(res.data.data.content || []))
+            .catch(() => setSearchResult([]))
             .finally(() => setSearching(false));
     }, [debouncedSearch]);
 
@@ -124,28 +122,40 @@ export default function GroupInfoModal({ onClose }) {
                                 )}
                             </div>
 
-                            {/* Search result */}
+                            {/* Search results */}
                             {searching && <p className="gim-hint">Đang tìm...</p>}
-                            {!searching && search && !searchResult && <p className="gim-hint">Không tìm thấy người dùng</p>}
-                            {searchResult && (
-                                <div className="gim-search-result">
-                                    <MemberAvatar name={searchResult.fullName || searchResult.username} imageUrl={searchResult.imageUrl} size={38} />
-                                    <div className="gim-sr-info">
-                                        <span className="gim-sr-name">{searchResult.fullName || searchResult.username}</span>
-                                        <span className="gim-sr-username">@{searchResult.username}</span>
-                                    </div>
-                                    {isAlreadyMember(searchResult.id)
-                                        ? <span className="gim-badge gim-badge--already">Đã có</span>
-                                        : (
-                                            <button
-                                                className="gim-btn-add"
-                                                onClick={() => handleAdd(searchResult)}
-                                                disabled={adding}
-                                            >
-                                                {adding ? '...' : '+ Thêm'}
-                                            </button>
-                                        )
-                                    }
+
+                            {!searching && search && searchResult !== null && searchResult.length === 0 && (
+                                <p className="gim-hint">Không tìm thấy người dùng</p>
+                            )}
+
+                            {!searching && searchResult && searchResult.length > 0 && (
+                                <div className="gim-search-results">
+                                    {searchResult.map(user => (
+                                        <div key={user.id} className="gim-search-result">
+                                            <MemberAvatar
+                                                name={user.fullName || user.username}
+                                                imageUrl={user.imageUrl}
+                                                size={38}
+                                            />
+                                            <div className="gim-sr-info">
+                                                <span className="gim-sr-name">{user.fullName || user.username}</span>
+                                                <span className="gim-sr-username">@{user.username}</span>
+                                            </div>
+                                            {isAlreadyMember(user.id)
+                                                ? <span className="gim-badge gim-badge--already">Đã có</span>
+                                                : (
+                                                    <button
+                                                        className="gim-btn-add"
+                                                        onClick={() => handleAdd(user)}
+                                                        disabled={adding}
+                                                    >
+                                                        {adding ? '...' : '+ Thêm'}
+                                                    </button>
+                                                )
+                                            }
+                                        </div>
+                                    ))}
                                 </div>
                             )}
 
@@ -176,7 +186,7 @@ export default function GroupInfoModal({ onClose }) {
                         </div>
                     </div>
 
-                    {/*  Footer  */}
+                    {/* Footer */}
                     <div className="gim-footer">
                         <button className="gim-btn-leave" onClick={() => setShowConfirm(true)} disabled={leaving}>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -190,7 +200,7 @@ export default function GroupInfoModal({ onClose }) {
                 </div>
             </div>
 
-            {/*  Confirm Leave Modal  */}
+            {/* Confirm Leave Modal */}
             {showConfirm && (
                 <div className="confirm-backdrop">
                     <div className="confirm-modal">
