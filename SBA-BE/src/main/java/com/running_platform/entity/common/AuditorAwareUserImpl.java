@@ -19,7 +19,6 @@ public class AuditorAwareUserImpl implements AuditorAware<Users> {
 
     @Override
     public Optional<Users> getCurrentAuditor() {
-    log.info("vaof ra thay");
         Optional<Long> optionalUserId = Optional.ofNullable(AppSecurityUtils.getCurrentUserPrinciple())
                 .map(customUserDetails -> customUserDetails.getUserEntity())
                 .map(userEntity -> userEntity.getId());
