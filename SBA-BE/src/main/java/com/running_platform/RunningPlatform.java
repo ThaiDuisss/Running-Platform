@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableCaching
 @EnableConfigurationProperties(AppProperties.class)
 @EnableJpaAuditing(auditorAwareRef = "auditorAwareUserImpl")
-public class RunningPlatform {
+public class  RunningPlatform {
     public static void main(String[] args) {
         SpringApplication.run(RunningPlatform.class, args);
     }

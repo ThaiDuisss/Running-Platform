@@ -8,6 +8,7 @@ import java.util.List;
 public class PoLineUtils {
 
     public static List<LatLng> decode(String encodedPolyline) {
+
         return PolylineEncoding.decode(encodedPolyline);
     }
 

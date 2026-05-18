@@ -9,6 +9,7 @@ import com.running_platform.security.CustomUserDetails;
 import com.running_platform.security.Oauth2.common.CustomAbstractOAuth2UserInfo;
 import com.running_platform.security.Oauth2.common.Oauth2Util;
 import com.running_platform.security.Oauth2.common.SecurityEnums;
+import com.running_platform.security.Oauth2.factory.Oauth2UserInfoFactoryProvider;
 import com.running_platform.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     UserService userService;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    Oauth2UserInfoFactoryProvider provider;
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
@@ -51,9 +53,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processOauth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         // Mapped OAuth2User to specific CustomAbstractOAuth2UserInfo for that registration id
         // clientRegistrationId - (google, facebook, gitHub, or Custom Auth Provider - ( keyClock, okta, authServer etc.)
-        log.info("vao process roi");
         String clientRegistrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
-        CustomAbstractOAuth2UserInfo abstractOAuth2UserInfo = Oauth2Util.getOAuth2UserInfo(clientRegistrationId, oAuth2User.getAttributes());
+        CustomAbstractOAuth2UserInfo abstractOAuth2UserInfo = provider.createOauth2Entity(clientRegistrationId, oAuth2User.getAttributes());
         // Check if the email is provided by the OAuthProvider
         SecurityEnums.AuthProviderId registeredProviderId = SecurityEnums.AuthProviderId.valueOf(clientRegistrationId);
         String userEmail = abstractOAuth2UserInfo.getEmail();

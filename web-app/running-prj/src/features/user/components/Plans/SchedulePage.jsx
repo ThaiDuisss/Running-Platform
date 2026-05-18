@@ -42,7 +42,7 @@ const SchedulePage = () => {
             restDaysCount: allDays.filter(d => d.type === "REST").length,
         };
     }, [schedule]);
-
+    
     const updateDayHandler = (day) => {
         updateDay(day); // zustand
         setEditingDay(null);
