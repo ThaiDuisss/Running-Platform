@@ -16,7 +16,7 @@ export default function DayCard({ day, onClick, isOpen }) {
                 cursor: isRest ? "not-allowed" : "pointer",
                 minHeight: 120,
                 borderLeft: `5px solid ${typeData.color}`,
-                opacity: isRest ? 0.6 : 1,
+                opacity: isRest ? 0.6 : 1,  
                 transition: "0.2s"
 
             }}

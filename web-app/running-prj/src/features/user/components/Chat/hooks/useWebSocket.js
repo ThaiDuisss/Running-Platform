@@ -24,7 +24,7 @@ export function useWebSocket() {
         if (!token) return;
 
         const client = new Client({
-            webSocketFactory: () => new SockJS(`${WS_URL}/ws`),
+            webSocketFactory: () => new SockJS(`${WS_URL}/ws`), 
             connectHeaders: {
                 Authorization: `Bearer ${token}`
             },

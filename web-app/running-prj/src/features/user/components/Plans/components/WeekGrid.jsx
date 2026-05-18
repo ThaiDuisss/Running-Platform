@@ -74,7 +74,7 @@ const WeekGrid = ({ schedule = [], onEdit, applyOnWeeks }) => {
                     <h4 className="mt-5">
                         Apply  <span style={{ color: "blue" }}>Week {currentWeekIndex + 1} </span>to Weeks: {selectedWeeks.length != 0 && selectedWeeks.map((e) => { return <span style={{ color: "purple" }}>{e} </span> })}
                     </h4>
-                    <div className="week-preview-list">
+                    <div className="week-preview-list"> 
                         <Row>
                             {schedule.slice(currentWeekIndex + 1).map((week) => (
                                 <Col

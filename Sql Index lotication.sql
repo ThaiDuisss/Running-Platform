@@ -1,5 +1,5 @@
 
-USE `platform-running`;
+USE `running-platform`;
 ALTER TABLE users
 MODIFY location_detail POINT SRID 4326 NOT NULL;
 ALTER TABLE users
